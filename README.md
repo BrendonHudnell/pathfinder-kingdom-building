@@ -1,2 +1,2 @@
-# react-express-typescript-boilerplate
-Starter for a React/Node app written in typescript
+# Pathfinder 1 Kingdom Building
+A webapp designed to manage kingdom building for Pathfinder 1 rules
