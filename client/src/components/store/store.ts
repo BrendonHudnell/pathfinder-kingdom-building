@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, AnyAction } from '@reduxjs/toolkit';
 import { kingdomReducer } from '../../modules/kingdom';
+import { leadershipReducer } from '../../modules/leadership';
 
 export const store = configureStore({
 	reducer: {
 		kingdom: kingdomReducer,
+		leadership: leadershipReducer,
 	},
 });
 
