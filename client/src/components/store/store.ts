@@ -1,7 +1,10 @@
 import { configureStore, ThunkAction, AnyAction } from '@reduxjs/toolkit';
+import { kingdomReducer } from '../../modules/kingdom';
 
 export const store = configureStore({
-	reducer: {},
+	reducer: {
+		kingdom: kingdomReducer,
+	},
 });
 
 export type AppDispatch = typeof store.dispatch;

@@ -5,10 +5,10 @@ import { store } from './components/store';
 import { ShellView } from './modules/shell';
 
 ReactDOM.render(
-	<React.StrictMode>
-		<Provider store={store}>
-			<ShellView />
-		</Provider>
-	</React.StrictMode>,
+	// <React.StrictMode> TODO put back in
+	<Provider store={store}>
+		<ShellView />
+	</Provider>,
+	//</React.StrictMode>
 	document.getElementById('root')
 );
