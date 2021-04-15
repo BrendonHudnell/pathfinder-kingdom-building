@@ -10,6 +10,7 @@ import {
 	Typography,
 } from '@material-ui/core';
 import { useAppDispatch, useAppSelector } from '../../components/store';
+import { LinkButton } from '../../components/linkButton';
 import {
 	alignmentUpdated,
 	holidayEdictLevelUpdated,
@@ -20,7 +21,7 @@ import {
 	treasuryUpdated,
 	unrestUpdated,
 } from './kingdomSlice';
-import { LinkButton } from '../../components/linkButton';
+import { useLeadershipBonusByType } from '../leadership';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -39,10 +40,10 @@ export function KingdomView(): ReactElement {
 	const month = useAppSelector((state) => state.kingdom.month);
 	const treasury = useAppSelector((state) => state.kingdom.treasury);
 	const consumption = useAppSelector((state) => state.kingdom.consumption);
-	const economy = useAppSelector((state) => state.kingdom.economy);
-	const stability = useAppSelector((state) => state.kingdom.stability);
-	const loyalty = useAppSelector((state) => state.kingdom.loyalty);
-	const unrest = useAppSelector((state) => state.kingdom.unrest);
+	const kingdomEconomy = useAppSelector((state) => state.kingdom.economy);
+	const kingdomStability = useAppSelector((state) => state.kingdom.stability);
+	const kingdomLoyalty = useAppSelector((state) => state.kingdom.loyalty);
+	const currentUnrest = useAppSelector((state) => state.kingdom.unrest);
 	const holidayEdictLevel = useAppSelector(
 		(state) => state.kingdom.holidayEdictLevel
 	);
@@ -52,14 +53,16 @@ export function KingdomView(): ReactElement {
 	const taxationEdictLevel = useAppSelector(
 		(state) => state.kingdom.taxationEdictLevel
 	);
+	const leadershipEconomy = useLeadershipBonusByType('Economy');
+	const leadershipStability = useLeadershipBonusByType('Stability');
+	const leadershipLoyalty = useLeadershipBonusByType('Loyalty');
 
 	// TODO need to add Size, Population, Control DC, and Terrain Income
 
 	const totalConsumption = consumption; // add size and hex/army slices info
-	const totalEconomy = economy; // add loyalty/hex/settlement slices info
-	const totalStability = stability; // add loyalty/hex/settlement slices info
-	const totalLoyalty = loyalty; // add loyalty/hex/settlement slices info
-
+	const totalEconomy = kingdomEconomy + leadershipEconomy - currentUnrest; // add hex/settlement slices info
+	const totalStability = kingdomStability + leadershipStability - currentUnrest; // add hex/settlement slices info
+	const totalLoyalty = kingdomLoyalty + leadershipLoyalty - currentUnrest; // add hex/settlement slices info
 	return (
 		<Paper className={classes.container}>
 			<Grid container spacing={2}>
@@ -146,7 +149,7 @@ export function KingdomView(): ReactElement {
 						<TextField
 							style={{ width: '5ch' }}
 							type="number"
-							value={unrest}
+							value={currentUnrest}
 							onChange={(e) => dispatch(unrestUpdated(Number(e.target.value)))}
 						/>
 					</Grid>
