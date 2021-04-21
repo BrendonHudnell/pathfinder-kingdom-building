@@ -217,6 +217,9 @@ export function KingdomView(): ReactElement {
 						<LinkButton title="Hexes" to="/" />
 					</Grid>
 					<Grid item>
+						<LinkButton title="Settlements" to="/settlements" />
+					</Grid>
+					<Grid item>
 						<LinkButton title="Leadership" to="/leadership" />
 					</Grid>
 					<Grid item>
