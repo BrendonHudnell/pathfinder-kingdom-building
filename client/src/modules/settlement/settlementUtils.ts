@@ -1,8 +1,7 @@
 import { EntityId } from '@reduxjs/toolkit';
 
 import { useAppSelector } from '../../components/store';
-import { selectDistrictsBySettlementId } from '../district';
-import { KingdomStat } from '../leadership';
+import { buildingList, selectDistrictsBySettlementId } from '../district';
 import { Settlement } from './settlementSlice';
 
 export type SettlementSize =
@@ -12,6 +11,8 @@ export type SettlementSize =
 	| 'Large City'
 	| 'Metropolis';
 
+export type SettlementStat = 'economy' | 'stability' | 'loyalty';
+
 export function useSettlementPopulation(settlementId: EntityId): number {
 	let numLots = 0;
 
@@ -19,7 +20,7 @@ export function useSettlementPopulation(settlementId: EntityId): number {
 		selectDistrictsBySettlementId(state, settlementId)
 	);
 	districts.forEach((district) =>
-		district.lots.forEach((lot) => (lot ? numLots++ : ''))
+		district.lotIds.forEach((lotId) => (lotId >= 0 ? numLots++ : ''))
 	);
 
 	const population = 250 * numLots;
@@ -45,21 +46,36 @@ export function useSettlementSize(settlementId: EntityId): SettlementSize {
 
 export function useSettlementBonusByType(
 	settlementId: EntityId,
-	type: KingdomStat
+	type: SettlementStat
 ): number {
-	// const districts = useAppSelector((state) =>
-	// 	selectDistrictsBySettlementId(state, settlementId)
-	// );
+	let total = 0;
 
-	return -999;
+	const districts = useAppSelector((state) =>
+		selectDistrictsBySettlementId(state, settlementId)
+	);
+	districts.forEach((district) =>
+		district.lotIds.forEach((lotId) =>
+			lotId >= 0 ? (total += buildingList[lotId][type] ?? 0) : 0
+		)
+	);
+
+	return total;
 }
 
 export function useSettlementUnrest(settlementId: EntityId): number {
-	// const districts = useAppSelector((state) =>
-	// 	selectDistrictsBySettlementId(state, settlementId)
-	// );
+	let total = 0;
 
-	return -99999;
+	const districts = useAppSelector((state) =>
+		selectDistrictsBySettlementId(state, settlementId)
+	);
+
+	districts.forEach((district) =>
+		district.lotIds.forEach((lotId) =>
+			lotId >= 0 ? (total += buildingList[lotId].unrest ?? 0) : 0
+		)
+	);
+
+	return total;
 }
 
 // TODO remove everything below when hooked up to DB

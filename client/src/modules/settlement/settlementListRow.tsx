@@ -17,9 +17,9 @@ export function SettlementListRow(props: SettlementRowProps): ReactElement {
 	const { settlement } = props;
 
 	const size = useSettlementSize(settlement.id);
-	const economy = useSettlementBonusByType(settlement.id, 'Economy');
-	const stability = useSettlementBonusByType(settlement.id, 'Stability');
-	const loyalty = useSettlementBonusByType(settlement.id, 'Loyalty');
+	const economy = useSettlementBonusByType(settlement.id, 'economy');
+	const stability = useSettlementBonusByType(settlement.id, 'stability');
+	const loyalty = useSettlementBonusByType(settlement.id, 'loyalty');
 	const unrest = useSettlementUnrest(settlement.id);
 
 	return (

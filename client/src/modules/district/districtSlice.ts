@@ -7,7 +7,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import { RootState } from '../../components/store';
-import { BuildingType } from './buildingTypes';
+import { BuildingId } from './buildingTypes';
 
 // {
 // 	name: 'Watergate',
@@ -43,7 +43,7 @@ export interface District {
 		wall: boolean;
 		moat: boolean;
 	};
-	lots: BuildingType[];
+	lotIds: BuildingId[];
 }
 
 const districtAdapter = createEntityAdapter<District>();
@@ -63,15 +63,20 @@ export const districtSlice = createSlice({
 				districtId: EntityId;
 				newLotNumber: number;
 				oldLotNumber?: number;
-				item: BuildingType;
+				buildingId: BuildingId;
 			}>
 		) => {
-			const { districtId, newLotNumber, oldLotNumber, item } = action.payload;
+			const {
+				districtId,
+				newLotNumber,
+				oldLotNumber,
+				buildingId,
+			} = action.payload;
 
 			if (state.ids.includes(districtId)) {
-				state.entities[districtId]!.lots[newLotNumber] = item;
+				state.entities[districtId]!.lotIds[newLotNumber] = buildingId;
 				if (oldLotNumber !== undefined) {
-					state.entities[districtId]!.lots[oldLotNumber] = null;
+					state.entities[districtId]!.lotIds[oldLotNumber] = -1;
 				}
 			}
 		},
@@ -86,7 +91,7 @@ export const districtSlice = createSlice({
 				oldLotNumber !== undefined &&
 				state.ids.includes(districtId)
 			) {
-				state.entities[districtId]!.lots[oldLotNumber] = null;
+				state.entities[districtId]!.lotIds[oldLotNumber] = -1;
 			}
 		},
 	},

@@ -1,11 +1,41 @@
-import { BuildingType } from './buildingTypes';
-import { District } from './districtSlice';
+import { useAppSelector } from '../../components/store';
+import { SettlementStat } from '../settlement';
+import { BuildingId, buildingList } from './buildingTypes';
+import { District, selectAllDistricts } from './districtSlice';
+
+export function useAllDistrictsBonusByType(type: SettlementStat): number {
+	let total = 0;
+
+	const districts = useAppSelector((state) => selectAllDistricts(state));
+
+	districts.forEach((district) =>
+		district.lotIds.forEach((lotId) =>
+			lotId >= 0 ? (total += buildingList[lotId][type] ?? 0) : 0
+		)
+	);
+
+	return total;
+}
+
+export function useAllDistrictsUnrest(): number {
+	let total = 0;
+
+	const districts = useAppSelector((state) => selectAllDistricts(state));
+
+	districts.forEach((district) =>
+		district.lotIds.forEach((lotId) =>
+			lotId >= 0 ? (total += buildingList[lotId].unrest ?? 0) : 0
+		)
+	);
+
+	return total;
+}
 
 // TODO remove everything below when hooked up to DB
-function createLotArray(): BuildingType[] {
-	const emptyArray: BuildingType[] = [];
+function createLotArray(): BuildingId[] {
+	const emptyArray: BuildingId[] = [];
 	for (let i = 0; i < 36; i++) {
-		emptyArray.push(null);
+		emptyArray.push(-1);
 	}
 	return emptyArray;
 }
@@ -37,7 +67,7 @@ export const initialDistricts: District[] = [
 			wall: false,
 			moat: false,
 		},
-		lots: createLotArray(),
+		lotIds: createLotArray(),
 	},
 	{
 		id: 2,
@@ -65,7 +95,7 @@ export const initialDistricts: District[] = [
 			wall: false,
 			moat: false,
 		},
-		lots: createLotArray(),
+		lotIds: createLotArray(),
 	},
 	{
 		id: 3,
@@ -93,7 +123,7 @@ export const initialDistricts: District[] = [
 			wall: false,
 			moat: false,
 		},
-		lots: createLotArray(),
+		lotIds: createLotArray(),
 	},
 	{
 		id: 4,
@@ -121,7 +151,7 @@ export const initialDistricts: District[] = [
 			wall: false,
 			moat: false,
 		},
-		lots: createLotArray(),
+		lotIds: createLotArray(),
 	},
 	{
 		id: 5,
@@ -149,7 +179,7 @@ export const initialDistricts: District[] = [
 			wall: false,
 			moat: false,
 		},
-		lots: createLotArray(),
+		lotIds: createLotArray(),
 	},
 	{
 		id: 6,
@@ -177,7 +207,7 @@ export const initialDistricts: District[] = [
 			wall: false,
 			moat: false,
 		},
-		lots: createLotArray(),
+		lotIds: createLotArray(),
 	},
 	{
 		id: 7,
@@ -205,7 +235,7 @@ export const initialDistricts: District[] = [
 			wall: false,
 			moat: false,
 		},
-		lots: createLotArray(),
+		lotIds: createLotArray(),
 	},
 	{
 		id: 8,
@@ -233,7 +263,7 @@ export const initialDistricts: District[] = [
 			wall: false,
 			moat: false,
 		},
-		lots: createLotArray(),
+		lotIds: createLotArray(),
 	},
 	{
 		id: 9,
@@ -261,6 +291,6 @@ export const initialDistricts: District[] = [
 			wall: false,
 			moat: false,
 		},
-		lots: createLotArray(),
+		lotIds: createLotArray(),
 	},
 ];

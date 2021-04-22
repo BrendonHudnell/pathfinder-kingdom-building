@@ -4,18 +4,18 @@ import { useDrop } from 'react-dnd';
 import { EntityId } from '@reduxjs/toolkit';
 
 import { useAppDispatch } from '../../components/store';
-import { Building, BuildingType } from './buildingTypes';
+import { BuildingId, buildingList } from './buildingTypes';
 import { lotUpdated } from './districtSlice';
 import { BuildingCard, BuildingCardItem } from './buildingCard';
 
 export interface LotProps {
 	districtId: EntityId;
-	lot: BuildingType;
+	buildingId: BuildingId;
 	index: number;
 }
 
 export function Lot(props: LotProps): ReactElement {
-	const { districtId, lot, index } = props;
+	const { districtId, buildingId, index } = props;
 
 	const classes = makeStyles({
 		root: {
@@ -31,14 +31,14 @@ export function Lot(props: LotProps): ReactElement {
 	const dispatch = useAppDispatch();
 
 	function onDrop(item: BuildingCardItem): void {
-		const { lotNumber, name } = item;
+		const { lotNumber, id } = item;
 
 		dispatch(
 			lotUpdated({
 				districtId,
 				newLotNumber: index,
 				oldLotNumber: lotNumber,
-				item: name,
+				buildingId: id,
 			})
 		);
 	}
@@ -47,23 +47,18 @@ export function Lot(props: LotProps): ReactElement {
 		() => ({
 			accept: 'Building',
 			drop: onDrop,
-			canDrop: () => lot === null,
+			canDrop: () => buildingId === -1,
 			collect: (monitor) => ({
 				isOver: monitor.isOver(),
 				canDrop: monitor.canDrop(),
 			}),
 		}),
-		[lot]
+		[buildingId]
 	);
 
 	const isActive = isOver && canDrop;
 
-	const building: Building = {
-		name: lot,
-		size: 1,
-		description: 'Test building',
-		cost: 69,
-	};
+	const building = buildingList[buildingId];
 
 	return (
 		<Card
@@ -79,7 +74,7 @@ export function Lot(props: LotProps): ReactElement {
 		>
 			{index}
 			<br />
-			{lot ? (
+			{buildingId >= 0 ? (
 				<BuildingCard
 					building={building}
 					lotNumber={index}

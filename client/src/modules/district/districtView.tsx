@@ -32,11 +32,11 @@ export function DistrictView(props: DistrictViewProps): ReactElement {
 	return (
 		<div className={classes.root}>
 			{district
-				? district.lots.map((lot, index) => (
+				? district.lotIds.map((lotId, index) => (
 						<Lot
 							key={`${district.name}-lot-${index}`}
 							districtId={districtId}
-							lot={lot}
+							buildingId={lotId}
 							index={index}
 						/>
 				  ))
