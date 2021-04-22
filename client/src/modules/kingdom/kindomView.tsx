@@ -13,7 +13,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../components/store';
 import { LinkButton } from '../../components/linkButton';
 import { useLeadershipBonusByType } from '../leadership';
-import { useAllDistrictsBonusByType } from '../district';
+import { useAllSettlementsBonusByType } from '../settlement';
 import {
 	alignmentUpdated,
 	holidayEdictLevelUpdated,
@@ -59,9 +59,9 @@ export function KingdomView(): ReactElement {
 	const leadershipStability = useLeadershipBonusByType('Stability');
 	const leadershipLoyalty = useLeadershipBonusByType('Loyalty');
 
-	const settlementEconomy = useAllDistrictsBonusByType('economy');
-	const settlementStability = useAllDistrictsBonusByType('stability');
-	const settlementLoyalty = useAllDistrictsBonusByType('loyalty');
+	const settlementEconomy = useAllSettlementsBonusByType('economy');
+	const settlementStability = useAllSettlementsBonusByType('stability');
+	const settlementLoyalty = useAllSettlementsBonusByType('loyalty');
 
 	// TODO need to add Size, Population, Control DC, and Terrain Income
 
@@ -236,6 +236,9 @@ export function KingdomView(): ReactElement {
 					</Grid>
 					{/* <Grid item> TODO remove
 						<LinkButton title="Army" to="/army" />
+					</Grid>
+					<Grid item>
+						<LinkButton title="Events" to="/events" />
 					</Grid> */}
 				</Grid>
 			</Grid>

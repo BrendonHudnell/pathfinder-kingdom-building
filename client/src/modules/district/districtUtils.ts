@@ -1,35 +1,5 @@
-import { useAppSelector } from '../../components/store';
-import { SettlementStat } from '../settlement';
-import { BuildingId, buildingList } from './buildingTypes';
-import { District, selectAllDistricts } from './districtSlice';
-
-export function useAllDistrictsBonusByType(type: SettlementStat): number {
-	let total = 0;
-
-	const districts = useAppSelector((state) => selectAllDistricts(state));
-
-	districts.forEach((district) =>
-		district.lotIds.forEach((lotId) =>
-			lotId >= 0 ? (total += buildingList[lotId][type] ?? 0) : 0
-		)
-	);
-
-	return total;
-}
-
-export function useAllDistrictsUnrest(): number {
-	let total = 0;
-
-	const districts = useAppSelector((state) => selectAllDistricts(state));
-
-	districts.forEach((district) =>
-		district.lotIds.forEach((lotId) =>
-			lotId >= 0 ? (total += buildingList[lotId].unrest ?? 0) : 0
-		)
-	);
-
-	return total;
-}
+import { BuildingId } from './buildingTypes';
+import { District } from './districtSlice';
 
 // TODO remove everything below when hooked up to DB
 function createLotArray(): BuildingId[] {

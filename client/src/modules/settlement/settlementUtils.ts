@@ -1,7 +1,11 @@
 import { EntityId } from '@reduxjs/toolkit';
 
 import { useAppSelector } from '../../components/store';
-import { buildingList, selectDistrictsBySettlementId } from '../district';
+import {
+	buildingList,
+	selectAllDistricts,
+	selectDistrictsBySettlementId,
+} from '../district';
 import { Settlement } from './settlementSlice';
 
 export type SettlementSize =
@@ -56,6 +60,34 @@ export function useSettlementBonusByType(
 	districts.forEach((district) =>
 		district.lotIds.forEach((lotId) =>
 			lotId >= 0 ? (total += buildingList[lotId][type] ?? 0) : 0
+		)
+	);
+
+	return total;
+}
+
+export function useAllSettlementsBonusByType(type: SettlementStat): number {
+	let total = 0;
+
+	const districts = useAppSelector((state) => selectAllDistricts(state));
+
+	districts.forEach((district) =>
+		district.lotIds.forEach((lotId) =>
+			lotId >= 0 ? (total += buildingList[lotId][type] ?? 0) : 0
+		)
+	);
+
+	return total;
+}
+
+export function useAllSettlementsUnrest(): number {
+	let total = 0;
+
+	const districts = useAppSelector((state) => selectAllDistricts(state));
+
+	districts.forEach((district) =>
+		district.lotIds.forEach((lotId) =>
+			lotId >= 0 ? (total += buildingList[lotId].unrest ?? 0) : 0
 		)
 	);
 
