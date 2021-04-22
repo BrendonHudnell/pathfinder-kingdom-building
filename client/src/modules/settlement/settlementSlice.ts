@@ -25,10 +25,22 @@ export const settlementSlice = createSlice({
 		fetchSettlements: (state, action: PayloadAction<Settlement[]>) => {
 			settlementAdapter.setAll(state, action.payload);
 		},
+		nameUpdated: (
+			state,
+			action: PayloadAction<{ settlementId: EntityId; name: string }>
+		) => {
+			const { settlementId, name } = action.payload;
+
+			const settlement = state.entities[settlementId];
+
+			if (settlement) {
+				settlement.name = name;
+			}
+		},
 	},
 });
 
-export const { fetchSettlements } = settlementSlice.actions;
+export const { fetchSettlements, nameUpdated } = settlementSlice.actions;
 
 export const {
 	selectAll: selectAllSettlements,

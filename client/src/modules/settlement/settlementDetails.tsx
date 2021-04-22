@@ -1,6 +1,8 @@
 import React, { ReactElement } from 'react';
+import { Grid, makeStyles, TextField, Typography } from '@material-ui/core';
 
-import { Settlement } from './settlementSlice';
+import { useAppDispatch } from '../../components/store';
+import { nameUpdated, Settlement } from './settlementSlice';
 import {
 	useSettlementBonusByType,
 	useSettlementPopulation,
@@ -8,32 +10,69 @@ import {
 	useSettlementUnrest,
 } from './settlementUtils';
 
+const useStyles = makeStyles((theme) => {
+	return {
+		container: {
+			padding: theme.spacing(3),
+		},
+	};
+});
+
 export interface SettlementDetailsProps {
 	settlement: Settlement;
 }
 
 export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
-	const { settlement } = props;
+	const { id, name } = props.settlement;
 
-	const economy = useSettlementBonusByType(settlement.id, 'economy');
-	const stability = useSettlementBonusByType(settlement.id, 'stability');
-	const loyalty = useSettlementBonusByType(settlement.id, 'loyalty');
-	const unrest = useSettlementUnrest(settlement.id);
+	const classes = useStyles();
 
-	const population = useSettlementPopulation(settlement.id);
+	const dispatch = useAppDispatch();
 
-	const size = useSettlementSize(settlement.id);
+	const economy = useSettlementBonusByType(id, 'economy');
+	const stability = useSettlementBonusByType(id, 'stability');
+	const loyalty = useSettlementBonusByType(id, 'loyalty');
+	const unrest = useSettlementUnrest(id);
+
+	const population = useSettlementPopulation(id);
+
+	const size = useSettlementSize(id);
 
 	return (
-		<div>
-			Name: {settlement.name}&nbsp;&nbsp;&nbsp;&nbsp;Size: {size}
-			&nbsp;&nbsp;&nbsp;&nbsp;Population: {population}
-			<br />
-			<br />
-			Economy: {economy}&nbsp;&nbsp;&nbsp;&nbsp;Stability: {stability}
-			&nbsp;&nbsp;&nbsp;&nbsp;Loyalty: {
-				loyalty
-			}&nbsp;&nbsp;&nbsp;&nbsp;Unrest: {unrest}
-		</div>
+		<Grid container spacing={2} className={classes.container}>
+			<Grid container item spacing={2} alignItems="center">
+				<Grid item>
+					<TextField
+						value={name}
+						onChange={(e) =>
+							dispatch(nameUpdated({ settlementId: id, name: e.target.value }))
+						}
+						fullWidth
+					/>
+				</Grid>
+				<Grid item>
+					<Typography>Size: {size}</Typography>
+				</Grid>
+				<Grid item>
+					<Typography>Population: {population.toLocaleString()}</Typography>
+				</Grid>
+			</Grid>
+
+			<Grid container item spacing={2} alignItems="center">
+				<Grid item>
+					<Typography>Economy: {economy}</Typography>
+				</Grid>
+				<Grid item>
+					<Typography>Stability: {stability}</Typography>
+				</Grid>
+				<Grid item>
+					<Typography>Loyalty: {loyalty}</Typography>
+				</Grid>
+				<Grid item />
+				<Grid item>
+					<Typography>Unrest: {unrest}</Typography>
+				</Grid>
+			</Grid>
+		</Grid>
 	);
 }
