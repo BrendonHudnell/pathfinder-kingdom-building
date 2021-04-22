@@ -9,8 +9,11 @@ import {
 	TextField,
 	Typography,
 } from '@material-ui/core';
+
 import { useAppDispatch, useAppSelector } from '../../components/store';
 import { LinkButton } from '../../components/linkButton';
+import { useLeadershipBonusByType } from '../leadership';
+import { useAllSettlementsBonusByType } from '../settlement';
 import {
 	alignmentUpdated,
 	holidayEdictLevelUpdated,
@@ -21,7 +24,6 @@ import {
 	treasuryUpdated,
 	unrestUpdated,
 } from './kingdomSlice';
-import { useLeadershipBonusByType } from '../leadership';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -57,12 +59,22 @@ export function KingdomView(): ReactElement {
 	const leadershipStability = useLeadershipBonusByType('Stability');
 	const leadershipLoyalty = useLeadershipBonusByType('Loyalty');
 
+	const settlementEconomy = useAllSettlementsBonusByType('economy');
+	const settlementStability = useAllSettlementsBonusByType('stability');
+	const settlementLoyalty = useAllSettlementsBonusByType('loyalty');
+
 	// TODO need to add Size, Population, Control DC, and Terrain Income
 
 	const totalConsumption = consumption; // add size and hex/army slices info
-	const totalEconomy = kingdomEconomy + leadershipEconomy - currentUnrest; // add hex/settlement slices info
-	const totalStability = kingdomStability + leadershipStability - currentUnrest; // add hex/settlement slices info
-	const totalLoyalty = kingdomLoyalty + leadershipLoyalty - currentUnrest; // add hex/settlement slices info
+	const totalEconomy =
+		kingdomEconomy + leadershipEconomy + settlementEconomy - currentUnrest; // add hex slice info
+	const totalStability =
+		kingdomStability +
+		leadershipStability +
+		settlementStability -
+		currentUnrest; // add hex slice info
+	const totalLoyalty =
+		kingdomLoyalty + leadershipLoyalty + settlementLoyalty - currentUnrest; // add hex slice info
 	return (
 		<Paper className={classes.container}>
 			<Grid container spacing={2}>
@@ -217,11 +229,17 @@ export function KingdomView(): ReactElement {
 						<LinkButton title="Hexes" to="/" />
 					</Grid>
 					<Grid item>
-						<LinkButton title="Leadership" to="/leadership" />
+						<LinkButton title="Settlements" to="/settlements" />
 					</Grid>
 					<Grid item>
+						<LinkButton title="Leadership" to="/leadership" />
+					</Grid>
+					{/* <Grid item> TODO remove
 						<LinkButton title="Army" to="/army" />
 					</Grid>
+					<Grid item>
+						<LinkButton title="Events" to="/events" />
+					</Grid> */}
 				</Grid>
 			</Grid>
 		</Paper>

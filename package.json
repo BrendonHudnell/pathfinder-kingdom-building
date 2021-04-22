@@ -17,6 +17,8 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "react": "^17.0.1",
+    "react-dnd": "^14.0.2",
+    "react-dnd-html5-backend": "^14.0.0",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.3",
     "react-router-dom": "^5.2.0",
@@ -68,7 +70,7 @@
     "start": "node server/build/server.js",
     "dev:client": "cd ./client && webpack serve --open --config webpack.dev.js",
     "dev:server": "ts-node-dev --respawn --transpile-only server/src/server.ts",
-    "lint": "eslint . --ext .js,.ts,.tsx --quiet --fix",
+    "lint": "eslint --ext .js,.ts,.tsx --quiet --fix .",
     "test": "yarn test:server",
     "test:server": "jest",
     "cover": "yarn cover:server",
@@ -81,6 +83,6 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": "yarn lint"
+    "*.{ts,tsx}": "eslint --quiet --fix"
   }
 }

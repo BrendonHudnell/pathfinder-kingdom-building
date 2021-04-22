@@ -1,11 +1,15 @@
 import { configureStore, ThunkAction, AnyAction } from '@reduxjs/toolkit';
+import { districtReducer } from '../../modules/district';
 import { kingdomReducer } from '../../modules/kingdom';
 import { leadershipReducer } from '../../modules/leadership';
+import { settlementReducer } from '../../modules/settlement';
 
 export const store = configureStore({
 	reducer: {
 		kingdom: kingdomReducer,
 		leadership: leadershipReducer,
+		settlement: settlementReducer,
+		district: districtReducer,
 	},
 });
 
