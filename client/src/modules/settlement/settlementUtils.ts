@@ -32,9 +32,7 @@ export function useSettlementPopulation(settlementId: EntityId): number {
 	return population;
 }
 
-export function useSettlementSize(settlementId: EntityId): SettlementSize {
-	const population = useSettlementPopulation(settlementId);
-
+export function getSettlementSize(population: number): SettlementSize {
 	if (population <= 2000) {
 		return 'Small Town';
 	} else if (population <= 5000) {

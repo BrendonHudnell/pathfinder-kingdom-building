@@ -6,7 +6,7 @@ import { nameUpdated, Settlement } from './settlementSlice';
 import {
 	useSettlementBonusByType,
 	useSettlementPopulation,
-	useSettlementSize,
+	getSettlementSize,
 	useSettlementUnrest,
 } from './settlementUtils';
 
@@ -36,7 +36,7 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 
 	const population = useSettlementPopulation(id);
 
-	const size = useSettlementSize(id);
+	const size = getSettlementSize(population);
 
 	return (
 		<Grid container spacing={2} className={classes.container}>
