@@ -1,9 +1,10 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import {
 	makeStyles,
 	Container,
-	// AppBar,
-	// Typography
+	AppBar,
+	Typography,
+	Link,
 } from '@material-ui/core';
 import {
 	BrowserRouter as Router,
@@ -12,20 +13,10 @@ import {
 	Switch,
 } from 'react-router-dom';
 
-import { useAppDispatch } from '../../components/store';
 import { KingdomView } from '../kingdom';
-import {
-	fetchLeadershipRoles,
-	initialRoles,
-	LeadershipView,
-} from '../leadership';
-import {
-	fetchSettlements,
-	initialSettlements,
-	SettlementView,
-	SettlementListView,
-} from '../settlement';
-import { fetchDistricts, initialDistricts } from '../district';
+import { LeadershipView } from '../leadership';
+import { SettlementView, SettlementListView } from '../settlement';
+import { HexGridView } from '../hex';
 
 const useStyles = makeStyles({
 	layout: {
@@ -50,27 +41,13 @@ const useStyles = makeStyles({
 export function ShellLayout(): ReactElement {
 	const classes = useStyles();
 
-	const dispatch = useAppDispatch();
-
-	useEffect(() => {
-		dispatch(fetchLeadershipRoles(initialRoles));
-	}, []);
-
-	useEffect(() => {
-		dispatch(fetchSettlements(initialSettlements));
-	}, []);
-
-	useEffect(() => {
-		dispatch(fetchDistricts(initialDistricts));
-	}, []);
-
 	return (
 		<Router>
 			<div className={classes.layout}>
 				<KingdomView />
 				<Container className={classes.content}>
 					<Switch>
-						{/* <Route exact path="/" component={hexView} /> */}
+						<Route exact path="/" component={HexGridView} />
 						<Route exact path="/leadership" component={LeadershipView} />
 						{/* <Route exact path="/army" component={ArmyView} />
 						<Route exact path="/events" component={EventsView} /> */}
@@ -83,9 +60,20 @@ export function ShellLayout(): ReactElement {
 						<Redirect to="/" />
 					</Switch>
 				</Container>
-				{/* <AppBar className={classes.footer}> TODO use a footer?
-					<Typography>Designed by Brendon Hudnell. 2021</Typography>
-				</AppBar> */}
+				<AppBar className={classes.footer}>
+					<Typography>
+						Please report any bugs or make feature requests&nbsp;
+						<Link
+							color="inherit"
+							underline="always"
+							href="https://github.com/BrendonHudnell/pf1-kingdom-building/issues"
+							target="_blank"
+							rel="noreferrer"
+						>
+							HERE
+						</Link>
+					</Typography>
+				</AppBar>
 			</div>
 		</Router>
 	);
