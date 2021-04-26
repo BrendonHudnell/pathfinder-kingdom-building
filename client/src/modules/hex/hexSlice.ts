@@ -97,6 +97,26 @@ export const hexSlice = createSlice({
 				state.entities[hexId]!.settlementId = settlementId;
 			}
 		},
+		pointsOfInterestUpdated: (
+			state,
+			action: PayloadAction<{ hexId: EntityId; pointsOfInterest: string }>
+		) => {
+			const { hexId, pointsOfInterest } = action.payload;
+
+			if (state.ids.includes(hexId)) {
+				state.entities[hexId]!.pointsOfInterest = pointsOfInterest;
+			}
+		},
+		notesUpdated: (
+			state,
+			action: PayloadAction<{ hexId: EntityId; notes: string }>
+		) => {
+			const { hexId, notes } = action.payload;
+
+			if (state.ids.includes(hexId)) {
+				state.entities[hexId]!.notes = notes;
+			}
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(
@@ -114,6 +134,8 @@ export const {
 	specialTerrainUpdated,
 	explorationStateUpdated,
 	settlementIdUpdated,
+	pointsOfInterestUpdated,
+	notesUpdated,
 } = hexSlice.actions;
 
 export const {

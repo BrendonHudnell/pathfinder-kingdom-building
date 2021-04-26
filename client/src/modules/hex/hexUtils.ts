@@ -18,6 +18,7 @@ export enum ExplorationState {
 	EXPLORED = 'Explored',
 	CLEARED = 'Cleared',
 	CLAIMED = 'Claimed',
+	SETTLED = 'Settled',
 }
 
 export enum SpecialTerrainType {
