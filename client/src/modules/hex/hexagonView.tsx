@@ -12,6 +12,9 @@ const useStyles = makeStyles({
 	small: {
 		fontSize: '3px',
 	},
+	cursor: {
+		cursor: 'pointer',
+	},
 });
 
 export interface HexagonViewProps {
@@ -25,6 +28,7 @@ export function HexagonView(props: HexagonViewProps): ReactElement {
 	const classes = useStyles();
 
 	const [open, setOpen] = useState(false);
+	const [over, setOver] = useState(false);
 
 	const hexData = useAppSelector((state) => selectHexById(state, hexId));
 
@@ -33,16 +37,25 @@ export function HexagonView(props: HexagonViewProps): ReactElement {
 	}
 
 	const color = mapTerrainToColor(hexData?.terrain ?? TerrainType.PLAINS);
+	const opacity = over ? 0.5 : 1;
 
 	return (
 		<Fragment>
 			{(hexId as number) % 16 !== 15 ? (
 				<Hexagon
+					className={classes.cursor}
 					q={hex.q}
 					r={hex.r}
 					s={hex.s}
-					cellStyle={{ fill: color, stroke: 'black', strokeWidth: '.1px' }}
+					cellStyle={{
+						fill: color,
+						stroke: 'black',
+						strokeWidth: '.1px',
+						opacity: opacity,
+					}}
 					onClick={() => setOpen(true)}
+					onMouseEnter={() => setOver(true)}
+					onMouseLeave={() => setOver(false)}
 				>
 					<Text className={classes.small}>{hexData?.terrain}</Text>{' '}
 					{/* TODO remove? */}
