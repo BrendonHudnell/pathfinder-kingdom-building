@@ -34,18 +34,17 @@ export const addNewSettlement = createAsyncThunk(
 	async ({
 		hexId,
 		settlementId,
-		districtId,
 	}: {
 		hexId: EntityId;
 		settlementId: EntityId;
-		districtId: EntityId;
 	}) => {
 		const newSettlement: Settlement = {
 			id: settlementId,
-			name: 'Test Settlement',
+			name: `Settlement ${settlementId}`,
 			hexId,
-			districts: [districtId],
+			districts: [],
 		};
+
 		return newSettlement;
 	}
 );
