@@ -1,4 +1,5 @@
 import {
+	createAsyncThunk,
 	createEntityAdapter,
 	createSelector,
 	createSlice,
@@ -8,6 +9,7 @@ import {
 
 import { RootState } from '../../components/store';
 import { BuildingId } from './buildingTypes';
+import { createEmptyLotArray, initialDistricts } from './districtUtils';
 
 // {
 // 	name: 'Watergate',
@@ -50,13 +52,61 @@ const districtAdapter = createEntityAdapter<District>();
 
 const initialState = districtAdapter.getInitialState();
 
+export const fetchDistricts = createAsyncThunk(
+	// TODO fix when server is hooked up
+	'district/fetchDistricts',
+	async () => {
+		return initialDistricts;
+	}
+);
+
+export const addNewDistrict = createAsyncThunk(
+	// TODO fix when server is hooked up
+	'district/addNewDistrict',
+	async ({
+		districtId,
+		settlementId,
+	}: {
+		districtId: EntityId;
+		settlementId: EntityId;
+	}) => {
+		const newDistrict: District = {
+			id: districtId,
+			settlementId,
+			name: 'New District',
+			paved: false,
+			sewers: false,
+			north: {
+				terrain: 'Land',
+				wall: false,
+				moat: false,
+			},
+			south: {
+				terrain: 'Land',
+				wall: false,
+				moat: false,
+			},
+			east: {
+				terrain: 'Land',
+				wall: false,
+				moat: false,
+			},
+			west: {
+				terrain: 'Land',
+				wall: false,
+				moat: false,
+			},
+			lotIds: createEmptyLotArray(),
+		};
+
+		return newDistrict;
+	}
+);
+
 export const districtSlice = createSlice({
 	name: 'district',
 	initialState,
 	reducers: {
-		fetchDistricts: (state, action: PayloadAction<District[]>) => {
-			districtAdapter.setAll(state, action.payload);
-		},
 		lotUpdated: (
 			state,
 			action: PayloadAction<{
@@ -95,9 +145,24 @@ export const districtSlice = createSlice({
 			}
 		},
 	},
+	extraReducers: (builder) => {
+		builder.addCase(
+			fetchDistricts.fulfilled,
+			(state, action: PayloadAction<District[]>) => {
+				districtAdapter.setAll(state, action.payload);
+			}
+		),
+			builder.addCase(
+				addNewDistrict.fulfilled,
+				(state, action: PayloadAction<District>) => {
+					console.log(action.payload);
+					districtAdapter.addOne(state, action.payload);
+				}
+			);
+	},
 });
 
-export const { fetchDistricts, lotUpdated, lotCleared } = districtSlice.actions;
+export const { lotUpdated, lotCleared } = districtSlice.actions;
 
 export const {
 	selectAll: selectAllDistricts,

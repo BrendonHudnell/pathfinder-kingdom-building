@@ -1,4 +1,5 @@
 import {
+	createAsyncThunk,
 	createEntityAdapter,
 	createSlice,
 	EntityId,
@@ -6,6 +7,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import { RootState } from '../../components/store';
+import { initialSettlements } from './settlementUtils';
 
 export interface Settlement {
 	id: EntityId;
@@ -18,13 +20,39 @@ const settlementAdapter = createEntityAdapter<Settlement>();
 
 const initialState = settlementAdapter.getInitialState();
 
+export const fetchSettlements = createAsyncThunk(
+	// TODO fix when server is hooked up
+	'settlement/fetchSettlements',
+	async () => {
+		return initialSettlements;
+	}
+);
+
+export const addNewSettlement = createAsyncThunk(
+	// TODO fix when server is hooked up
+	'settlement/addNewSettlement',
+	async ({
+		hexId,
+		settlementId,
+	}: {
+		hexId: EntityId;
+		settlementId: EntityId;
+	}) => {
+		const newSettlement: Settlement = {
+			id: settlementId,
+			name: `Settlement ${settlementId}`,
+			hexId,
+			districts: [],
+		};
+
+		return newSettlement;
+	}
+);
+
 export const settlementSlice = createSlice({
 	name: 'settlement',
 	initialState,
 	reducers: {
-		fetchSettlements: (state, action: PayloadAction<Settlement[]>) => {
-			settlementAdapter.setAll(state, action.payload);
-		},
 		nameUpdated: (
 			state,
 			action: PayloadAction<{ settlementId: EntityId; name: string }>
@@ -38,9 +66,23 @@ export const settlementSlice = createSlice({
 			}
 		},
 	},
+	extraReducers: (builder) => {
+		builder.addCase(
+			fetchSettlements.fulfilled,
+			(state, action: PayloadAction<Settlement[]>) => {
+				settlementAdapter.setAll(state, action.payload);
+			}
+		),
+			builder.addCase(
+				addNewSettlement.fulfilled,
+				(state, action: PayloadAction<Settlement>) => {
+					settlementAdapter.addOne(state, action.payload);
+				}
+			);
+	},
 });
 
-export const { fetchSettlements, nameUpdated } = settlementSlice.actions;
+export const { nameUpdated } = settlementSlice.actions;
 
 export const {
 	selectAll: selectAllSettlements,

@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core';
+
 import { ShellLayout } from './shellLayout';
 
 const theme = createMuiTheme({

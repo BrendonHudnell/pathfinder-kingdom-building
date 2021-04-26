@@ -5,8 +5,9 @@ import { Link } from 'react-router-dom';
 import { Settlement } from './settlementSlice';
 import {
 	useSettlementBonusByType,
-	useSettlementSize,
+	getSettlementSize,
 	useSettlementUnrest,
+	useSettlementPopulation,
 } from './settlementUtils';
 
 export interface SettlementRowProps {
@@ -16,7 +17,8 @@ export interface SettlementRowProps {
 export function SettlementListRow(props: SettlementRowProps): ReactElement {
 	const { settlement } = props;
 
-	const size = useSettlementSize(settlement.id);
+	const population = useSettlementPopulation(settlement.id);
+	const size = getSettlementSize(population);
 	const economy = useSettlementBonusByType(settlement.id, 'economy');
 	const stability = useSettlementBonusByType(settlement.id, 'stability');
 	const loyalty = useSettlementBonusByType(settlement.id, 'loyalty');

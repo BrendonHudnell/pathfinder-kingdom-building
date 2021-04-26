@@ -1,9 +1,12 @@
 import {
+	createAsyncThunk,
 	createEntityAdapter,
 	createSlice,
 	PayloadAction,
 } from '@reduxjs/toolkit';
+
 import { RootState } from '../../components/store';
+import { initialRoles } from './leadershipUtils';
 
 export interface Role {
 	id: number;
@@ -20,13 +23,18 @@ const leadershipAdapter = createEntityAdapter<Role>();
 
 const initialState = leadershipAdapter.getInitialState();
 
+export const fetchLeadershipRoles = createAsyncThunk(
+	// TODO fix when server is hooked up
+	'leadership/fetchLeadershipRoles',
+	async () => {
+		return initialRoles;
+	}
+);
+
 export const leadershipSlice = createSlice({
 	name: 'leadership',
 	initialState,
 	reducers: {
-		fetchLeadershipRoles: (state, action: PayloadAction<Role[]>) => {
-			leadershipAdapter.setAll(state, action.payload);
-		},
 		vacantToggled: (state, action: PayloadAction<number>) => {
 			const id = action.payload;
 			const role = state.entities[id];
@@ -83,10 +91,17 @@ export const leadershipSlice = createSlice({
 		},
 		viceroyAdded: leadershipAdapter.addOne,
 	},
+	extraReducers: (builder) => {
+		builder.addCase(
+			fetchLeadershipRoles.fulfilled,
+			(state, action: PayloadAction<Role[]>) => {
+				leadershipAdapter.setAll(state, action.payload);
+			}
+		);
+	},
 });
 
 export const {
-	fetchLeadershipRoles,
 	vacantToggled,
 	heldByUpdated,
 	attributeUpdated,
