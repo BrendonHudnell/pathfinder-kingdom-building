@@ -1,4 +1,5 @@
 import { configureStore, ThunkAction, AnyAction } from '@reduxjs/toolkit';
+
 import { districtReducer } from '../../modules/district';
 import { hexReducer } from '../../modules/hex';
 import { kingdomReducer } from '../../modules/kingdom';

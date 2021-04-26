@@ -1,4 +1,6 @@
-export const numberReducer = (
+export function numberReducer(
 	accumulator: number,
 	currentValue: number
-): number => accumulator + currentValue;
+): number {
+	return accumulator + currentValue;
+}

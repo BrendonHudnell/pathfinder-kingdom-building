@@ -1,7 +1,8 @@
+import React, { Fragment, ReactElement, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { EntityId } from '@reduxjs/toolkit';
-import React, { Fragment, ReactElement, useState } from 'react';
 import { Hex, Hexagon, Text } from 'react-hexgrid';
+
 import { useAppSelector } from '../../components/store';
 import { HexagonDetails } from './hexagonDetails';
 import { selectHexById } from './hexSlice';

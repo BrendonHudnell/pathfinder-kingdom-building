@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { HexGrid, Layout, GridGenerator, Hex } from 'react-hexgrid';
+
 import { HexagonView } from './hexagonView';
 
 export function HexGridView(): ReactElement {
