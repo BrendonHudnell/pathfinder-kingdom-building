@@ -6,7 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import { RootState } from '../../components/store';
-import { initialRoles } from './leadershipUtils';
+// import { initialRoles } from './leadershipUtils';
 
 export interface Role {
 	id: number;
@@ -26,8 +26,8 @@ const initialState = leadershipAdapter.getInitialState();
 export const fetchLeadershipRoles = createAsyncThunk(
 	// TODO fix when server is hooked up
 	'leadership/fetchLeadershipRoles',
-	async () => {
-		return initialRoles;
+	async (roles: Role[]) => {
+		return roles;
 	}
 );
 

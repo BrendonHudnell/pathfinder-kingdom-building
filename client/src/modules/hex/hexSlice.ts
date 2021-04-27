@@ -9,7 +9,7 @@ import {
 import { RootState } from '../../components/store';
 import {
 	ExplorationState,
-	initialHexes,
+	// initialHexes,
 	SpecialTerrainType,
 	TerrainType,
 } from './hexUtils';
@@ -32,8 +32,8 @@ const initialState = hexAdapter.getInitialState();
 export const fetchHexes = createAsyncThunk(
 	// TODO fix when server is hooked up
 	'hex/fetchHexes',
-	async () => {
-		return initialHexes;
+	async (hexes: HexData[]) => {
+		return hexes;
 	}
 );
 

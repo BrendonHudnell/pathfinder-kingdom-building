@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface KingdomState {
 	name: string;
@@ -15,7 +15,7 @@ export interface KingdomState {
 	taxationEdictLevel: number;
 }
 
-const initialState: KingdomState = {
+export const initialKingdomState: KingdomState = {
 	name: 'Untitled',
 	alignment: 'N',
 	month: 1,
@@ -30,9 +30,17 @@ const initialState: KingdomState = {
 	taxationEdictLevel: 0,
 };
 
+export const fetchKingdomData = createAsyncThunk(
+	// TODO fix when server is hooked up
+	'kingdom/fetchKingdomData',
+	async (kingdomState: KingdomState) => {
+		return kingdomState;
+	}
+);
+
 export const kingdomSlice = createSlice({
 	name: 'kingdom',
-	initialState,
+	initialState: initialKingdomState,
 	reducers: {
 		nameUpdated: (state, action: PayloadAction<string>) => {
 			state.name = action.payload;
@@ -198,6 +206,27 @@ export const kingdomSlice = createSlice({
 				state.loyalty -= 8;
 			}
 		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(
+			fetchKingdomData.fulfilled,
+			(state, action: PayloadAction<KingdomState>) => {
+				const kingdom = action.payload;
+
+				state.alignment = kingdom.alignment;
+				state.consumption = kingdom.consumption;
+				state.economy = kingdom.economy;
+				state.holidayEdictLevel = kingdom.holidayEdictLevel;
+				state.loyalty = kingdom.loyalty;
+				state.month = kingdom.month;
+				state.name = kingdom.name;
+				state.promotionEdictLevel = kingdom.promotionEdictLevel;
+				state.stability = kingdom.stability;
+				state.taxationEdictLevel = kingdom.taxationEdictLevel;
+				state.treasury = kingdom.treasury;
+				state.unrest = kingdom.unrest;
+			}
+		);
 	},
 });
 

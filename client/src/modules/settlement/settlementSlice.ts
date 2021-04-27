@@ -7,7 +7,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import { RootState } from '../../components/store';
-import { initialSettlements } from './settlementUtils';
+// import { initialSettlements } from './settlementUtils';
 
 export interface Settlement {
 	id: EntityId;
@@ -23,8 +23,8 @@ const initialState = settlementAdapter.getInitialState();
 export const fetchSettlements = createAsyncThunk(
 	// TODO fix when server is hooked up
 	'settlement/fetchSettlements',
-	async () => {
-		return initialSettlements;
+	async (settlements: Settlement[]) => {
+		return settlements;
 	}
 );
 
