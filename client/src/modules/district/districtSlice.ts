@@ -9,7 +9,7 @@ import {
 
 import { RootState } from '../../components/store';
 import { BuildingId } from './buildingTypes';
-import { createEmptyLotArray, initialDistricts } from './districtUtils';
+import { createEmptyLotArray /*initialDistricts */ } from './districtUtils';
 
 // {
 // 	name: 'Watergate',
@@ -55,8 +55,8 @@ const initialState = districtAdapter.getInitialState();
 export const fetchDistricts = createAsyncThunk(
 	// TODO fix when server is hooked up
 	'district/fetchDistricts',
-	async () => {
-		return initialDistricts;
+	async (districts: District[]) => {
+		return districts;
 	}
 );
 

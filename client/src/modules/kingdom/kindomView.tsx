@@ -7,6 +7,7 @@ import {
 	Paper,
 	Select,
 	TextField,
+	Tooltip,
 	Typography,
 } from '@material-ui/core';
 
@@ -66,15 +67,40 @@ export function KingdomView(): ReactElement {
 	// TODO need to add Size, Population, Control DC, and Terrain Income
 
 	const totalConsumption = consumption; // add size and hex/army slices info
+
 	const totalEconomy =
 		kingdomEconomy + leadershipEconomy + settlementEconomy - currentUnrest; // add hex slice info
+
 	const totalStability =
 		kingdomStability +
 		leadershipStability +
 		settlementStability -
 		currentUnrest; // add hex slice info
+
 	const totalLoyalty =
 		kingdomLoyalty + leadershipLoyalty + settlementLoyalty - currentUnrest; // add hex slice info
+
+	// TODO remove when server is connected
+	const state = useAppSelector((state) => state);
+	function saveState(): void {
+		localStorage.setItem('kingdom', JSON.stringify(state.kingdom));
+		localStorage.setItem(
+			'leadership',
+			JSON.stringify(state.leadership.entities)
+		);
+		localStorage.setItem(
+			'settlements',
+			JSON.stringify(state.settlement.entities)
+		);
+		localStorage.setItem('districts', JSON.stringify(state.district.entities));
+		localStorage.setItem('hexes', JSON.stringify(state.hex.entities));
+	}
+
+	// TODO remove when server is connected
+	function resetState(): void {
+		localStorage.clear();
+	}
+
 	return (
 		<Paper className={classes.container}>
 			<Grid container spacing={2}>
@@ -118,6 +144,28 @@ export function KingdomView(): ReactElement {
 						>
 							Next month
 						</Button>
+					</Grid>
+					{/*TODO remove buttons when server is connected*/}
+					<Grid item xs />
+					<Grid item>
+						<Button
+							variant="contained"
+							color="primary"
+							onClick={() => saveState()}
+						>
+							Save Current Kingdom
+						</Button>
+					</Grid>
+					<Grid item>
+						<Tooltip title="Refresh page to see defaults">
+							<Button
+								variant="contained"
+								color="secondary"
+								onClick={() => resetState()}
+							>
+								Reset to Defaults
+							</Button>
+						</Tooltip>
 					</Grid>
 				</Grid>
 

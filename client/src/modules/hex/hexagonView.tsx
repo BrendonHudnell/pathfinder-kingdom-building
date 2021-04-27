@@ -57,8 +57,8 @@ export function HexagonView(props: HexagonViewProps): ReactElement {
 					onMouseEnter={() => setOver(true)}
 					onMouseLeave={() => setOver(false)}
 				>
-					<Text className={classes.small}>{hexData?.terrain}</Text>{' '}
 					{/* TODO remove? */}
+					<Text className={classes.small}>{hexData?.terrain}</Text>
 				</Hexagon>
 			) : null}
 			{hexData ? (
