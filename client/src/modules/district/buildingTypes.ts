@@ -276,7 +276,7 @@ export const buildingList: Building[] = [
 	// 	special: 'Can share lot with Castle, Cathedral, Market, Monument, Park, or Town Hall'
 	// },
 	{
-		id: 17,
+		id: 16,
 		name: 'Exotic Artisan',
 		description:
 			'The shop and home of a jeweler, tinker, glassblower, or the like.',
@@ -287,7 +287,7 @@ export const buildingList: Building[] = [
 		limit: 'Adjacent to 1 house',
 	},
 	{
-		id: 18,
+		id: 17,
 		name: 'Foreign Quarter',
 		description:
 			'An area with many foreigners, as well as shops and services catering to them.',
@@ -299,7 +299,7 @@ export const buildingList: Building[] = [
 			'Increase the value of trade routes (see Trade Edicts) by 5% (maximum 100%)',
 	},
 	{
-		id: 19,
+		id: 18,
 		name: 'Foundry',
 		description: 'Processes ore and refines it into finished metal.',
 		cost: 16,
@@ -313,7 +313,7 @@ export const buildingList: Building[] = [
 			'Increase the Economy and BP earned per turn by 1 for 1 Mine connected to this settlement by a river or Road',
 	},
 	{
-		id: 20,
+		id: 19,
 		name: 'Garrison',
 		description:
 			'A large building to house armies, train guards, and recruit militia.',
@@ -325,7 +325,7 @@ export const buildingList: Building[] = [
 		discount: ['City Wall', 'Granary', 'Jail'],
 	},
 	{
-		id: 21,
+		id: 20,
 		name: 'Granary',
 		description: 'A place to store grain and food.',
 		cost: 12,
@@ -336,7 +336,7 @@ export const buildingList: Building[] = [
 			'If Farms reduce Consumption below 0, store up to 5 BP of excess production for use on a later turn when Consumption exceeds the Treasury',
 	},
 	{
-		id: 22,
+		id: 21,
 		name: 'Graveyard',
 		description: 'A plot of land to honor and bury the dead.',
 		cost: 4,
@@ -344,7 +344,7 @@ export const buildingList: Building[] = [
 		loyalty: 1,
 	},
 	{
-		id: 23,
+		id: 22,
 		name: 'Guildhall',
 		description: 'The headquarters for a guild or similar organization.',
 		cost: 34,
@@ -355,7 +355,7 @@ export const buildingList: Building[] = [
 		baseValueIncrease: 1000,
 	},
 	{
-		id: 24,
+		id: 23,
 		name: 'Herbalist',
 		description: 'The workshop and home of a gardener, healer, or poisoner.',
 		cost: 10,
@@ -365,7 +365,7 @@ export const buildingList: Building[] = [
 		limit: 'Adjacent to 1 house',
 	},
 	{
-		id: 25,
+		id: 24,
 		name: 'Hospital',
 		description: 'A building devoted to healing the sick.',
 		cost: 30,
@@ -375,7 +375,7 @@ export const buildingList: Building[] = [
 		special: 'Increase Stability by 2 during plague events',
 	},
 	{
-		id: 26,
+		id: 25,
 		name: 'House',
 		description: 'A number of mid-sized houses for citizens.',
 		cost: 3,
@@ -385,7 +385,7 @@ export const buildingList: Building[] = [
 			'The first House you build during the Improvement phase does not count against the total number of buildings you can build during the phase',
 	},
 	{
-		id: 27,
+		id: 26,
 		name: 'Inn',
 		description: 'A place for visitors to rest.',
 		cost: 10,
@@ -396,7 +396,7 @@ export const buildingList: Building[] = [
 		baseValueIncrease: 500,
 	},
 	{
-		id: 28,
+		id: 27,
 		name: 'Jail',
 		description:
 			'A fortified structure for confining criminals or dangerous monsters.',
@@ -407,7 +407,7 @@ export const buildingList: Building[] = [
 		unrest: -2,
 	},
 	{
-		id: 29,
+		id: 28,
 		name: 'Library',
 		description: 'A large building containing an archive of books.',
 		cost: 6,
@@ -417,7 +417,7 @@ export const buildingList: Building[] = [
 		upgradeTo: ['Academy'],
 	},
 	{
-		id: 30,
+		id: 29,
 		name: 'Luxury Store',
 		description:
 			'A shop that specializes in expensive comforts for the wealthy.',
@@ -429,7 +429,7 @@ export const buildingList: Building[] = [
 		baseValueIncrease: 2000,
 	},
 	{
-		id: 31,
+		id: 30,
 		name: 'Magic Shop',
 		description: 'A shop that specializes in magic items and spells.',
 		cost: 68,
@@ -439,7 +439,7 @@ export const buildingList: Building[] = [
 		baseValueIncrease: 2000,
 	},
 	{
-		id: 32,
+		id: 31,
 		name: 'Magical Academy',
 		description:
 			'An institution for training students in spellcasting, magic item crafting, and various arcane arts.',
@@ -458,7 +458,7 @@ export const buildingList: Building[] = [
 	// 	special: 'Can share a lot with any building or improvement'
 	// },
 	{
-		id: 34,
+		id: 32,
 		name: 'Mansion',
 		description: 'A single huge manor housing a rich family and its servants.',
 		cost: 10,
@@ -467,7 +467,7 @@ export const buildingList: Building[] = [
 		upgradeTo: ['Noble Villa'],
 	},
 	{
-		id: 35,
+		id: 33,
 		name: 'Market',
 		description: 'An open area for traveling merchants and bargain hunters.',
 		cost: 48,
@@ -479,7 +479,7 @@ export const buildingList: Building[] = [
 		baseValueIncrease: 2000,
 	},
 	{
-		id: 36,
+		id: 34,
 		name: 'Menagerie',
 		description:
 			'A large park stocked with exotic creatures for public viewing.',
@@ -490,7 +490,7 @@ export const buildingList: Building[] = [
 			'Increase Loyalty by 1/4 the CR of the highest-CR creature in the Menagerie',
 	},
 	{
-		id: 37,
+		id: 35,
 		name: 'Military Academy',
 		description:
 			'An institution dedicated to the study of war and the training of elite soldiers and officers.',
@@ -504,7 +504,7 @@ export const buildingList: Building[] = [
 			'Armies and commanders recruited at the settlement gain one bonus tactic (see Army Tactics)',
 	},
 	{
-		id: 38,
+		id: 36,
 		name: 'Mill',
 		description: 'A building used to cut lumber or grind grain.',
 		cost: 6,
@@ -516,7 +516,7 @@ export const buildingList: Building[] = [
 			'With GM approval, you can construct a windmill at the same cost without the water district border requirement',
 	},
 	{
-		id: 39,
+		id: 37,
 		name: 'Mint',
 		description:
 			"A secure building where the kingdom's coinage is minted and standard weights and measures are kept.",
@@ -527,7 +527,7 @@ export const buildingList: Building[] = [
 		loyalty: 3,
 	},
 	{
-		id: 40,
+		id: 38,
 		name: 'Monastery',
 		description:
 			'A cloister for meditation, study, and the pursuit of various other scholarly paths.',
@@ -536,7 +536,7 @@ export const buildingList: Building[] = [
 		stability: 1,
 	},
 	{
-		id: 41,
+		id: 39,
 		name: 'Monument',
 		description:
 			'A local memorial such as a bell tower, a statue of a settlement founder, a large tomb, or a public display of art.',
@@ -546,7 +546,7 @@ export const buildingList: Building[] = [
 		unrest: -1,
 	},
 	{
-		id: 42,
+		id: 40,
 		name: 'Museum',
 		description:
 			"A place to display art and artifacts both modern and historical. The GM may allow the kingdom leaders to display a valuable item (such as a magic item or bejeweled statue) in the museum, increasing Fame during this display by 1 for every 10,000 gp of the item's price (maximum +5 Fame), and by an additional 1 if the item is significant to the kingdom's history.",
@@ -556,7 +556,7 @@ export const buildingList: Building[] = [
 		loyalty: 1,
 	},
 	{
-		id: 43,
+		id: 41,
 		name: 'Noble Villa',
 		description:
 			"A sprawling manor with luxurious grounds that houses a noble's family and staff.",
@@ -568,7 +568,7 @@ export const buildingList: Building[] = [
 		discount: ['Exotic Artisan', 'Luxury Store', 'Mansion'],
 	},
 	{
-		id: 44,
+		id: 42,
 		name: 'Observatory',
 		description:
 			'A dome or tower with optical devices for viewing the heavens.',
@@ -577,7 +577,7 @@ export const buildingList: Building[] = [
 		stability: 1,
 	},
 	{
-		id: 45,
+		id: 43,
 		name: 'Orphanage',
 		description:
 			'A place for housing and taking care of large numbers of orphans.',
@@ -587,7 +587,7 @@ export const buildingList: Building[] = [
 		unrest: -1,
 	},
 	{
-		id: 46,
+		id: 44,
 		name: 'Palace',
 		description:
 			"A grand edifice and walled grounds demonstrating one's wealth, power, and authority to the world.",
@@ -602,7 +602,7 @@ export const buildingList: Building[] = [
 			'You may make two special edicts per turn, but take a –2 penalty on kingdom checks associated with each special edict',
 	},
 	{
-		id: 47,
+		id: 45,
 		name: 'Park',
 		description: 'A plot of land set aside for its serene beauty.',
 		cost: 4,
@@ -611,7 +611,7 @@ export const buildingList: Building[] = [
 		unrest: -1,
 	},
 	{
-		id: 48,
+		id: 46,
 		name: 'Pier',
 		description:
 			'Warehouses and workshops for docking ships and handling cargo and passengers.',
@@ -624,7 +624,7 @@ export const buildingList: Building[] = [
 		baseValueIncrease: 1000,
 	},
 	{
-		id: 49,
+		id: 47,
 		name: 'Shop',
 		description: 'A general store.',
 		cost: 8,
@@ -635,7 +635,7 @@ export const buildingList: Building[] = [
 		baseValueIncrease: 500,
 	},
 	{
-		id: 50,
+		id: 48,
 		name: 'Shrine',
 		description:
 			'A shrine, idol, sacred grove, or similar holy site designed for worship by pious individuals.',
@@ -646,7 +646,7 @@ export const buildingList: Building[] = [
 		upgradeTo: ['Temple'],
 	},
 	{
-		id: 51,
+		id: 49,
 		name: 'Smithy',
 		description:
 			'The workshop of an armorsmith, blacksmith, weaponsmith, or other craftsman who works with metal.',
@@ -656,7 +656,7 @@ export const buildingList: Building[] = [
 		stability: 1,
 	},
 	{
-		id: 52,
+		id: 50,
 		name: 'Stable',
 		description: 'A structure for housing or selling horses and other mounts.',
 		cost: 10,
@@ -667,7 +667,7 @@ export const buildingList: Building[] = [
 		baseValueIncrease: 500,
 	},
 	{
-		id: 53,
+		id: 51,
 		name: 'Stockyard',
 		description:
 			'Barns and pens that store herd animals and prepare them for nearby slaughterhouses.',
@@ -680,7 +680,7 @@ export const buildingList: Building[] = [
 			'Farms in this hex or adjacent hexes reduce Consumption by 3 instead of 2',
 	},
 	{
-		id: 54,
+		id: 52,
 		name: 'Tannery',
 		description: 'A structure that prepares hides and leather.',
 		cost: 6,
@@ -690,7 +690,7 @@ export const buildingList: Building[] = [
 		limit: 'Cannot be adjacent to House, Mansion, Noble Villa, or Tenement',
 	},
 	{
-		id: 55,
+		id: 53,
 		name: 'Tavern',
 		description: 'An eating or drinking establishment.',
 		cost: 12,
@@ -701,7 +701,7 @@ export const buildingList: Building[] = [
 		baseValueIncrease: 500,
 	},
 	{
-		id: 56,
+		id: 54,
 		name: 'Temple',
 		description: 'A large place of worship dedicated to a deity.',
 		cost: 32,
@@ -712,7 +712,7 @@ export const buildingList: Building[] = [
 		discount: ['Graveyard', 'Monument', 'Shrine'],
 	},
 	{
-		id: 57,
+		id: 55,
 		name: 'Tenement',
 		description: 'A staggering number of low-rent housing units.',
 		cost: 1,
@@ -722,7 +722,7 @@ export const buildingList: Building[] = [
 		special: 'Counts as House for buildings that must be adjacent to a House',
 	},
 	{
-		id: 58,
+		id: 56,
 		name: 'Theater',
 		description:
 			'A venue for entertainments such as plays, operas, and concerts.',
@@ -734,7 +734,7 @@ export const buildingList: Building[] = [
 		upgradeTo: ['Arena'],
 	},
 	{
-		id: 59,
+		id: 57,
 		name: 'Town Hall',
 		description:
 			'A public venue for town meetings, repository for town records, and offices for minor bureaucrats.',
@@ -746,7 +746,7 @@ export const buildingList: Building[] = [
 		discount: ['Barracks', 'Cistern', 'Dump', 'Jail', 'Watchtower'],
 	},
 	{
-		id: 60,
+		id: 58,
 		name: 'Trade Shop',
 		description:
 			'A shop front for a tradesperson, such as a baker, butcher, candle maker, cobbler, rope maker, or wainwright.',
@@ -759,7 +759,7 @@ export const buildingList: Building[] = [
 		baseValueIncrease: 500,
 	},
 	{
-		id: 61,
+		id: 59,
 		name: 'University',
 		description:
 			'An institution of higher learning, focusing mainly on mundane subjects but dabbling in magical theory.',
@@ -777,7 +777,7 @@ export const buildingList: Building[] = [
 		],
 	},
 	{
-		id: 62,
+		id: 60,
 		name: 'Watchtower',
 		description: 'A tall structure that serves as a guard post.',
 		cost: 12,
@@ -787,7 +787,7 @@ export const buildingList: Building[] = [
 		defense: 2,
 	},
 	{
-		id: 63,
+		id: 61,
 		name: 'Waterfront',
 		description:
 			'A port for waterborne arrival and departure, with facilities for shipping and shipbuilding.',
@@ -800,7 +800,7 @@ export const buildingList: Building[] = [
 		special: 'Halves Loyalty penalty for Taxation edicts',
 	},
 	{
-		id: 64,
+		id: 62,
 		name: 'Waterway',
 		description:
 			"A river or canal occupying part of the District Grid. At the GM's option, a natural Waterway may already exist on the grid, requiring no action or BP to build. If you construct a City Wall that touches or crosses the Waterway, you must also build Watergates on the same turn.",
