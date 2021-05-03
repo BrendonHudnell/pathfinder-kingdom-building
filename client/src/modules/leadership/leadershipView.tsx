@@ -1,5 +1,6 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import {
+	Button,
 	makeStyles,
 	Paper,
 	Table,
@@ -9,8 +10,8 @@ import {
 	TableRow,
 } from '@material-ui/core';
 
-import { useAppSelector } from '../../components/store';
-import { selectAllRoles } from './leadershipSlice';
+import { useAppDispatch, useAppSelector } from '../../components/store';
+import { secondRulerToggled, selectAllRoles } from './leadershipSlice';
 import { RoleRow } from './roleRow';
 
 const useStyles = makeStyles((theme) => {
@@ -24,7 +25,24 @@ const useStyles = makeStyles((theme) => {
 export function LeadershipView(): ReactElement {
 	const classes = useStyles();
 
+	const dispatch = useAppDispatch();
+
 	const roles = useAppSelector((state) => selectAllRoles(state));
+
+	const [secondRuler, setSecondRuler] = useState(
+		roles.map((role) => role.name).includes('Second Ruler')
+	);
+
+	function toggleSecondRuler(): void {
+		setSecondRuler(!secondRuler);
+		if (secondRuler) {
+			dispatch(secondRulerToggled({ id: 2, changes: { name: 'Consort' } }));
+		} else {
+			dispatch(
+				secondRulerToggled({ id: 2, changes: { name: 'Second Ruler' } })
+			);
+		}
+	}
 
 	return (
 		<Paper className={classes.container}>
@@ -38,6 +56,15 @@ export function LeadershipView(): ReactElement {
 						<TableCell>Ability Bonus</TableCell>
 						<TableCell>Leadership?</TableCell>
 						<TableCell>Benefit</TableCell>
+						<TableCell>
+							<Button
+								variant="contained"
+								color="primary"
+								onClick={() => toggleSecondRuler()}
+							>
+								{secondRuler ? 'Remove Second Ruler' : 'Add Second Ruler'}
+							</Button>
+						</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>

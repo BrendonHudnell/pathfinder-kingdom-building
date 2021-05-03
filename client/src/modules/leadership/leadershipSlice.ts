@@ -2,6 +2,7 @@ import {
 	createAsyncThunk,
 	createEntityAdapter,
 	createSlice,
+	EntityId,
 	PayloadAction,
 } from '@reduxjs/toolkit';
 
@@ -35,7 +36,7 @@ export const leadershipSlice = createSlice({
 	name: 'leadership',
 	initialState,
 	reducers: {
-		vacantToggled: (state, action: PayloadAction<number>) => {
+		vacantToggled: (state, action: PayloadAction<EntityId>) => {
 			const id = action.payload;
 			const role = state.entities[id];
 			if (role) {
@@ -44,7 +45,7 @@ export const leadershipSlice = createSlice({
 		},
 		heldByUpdated: (
 			state,
-			action: PayloadAction<{ id: number; heldBy: string }>
+			action: PayloadAction<{ id: EntityId; heldBy: string }>
 		) => {
 			const { id, heldBy } = action.payload;
 			const role = state.entities[id];
@@ -54,7 +55,7 @@ export const leadershipSlice = createSlice({
 		},
 		attributeUpdated: (
 			state,
-			action: PayloadAction<{ id: number; attribute: string }>
+			action: PayloadAction<{ id: EntityId; attribute: string }>
 		) => {
 			const { id, attribute } = action.payload;
 			const role = state.entities[id];
@@ -64,7 +65,7 @@ export const leadershipSlice = createSlice({
 		},
 		abilityBonusUpdated: (
 			state,
-			action: PayloadAction<{ id: number; abilityBonus: number }>
+			action: PayloadAction<{ id: EntityId; abilityBonus: number }>
 		) => {
 			const { id, abilityBonus } = action.payload;
 			const role = state.entities[id];
@@ -72,7 +73,7 @@ export const leadershipSlice = createSlice({
 				role.abilityBonus = abilityBonus;
 			}
 		},
-		leadershipToggled: (state, action: PayloadAction<number>) => {
+		leadershipToggled: (state, action: PayloadAction<EntityId>) => {
 			const id = action.payload;
 			const role = state.entities[id];
 			if (role) {
@@ -81,7 +82,7 @@ export const leadershipSlice = createSlice({
 		},
 		benefitUpdated: (
 			state,
-			action: PayloadAction<{ id: number; benefit: string }>
+			action: PayloadAction<{ id: EntityId; benefit: string }>
 		) => {
 			const { id, benefit } = action.payload;
 			const role = state.entities[id];
@@ -89,6 +90,7 @@ export const leadershipSlice = createSlice({
 				role.benefit = benefit;
 			}
 		},
+		secondRulerToggled: leadershipAdapter.updateOne,
 		viceroyAdded: leadershipAdapter.addOne,
 	},
 	extraReducers: (builder) => {
@@ -108,6 +110,7 @@ export const {
 	abilityBonusUpdated,
 	leadershipToggled,
 	benefitUpdated,
+	secondRulerToggled,
 	viceroyAdded,
 } = leadershipSlice.actions;
 

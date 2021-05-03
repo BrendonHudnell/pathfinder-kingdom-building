@@ -127,8 +127,8 @@ export function RoleRow(props: RoleRowProps): ReactElement {
 					onChange={() => dispatch(leadershipToggled(id))}
 				/>
 			</TableCell>
-			<TableCell>
-				{name === 'Ruler' || name === 'Spymaster' ? (
+			<TableCell colSpan={2}>
+				{name === 'Ruler' || name === 'Second Ruler' || name === 'Spymaster' ? (
 					<Select
 						disabled={vacant}
 						style={{ minWidth: '34ch' }}
@@ -139,7 +139,7 @@ export function RoleRow(props: RoleRowProps): ReactElement {
 							)
 						}
 					>
-						{name === 'Ruler'
+						{name === 'Ruler' || name === 'Second Ruler'
 							? benefitList.map((benefit) => (
 									<MenuItem key={`${id}.${benefit}`} value={benefit}>
 										{benefit}
