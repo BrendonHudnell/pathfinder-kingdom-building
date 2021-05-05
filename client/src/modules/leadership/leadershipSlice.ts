@@ -32,6 +32,27 @@ export const fetchLeadershipRoles = createAsyncThunk(
 	}
 );
 
+export const viceroyAdded = createAsyncThunk(
+	// TODO fix when server is hooked up
+	'leadership/viceroyAdded',
+	async (_, thunkApi) => {
+		const state = thunkApi.getState() as RootState;
+
+		const viceroy: Role = {
+			id: state.leadership.ids.length + 1,
+			name: 'Viceroy',
+			heldBy: '',
+			attribute: 'Intelligence/2',
+			abilityBonus: 0,
+			leadership: false,
+			benefit: 'Economy',
+			vacant: true,
+		};
+
+		return viceroy;
+	}
+);
+
 export const leadershipSlice = createSlice({
 	name: 'leadership',
 	initialState,
@@ -91,7 +112,7 @@ export const leadershipSlice = createSlice({
 			}
 		},
 		secondRulerToggled: leadershipAdapter.updateOne,
-		viceroyAdded: leadershipAdapter.addOne,
+		viceroyDeleted: leadershipAdapter.removeOne,
 	},
 	extraReducers: (builder) => {
 		builder.addCase(
@@ -99,7 +120,13 @@ export const leadershipSlice = createSlice({
 			(state, action: PayloadAction<Role[]>) => {
 				leadershipAdapter.setAll(state, action.payload);
 			}
-		);
+		),
+			builder.addCase(
+				viceroyAdded.fulfilled,
+				(state, action: PayloadAction<Role>) => {
+					leadershipAdapter.addOne(state, action.payload);
+				}
+			);
 	},
 });
 
@@ -111,7 +138,7 @@ export const {
 	leadershipToggled,
 	benefitUpdated,
 	secondRulerToggled,
-	viceroyAdded,
+	viceroyDeleted,
 } = leadershipSlice.actions;
 
 export const {
