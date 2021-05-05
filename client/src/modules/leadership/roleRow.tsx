@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import {
+	Button,
 	Checkbox,
 	makeStyles,
 	MenuItem,
@@ -19,6 +20,7 @@ import {
 	leadershipToggled,
 	Role,
 	vacantToggled,
+	viceroyDeleted,
 } from './leadershipSlice';
 import { staticRoleThings } from './leadershipUtils';
 
@@ -127,8 +129,8 @@ export function RoleRow(props: RoleRowProps): ReactElement {
 					onChange={() => dispatch(leadershipToggled(id))}
 				/>
 			</TableCell>
-			<TableCell>
-				{name === 'Ruler' || name === 'Spymaster' ? (
+			<TableCell colSpan={name === 'Viceroy' ? 1 : 2}>
+				{name === 'Ruler' || name === 'Second Ruler' || name === 'Spymaster' ? (
 					<Select
 						disabled={vacant}
 						style={{ minWidth: '34ch' }}
@@ -139,7 +141,7 @@ export function RoleRow(props: RoleRowProps): ReactElement {
 							)
 						}
 					>
-						{name === 'Ruler'
+						{name === 'Ruler' || name === 'Second Ruler'
 							? benefitList.map((benefit) => (
 									<MenuItem key={`${id}.${benefit}`} value={benefit}>
 										{benefit}
@@ -157,6 +159,17 @@ export function RoleRow(props: RoleRowProps): ReactElement {
 					</Typography>
 				)}
 			</TableCell>
+			{name === 'Viceroy' ? (
+				<TableCell>
+					<Button
+						variant="contained"
+						color="secondary"
+						onClick={() => dispatch(viceroyDeleted(id))}
+					>
+						Remove Viceroy
+					</Button>
+				</TableCell>
+			) : null}
 		</TableRow>
 	);
 }

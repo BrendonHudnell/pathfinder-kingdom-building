@@ -2,6 +2,7 @@ import {
 	createAsyncThunk,
 	createEntityAdapter,
 	createSlice,
+	EntityId,
 	PayloadAction,
 } from '@reduxjs/toolkit';
 
@@ -31,11 +32,32 @@ export const fetchLeadershipRoles = createAsyncThunk(
 	}
 );
 
+export const viceroyAdded = createAsyncThunk(
+	// TODO fix when server is hooked up
+	'leadership/viceroyAdded',
+	async (_, thunkApi) => {
+		const state = thunkApi.getState() as RootState;
+
+		const viceroy: Role = {
+			id: state.leadership.ids.length + 1,
+			name: 'Viceroy',
+			heldBy: '',
+			attribute: 'Intelligence/2',
+			abilityBonus: 0,
+			leadership: false,
+			benefit: 'Economy',
+			vacant: true,
+		};
+
+		return viceroy;
+	}
+);
+
 export const leadershipSlice = createSlice({
 	name: 'leadership',
 	initialState,
 	reducers: {
-		vacantToggled: (state, action: PayloadAction<number>) => {
+		vacantToggled: (state, action: PayloadAction<EntityId>) => {
 			const id = action.payload;
 			const role = state.entities[id];
 			if (role) {
@@ -44,7 +66,7 @@ export const leadershipSlice = createSlice({
 		},
 		heldByUpdated: (
 			state,
-			action: PayloadAction<{ id: number; heldBy: string }>
+			action: PayloadAction<{ id: EntityId; heldBy: string }>
 		) => {
 			const { id, heldBy } = action.payload;
 			const role = state.entities[id];
@@ -54,7 +76,7 @@ export const leadershipSlice = createSlice({
 		},
 		attributeUpdated: (
 			state,
-			action: PayloadAction<{ id: number; attribute: string }>
+			action: PayloadAction<{ id: EntityId; attribute: string }>
 		) => {
 			const { id, attribute } = action.payload;
 			const role = state.entities[id];
@@ -64,7 +86,7 @@ export const leadershipSlice = createSlice({
 		},
 		abilityBonusUpdated: (
 			state,
-			action: PayloadAction<{ id: number; abilityBonus: number }>
+			action: PayloadAction<{ id: EntityId; abilityBonus: number }>
 		) => {
 			const { id, abilityBonus } = action.payload;
 			const role = state.entities[id];
@@ -72,7 +94,7 @@ export const leadershipSlice = createSlice({
 				role.abilityBonus = abilityBonus;
 			}
 		},
-		leadershipToggled: (state, action: PayloadAction<number>) => {
+		leadershipToggled: (state, action: PayloadAction<EntityId>) => {
 			const id = action.payload;
 			const role = state.entities[id];
 			if (role) {
@@ -81,7 +103,7 @@ export const leadershipSlice = createSlice({
 		},
 		benefitUpdated: (
 			state,
-			action: PayloadAction<{ id: number; benefit: string }>
+			action: PayloadAction<{ id: EntityId; benefit: string }>
 		) => {
 			const { id, benefit } = action.payload;
 			const role = state.entities[id];
@@ -89,7 +111,8 @@ export const leadershipSlice = createSlice({
 				role.benefit = benefit;
 			}
 		},
-		viceroyAdded: leadershipAdapter.addOne,
+		secondRulerToggled: leadershipAdapter.updateOne,
+		viceroyDeleted: leadershipAdapter.removeOne,
 	},
 	extraReducers: (builder) => {
 		builder.addCase(
@@ -97,7 +120,13 @@ export const leadershipSlice = createSlice({
 			(state, action: PayloadAction<Role[]>) => {
 				leadershipAdapter.setAll(state, action.payload);
 			}
-		);
+		),
+			builder.addCase(
+				viceroyAdded.fulfilled,
+				(state, action: PayloadAction<Role>) => {
+					leadershipAdapter.addOne(state, action.payload);
+				}
+			);
 	},
 });
 
@@ -108,7 +137,8 @@ export const {
 	abilityBonusUpdated,
 	leadershipToggled,
 	benefitUpdated,
-	viceroyAdded,
+	secondRulerToggled,
+	viceroyDeleted,
 } = leadershipSlice.actions;
 
 export const {

@@ -19,6 +19,13 @@ export const staticRoleThings: RoleConstants[] = [
 		unrest: 4,
 	},
 	{
+		name: 'Second Ruler',
+		attributeOptions: ['Charisma'],
+		penalty: [],
+		penaltyAmount: 0,
+		unrest: 0,
+	},
+	{
 		name: 'Consort',
 		attributeOptions: ['Charisma/2'],
 		penalty: [],
@@ -141,7 +148,11 @@ export function getLeadershipPositivesByType(
 ): number {
 	return roles
 		.filter((role) => !role.vacant && role.benefit.includes(bonusType))
-		.map((role) => role.abilityBonus + (role.leadership ? 1 : 0))
+		.map((role) =>
+			role.name === 'Consort' || role.name === 'Heir'
+				? Math.floor(role.abilityBonus / 2) + (role.leadership ? 1 : 0)
+				: role.abilityBonus + (role.leadership ? 1 : 0)
+		)
 		.reduce(numberReducer, 0);
 }
 
