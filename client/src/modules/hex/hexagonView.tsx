@@ -1,12 +1,18 @@
 import React, { Fragment, ReactElement, useState } from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Tooltip } from '@material-ui/core';
 import { EntityId } from '@reduxjs/toolkit';
 import { Hex, Hexagon, Text } from 'react-hexgrid';
 
 import { useAppSelector } from '../../components/store';
 import { HexagonDetails } from './hexagonDetails';
 import { selectHexById } from './hexSlice';
-import { mapTerrainToColor, TerrainType } from './hexUtils';
+import {
+	ExplorationState,
+	mapExplorationStateToBorderColor,
+	mapTerrainToColor,
+	TerrainType,
+} from './hexUtils';
+import { HexagonTooltip } from './hexagonTooltip';
 
 const useStyles = makeStyles({
 	small: {
@@ -36,21 +42,32 @@ export function HexagonView(props: HexagonViewProps): ReactElement {
 		setOpen(false);
 	}
 
-	const color = mapTerrainToColor(hexData?.terrain ?? TerrainType.PLAINS);
+	const hexColor = mapTerrainToColor(hexData?.terrain ?? TerrainType.PLAINS);
+	const hexBorderColor = mapExplorationStateToBorderColor(
+		hexData?.explorationState ?? ExplorationState.UNEXPLORED
+	);
+	const strokeWidth =
+		hexData?.explorationState === ExplorationState.CLAIMED ||
+		hexData?.explorationState === ExplorationState.SETTLED
+			? '.4px'
+			: '.2px';
 	const opacity = over ? 0.5 : 1;
 
 	return (
 		<Fragment>
-			{(hexId as number) % 16 !== 15 ? (
+			<Tooltip
+				id={`hexagon-tooltip-${hexId}`}
+				title={<HexagonTooltip hexData={hexData} />}
+			>
 				<Hexagon
 					className={classes.cursor}
 					q={hex.q}
 					r={hex.r}
 					s={hex.s}
 					cellStyle={{
-						fill: color,
-						stroke: 'black',
-						strokeWidth: '.1px',
+						fill: hexColor,
+						stroke: hexBorderColor,
+						strokeWidth: strokeWidth,
 						opacity: opacity,
 					}}
 					onClick={() => setOpen(true)}
@@ -60,7 +77,7 @@ export function HexagonView(props: HexagonViewProps): ReactElement {
 					{/* TODO remove? */}
 					<Text className={classes.small}>{hexData?.terrain}</Text>
 				</Hexagon>
-			) : null}
+			</Tooltip>
 			{hexData ? (
 				<HexagonDetails hexData={hexData} open={open} onClose={handleClose} />
 			) : null}
