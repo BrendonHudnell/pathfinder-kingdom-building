@@ -77,6 +77,40 @@ export const hexSlice = createSlice({
 				state.entities[hexId]!.explorationState = explorationState;
 			}
 		},
+		terrainImprovementAdded: (
+			state,
+			action: PayloadAction<{
+				hexId: EntityId;
+				terrainImprovement: TerrainImprovementType;
+			}>
+		) => {
+			const { hexId, terrainImprovement } = action.payload;
+
+			if (
+				state.ids.includes(hexId) &&
+				!state.entities[hexId]!.terrainImprovements.includes(terrainImprovement)
+			) {
+				state.entities[hexId]!.terrainImprovements.push(terrainImprovement);
+			}
+		},
+		terrainImprovementRemoved: (
+			state,
+			action: PayloadAction<{
+				hexId: EntityId;
+				terrainImprovement: TerrainImprovementType;
+			}>
+		) => {
+			const { hexId, terrainImprovement } = action.payload;
+
+			if (state.ids.includes(hexId)) {
+				const index = state.entities[hexId]!.terrainImprovements.indexOf(
+					terrainImprovement
+				);
+				if (index > -1) {
+					state.entities[hexId]!.terrainImprovements.splice(index, 1);
+				}
+			}
+		},
 		specialTerrainAdded: (
 			state,
 			action: PayloadAction<{
@@ -155,6 +189,8 @@ export const hexSlice = createSlice({
 export const {
 	terrainUpdated,
 	nameUpdated,
+	terrainImprovementAdded,
+	terrainImprovementRemoved,
 	specialTerrainAdded,
 	specialTerrainRemoved,
 	explorationStateUpdated,
