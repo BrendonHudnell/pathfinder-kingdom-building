@@ -1,6 +1,7 @@
 import {
 	createAsyncThunk,
 	createEntityAdapter,
+	createSelector,
 	createSlice,
 	EntityId,
 	PayloadAction,
@@ -11,6 +12,7 @@ import {
 	ExplorationState,
 	// initialHexes,
 	SpecialTerrainType,
+	TerrainImprovementType,
 	TerrainType,
 } from './hexUtils';
 
@@ -18,9 +20,10 @@ export interface HexData {
 	id: EntityId;
 	name: string;
 	terrain: TerrainType;
-	specialTerrain: SpecialTerrainType;
+	specialTerrain: SpecialTerrainType[];
 	explorationState: ExplorationState;
 	settlementId: EntityId;
+	terrainImprovements: TerrainImprovementType[];
 	pointsOfInterest: string;
 	notes: string;
 }
@@ -74,7 +77,23 @@ export const hexSlice = createSlice({
 				state.entities[hexId]!.explorationState = explorationState;
 			}
 		},
-		specialTerrainUpdated: (
+		specialTerrainAdded: (
+			state,
+			action: PayloadAction<{
+				hexId: EntityId;
+				specialTerrain: SpecialTerrainType;
+			}>
+		) => {
+			const { hexId, specialTerrain } = action.payload;
+
+			if (
+				state.ids.includes(hexId) &&
+				!state.entities[hexId]!.specialTerrain.includes(specialTerrain)
+			) {
+				state.entities[hexId]!.specialTerrain.push(specialTerrain);
+			}
+		},
+		specialTerrainRemoved: (
 			state,
 			action: PayloadAction<{
 				hexId: EntityId;
@@ -84,7 +103,12 @@ export const hexSlice = createSlice({
 			const { hexId, specialTerrain } = action.payload;
 
 			if (state.ids.includes(hexId)) {
-				state.entities[hexId]!.specialTerrain = specialTerrain;
+				const index = state.entities[hexId]!.specialTerrain.indexOf(
+					specialTerrain
+				);
+				if (index > -1) {
+					state.entities[hexId]!.specialTerrain.splice(index, 1);
+				}
 			}
 		},
 		settlementIdUpdated: (
@@ -131,7 +155,8 @@ export const hexSlice = createSlice({
 export const {
 	terrainUpdated,
 	nameUpdated,
-	specialTerrainUpdated,
+	specialTerrainAdded,
+	specialTerrainRemoved,
 	explorationStateUpdated,
 	settlementIdUpdated,
 	pointsOfInterestUpdated,
@@ -142,5 +167,13 @@ export const {
 	selectAll: selectAllHexes,
 	selectById: selectHexById,
 } = hexAdapter.getSelectors<RootState>((state) => state.hex);
+
+export const selectClaimedHexes = createSelector([selectAllHexes], (hexes) =>
+	hexes.filter(
+		(hex) =>
+			hex.explorationState === ExplorationState.CLAIMED ||
+			hex.explorationState === ExplorationState.SETTLED
+	)
+);
 
 export const hexReducer = hexSlice.reducer;

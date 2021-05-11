@@ -1,10 +1,13 @@
 import React, { ReactElement } from 'react';
 import {
 	Button,
+	Checkbox,
 	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogTitle,
+	FormControlLabel,
+	Grid,
 	makeStyles,
 	MenuItem,
 	Select,
@@ -28,7 +31,8 @@ import {
 	notesUpdated,
 	pointsOfInterestUpdated,
 	settlementIdUpdated,
-	specialTerrainUpdated,
+	specialTerrainAdded,
+	specialTerrainRemoved,
 	terrainUpdated,
 } from './hexSlice';
 
@@ -75,6 +79,17 @@ export function HexagonDetails(props: HexagonDetailsProps): ReactElement {
 				explorationState: ExplorationState.SETTLED,
 			})
 		);
+	}
+
+	function toggleSpecialTerrain(
+		specialTerrain: SpecialTerrainType,
+		isChecked: boolean
+	): void {
+		if (isChecked) {
+			dispatch(specialTerrainAdded({ hexId, specialTerrain }));
+		} else {
+			dispatch(specialTerrainRemoved({ hexId, specialTerrain }));
+		}
 	}
 
 	return (
@@ -128,24 +143,23 @@ export function HexagonDetails(props: HexagonDetailsProps): ReactElement {
 								<Typography>Special terrain:</Typography>
 							</TableCell>
 							<TableCell className={classes.borderlessRight}>
-								<Select
-									style={{ minWidth: '10ch' }}
-									value={hexData.specialTerrain}
-									onChange={(e) =>
-										dispatch(
-											specialTerrainUpdated({
-												hexId,
-												specialTerrain: e.target.value as SpecialTerrainType,
-											})
-										)
-									}
-								>
+								<Grid container>
 									{Object.values(SpecialTerrainType).map((type) => (
-										<MenuItem key={type} value={type}>
-											{type}
-										</MenuItem>
+										<Grid item key={`specialterrain-${hexId}-${type}`}>
+											<FormControlLabel
+												control={
+													<Checkbox
+														checked={hexData.specialTerrain.includes(type)}
+														onChange={(e) =>
+															toggleSpecialTerrain(type, e.target.checked)
+														}
+													/>
+												}
+												label={type}
+											/>
+										</Grid>
 									))}
-								</Select>
+								</Grid>
 							</TableCell>
 						</TableRow>
 						<TableRow>

@@ -22,7 +22,6 @@ export enum ExplorationState {
 }
 
 export enum SpecialTerrainType {
-	NONE = 'None',
 	BRIDGE = 'Bridge',
 	BUILDING = 'Building',
 	FREE_CITY = 'Free City',
@@ -31,6 +30,21 @@ export enum SpecialTerrainType {
 	RESOURCE = 'Resource',
 	RIVER = 'River',
 	RUIN = 'Ruin',
+}
+
+export enum TerrainImprovementType {
+	AQUEDUCT = 'Aqueduct',
+	BRIDGE = 'Bridge',
+	CANAL = 'Canal',
+	FARM = 'Farm',
+	FISHERY = 'Fishery',
+	FORT = 'Fort',
+	HIGHWAY = 'Highway',
+	MINE = 'Mine',
+	QUARRY = 'Quarry',
+	ROAD = 'Road',
+	SAWMILL = 'Sawmill',
+	WATCHTOWER = 'Watchtower',
 }
 
 export function mapTerrainToColor(terrain: TerrainType): string {
@@ -60,6 +74,121 @@ export function mapTerrainToColor(terrain: TerrainType): string {
 	}
 }
 
+export function mapExplorationStateToBorderColor(
+	explorationState: ExplorationState
+): string {
+	switch (explorationState) {
+		case ExplorationState.CLAIMED:
+		case ExplorationState.SETTLED:
+			return 'black';
+		case ExplorationState.EXPLORED:
+			return 'darkgrey';
+		case ExplorationState.CLEARED:
+			return 'grey';
+		case ExplorationState.UNEXPLORED:
+			return 'lightgrey';
+		default:
+			return '';
+	}
+}
+
+export function getTerrainImprovements(
+	hexData: HexData
+): TerrainImprovementType[] {
+	const hasRiver = hexData.specialTerrain.includes(SpecialTerrainType.RIVER);
+	const hasCanal = hexData.terrainImprovements.includes(
+		TerrainImprovementType.CANAL
+	);
+
+	const improvements: TerrainImprovementType[] = [];
+
+	// TODO handle bridges?
+	// TODO cavern is subterranean, should it have its own type?
+	// TODO highway is a road upgrade
+	switch (hexData.terrain) {
+		case TerrainType.CAVERN:
+			improvements.push(TerrainImprovementType.MINE);
+			improvements.push(TerrainImprovementType.QUARRY);
+			break;
+		case TerrainType.COASTLINE:
+			improvements.push(TerrainImprovementType.AQUEDUCT);
+			improvements.push(TerrainImprovementType.FARM);
+			improvements.push(TerrainImprovementType.FISHERY);
+			improvements.push(TerrainImprovementType.FORT);
+			improvements.push(TerrainImprovementType.ROAD);
+			improvements.push(TerrainImprovementType.WATCHTOWER);
+			break;
+		case TerrainType.DESERT:
+			improvements.push(TerrainImprovementType.AQUEDUCT);
+			improvements.push(TerrainImprovementType.CANAL);
+			if (hasRiver || hasCanal) improvements.push(TerrainImprovementType.FARM);
+			if (hasRiver) improvements.push(TerrainImprovementType.FISHERY);
+			improvements.push(TerrainImprovementType.FORT);
+			improvements.push(TerrainImprovementType.MINE);
+			improvements.push(TerrainImprovementType.ROAD);
+			improvements.push(TerrainImprovementType.WATCHTOWER);
+			break;
+		case TerrainType.FOREST:
+			improvements.push(TerrainImprovementType.AQUEDUCT);
+			if (hasRiver) improvements.push(TerrainImprovementType.FISHERY);
+			improvements.push(TerrainImprovementType.FORT);
+			improvements.push(TerrainImprovementType.ROAD);
+			improvements.push(TerrainImprovementType.SAWMILL);
+			improvements.push(TerrainImprovementType.WATCHTOWER);
+			break;
+		case TerrainType.HILLS:
+			improvements.push(TerrainImprovementType.AQUEDUCT);
+			improvements.push(TerrainImprovementType.CANAL);
+			improvements.push(TerrainImprovementType.FARM);
+			if (hasRiver) improvements.push(TerrainImprovementType.FISHERY);
+			improvements.push(TerrainImprovementType.FORT);
+			improvements.push(TerrainImprovementType.MINE);
+			improvements.push(TerrainImprovementType.QUARRY);
+			improvements.push(TerrainImprovementType.ROAD);
+			improvements.push(TerrainImprovementType.WATCHTOWER);
+			break;
+		case TerrainType.JUNGLE:
+			improvements.push(TerrainImprovementType.AQUEDUCT);
+			if (hasRiver) improvements.push(TerrainImprovementType.FISHERY);
+			improvements.push(TerrainImprovementType.FORT);
+			improvements.push(TerrainImprovementType.ROAD);
+			improvements.push(TerrainImprovementType.SAWMILL);
+			improvements.push(TerrainImprovementType.WATCHTOWER);
+			break;
+		case TerrainType.MARSH:
+			improvements.push(TerrainImprovementType.AQUEDUCT);
+			improvements.push(TerrainImprovementType.FISHERY);
+			improvements.push(TerrainImprovementType.FORT);
+			improvements.push(TerrainImprovementType.ROAD);
+			improvements.push(TerrainImprovementType.WATCHTOWER);
+			break;
+		case TerrainType.MOUNTAINS:
+			improvements.push(TerrainImprovementType.AQUEDUCT);
+			if (hasRiver) improvements.push(TerrainImprovementType.FISHERY);
+			improvements.push(TerrainImprovementType.FORT);
+			improvements.push(TerrainImprovementType.MINE);
+			improvements.push(TerrainImprovementType.QUARRY);
+			improvements.push(TerrainImprovementType.ROAD);
+			improvements.push(TerrainImprovementType.WATCHTOWER);
+			break;
+		case TerrainType.PLAINS:
+			improvements.push(TerrainImprovementType.AQUEDUCT);
+			improvements.push(TerrainImprovementType.CANAL);
+			improvements.push(TerrainImprovementType.FARM);
+			if (hasRiver) improvements.push(TerrainImprovementType.FISHERY);
+			improvements.push(TerrainImprovementType.FORT);
+			improvements.push(TerrainImprovementType.ROAD);
+			improvements.push(TerrainImprovementType.WATCHTOWER);
+			break;
+		case TerrainType.WATER:
+			improvements.push(TerrainImprovementType.AQUEDUCT);
+			improvements.push(TerrainImprovementType.FISHERY);
+			break;
+	}
+
+	return improvements;
+}
+
 // TODO remove after hooking up DB
 function generateHexes(): HexData[] {
 	const hexes: HexData[] = [];
@@ -69,9 +198,10 @@ function generateHexes(): HexData[] {
 			id: i,
 			name: `Hex Name`,
 			terrain: TerrainType.PLAINS,
-			specialTerrain: SpecialTerrainType.NONE,
+			specialTerrain: [],
 			explorationState: ExplorationState.UNEXPLORED,
 			settlementId: -1,
+			terrainImprovements: [],
 			pointsOfInterest: '',
 			notes: '',
 		});
