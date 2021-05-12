@@ -16,6 +16,12 @@ import { LinkButton } from '../../components/linkButton';
 import { useLeadershipBonusByType } from '../leadership';
 import { useAllSettlementsBonusByType } from '../settlement';
 import {
+	useClaimedHexesConsumptionDecrease,
+	useClaimedHexesEconomyBonus,
+	useClaimedHexesLoyaltyBonus,
+	useClaimedHexesStabilityBonus,
+} from '../hex';
+import {
 	alignmentUpdated,
 	holidayEdictLevelUpdated,
 	incrementMonth,
@@ -64,21 +70,35 @@ export function KingdomView(): ReactElement {
 	const settlementStability = useAllSettlementsBonusByType('stability');
 	const settlementLoyalty = useAllSettlementsBonusByType('loyalty');
 
+	const hexEconomy = useClaimedHexesEconomyBonus();
+	const hexStability = useClaimedHexesStabilityBonus();
+	const hexLoyalty = useClaimedHexesLoyaltyBonus();
+	const hexConsumptionDecrease = useClaimedHexesConsumptionDecrease();
+
 	// TODO need to add Size, Population, Control DC, and Terrain Income
 
-	const totalConsumption = consumption; // add size and hex/army slices info
+	const totalConsumption = consumption - hexConsumptionDecrease; // add size, # of districts, army slices info
 
 	const totalEconomy =
-		kingdomEconomy + leadershipEconomy + settlementEconomy - currentUnrest; // add hex slice info
+		kingdomEconomy +
+		leadershipEconomy +
+		settlementEconomy +
+		hexEconomy -
+		currentUnrest;
 
 	const totalStability =
 		kingdomStability +
 		leadershipStability +
-		settlementStability -
-		currentUnrest; // add hex slice info
+		settlementStability +
+		hexStability -
+		currentUnrest;
 
 	const totalLoyalty =
-		kingdomLoyalty + leadershipLoyalty + settlementLoyalty - currentUnrest; // add hex slice info
+		kingdomLoyalty +
+		leadershipLoyalty +
+		settlementLoyalty +
+		hexLoyalty -
+		currentUnrest;
 
 	// TODO remove when server is connected
 	const state = useAppSelector((state) => state);

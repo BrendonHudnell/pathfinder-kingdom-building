@@ -1,10 +1,13 @@
 import React, { ReactElement } from 'react';
 import {
 	Button,
+	Checkbox,
 	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogTitle,
+	FormControlLabel,
+	Grid,
 	makeStyles,
 	MenuItem,
 	Select,
@@ -20,7 +23,13 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { useAppDispatch } from '../../components/store';
 import { LinkButton } from '../../components/linkButton';
 import { addNewSettlement } from '../settlement';
-import { ExplorationState, SpecialTerrainType, TerrainType } from './hexUtils';
+import {
+	ExplorationState,
+	getTerrainImprovements,
+	SpecialTerrainType,
+	TerrainImprovementType,
+	TerrainType,
+} from './hexUtils';
 import {
 	explorationStateUpdated,
 	HexData,
@@ -28,14 +37,17 @@ import {
 	notesUpdated,
 	pointsOfInterestUpdated,
 	settlementIdUpdated,
-	specialTerrainUpdated,
+	specialTerrainAdded,
+	specialTerrainRemoved,
+	terrainImprovementAdded,
+	terrainImprovementRemoved,
 	terrainUpdated,
 } from './hexSlice';
 
 const useStyles = makeStyles({
 	borderlessLeft: {
 		textAlign: 'end',
-		verticalAlign: 'top',
+		verticalAlign: 'center',
 		borderBottom: 'none',
 		paddingLeft: 0,
 		paddingRight: 0,
@@ -59,6 +71,8 @@ export function HexagonDetails(props: HexagonDetailsProps): ReactElement {
 
 	const dispatch = useAppDispatch();
 
+	const improvements = getTerrainImprovements(hexData);
+
 	async function addSettlement(): Promise<void> {
 		// TODO fix when server is hooked up
 		const settlementId = Math.floor(Math.random() * 10000);
@@ -77,6 +91,59 @@ export function HexagonDetails(props: HexagonDetailsProps): ReactElement {
 		);
 	}
 
+	function terrainImprovementDisabled(
+		terrainImprovement: TerrainImprovementType
+	): boolean {
+		if (
+			terrainImprovement === TerrainImprovementType.MINE ||
+			terrainImprovement === TerrainImprovementType.QUARRY ||
+			terrainImprovement === TerrainImprovementType.SAWMILL
+		) {
+			const mine = hexData.terrainImprovements.includes(
+				TerrainImprovementType.MINE
+			);
+			const quarry = hexData.terrainImprovements.includes(
+				TerrainImprovementType.QUARRY
+			);
+			const sawmill = hexData.terrainImprovements.includes(
+				TerrainImprovementType.SAWMILL
+			);
+
+			if (terrainImprovement !== TerrainImprovementType.MINE && mine) {
+				return true;
+			}
+			if (terrainImprovement !== TerrainImprovementType.QUARRY && quarry) {
+				return true;
+			}
+			if (terrainImprovement !== TerrainImprovementType.SAWMILL && sawmill) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function toggleTerrainImprovement(
+		terrainImprovement: TerrainImprovementType,
+		isChecked: boolean
+	): void {
+		if (isChecked) {
+			dispatch(terrainImprovementAdded({ hexId, terrainImprovement }));
+		} else {
+			dispatch(terrainImprovementRemoved({ hexId, terrainImprovement }));
+		}
+	}
+
+	function toggleSpecialTerrain(
+		specialTerrain: SpecialTerrainType,
+		isChecked: boolean
+	): void {
+		if (isChecked) {
+			dispatch(specialTerrainAdded({ hexId, specialTerrain }));
+		} else {
+			dispatch(specialTerrainRemoved({ hexId, specialTerrain }));
+		}
+	}
+
 	return (
 		<Dialog open={open} onClose={onClose}>
 			<DialogTitle>
@@ -92,7 +159,7 @@ export function HexagonDetails(props: HexagonDetailsProps): ReactElement {
 					<TableBody>
 						<TableRow>
 							<TableCell className={classes.borderlessLeft}>
-								<Typography>Terrain type:</Typography>
+								<Typography noWrap>Terrain type:</Typography>
 							</TableCell>
 							<TableCell className={classes.borderlessRight}>
 								<Select
@@ -117,7 +184,7 @@ export function HexagonDetails(props: HexagonDetailsProps): ReactElement {
 						</TableRow>
 						<TableRow>
 							<TableCell className={classes.borderlessLeft}>
-								<Typography>Exploration status:</Typography>
+								<Typography noWrap>Exploration status:</Typography>
 							</TableCell>
 							<TableCell className={classes.borderlessRight}>
 								<Typography>{hexData.explorationState}</Typography>
@@ -125,36 +192,69 @@ export function HexagonDetails(props: HexagonDetailsProps): ReactElement {
 						</TableRow>
 						<TableRow>
 							<TableCell className={classes.borderlessLeft}>
-								<Typography>Special terrain:</Typography>
+								<Typography noWrap>Terrain improvements:</Typography>
 							</TableCell>
 							<TableCell className={classes.borderlessRight}>
-								<Select
-									style={{ minWidth: '10ch' }}
-									value={hexData.specialTerrain}
-									onChange={(e) =>
-										dispatch(
-											specialTerrainUpdated({
-												hexId,
-												specialTerrain: e.target.value as SpecialTerrainType,
-											})
-										)
-									}
-								>
-									{Object.values(SpecialTerrainType).map((type) => (
-										<MenuItem key={type} value={type}>
-											{type}
-										</MenuItem>
+								<Grid container>
+									{improvements.map((improvement) => (
+										<Grid
+											item
+											key={`terrainimprovement-${hexId}-${improvement}`}
+										>
+											<FormControlLabel
+												control={
+													<Checkbox
+														disabled={terrainImprovementDisabled(improvement)}
+														checked={hexData.terrainImprovements.includes(
+															improvement
+														)}
+														onChange={(e) =>
+															toggleTerrainImprovement(
+																improvement,
+																e.target.checked
+															)
+														}
+													/>
+												}
+												label={improvement}
+											/>
+										</Grid>
 									))}
-								</Select>
+								</Grid>
 							</TableCell>
 						</TableRow>
 						<TableRow>
 							<TableCell className={classes.borderlessLeft}>
-								<Typography>Points of interest:</Typography>
+								<Typography noWrap>Special terrain:</Typography>
+							</TableCell>
+							<TableCell className={classes.borderlessRight}>
+								<Grid container>
+									{Object.values(SpecialTerrainType).map((type) => (
+										<Grid item key={`specialterrain-${hexId}-${type}`}>
+											<FormControlLabel
+												control={
+													<Checkbox
+														checked={hexData.specialTerrain.includes(type)}
+														onChange={(e) =>
+															toggleSpecialTerrain(type, e.target.checked)
+														}
+													/>
+												}
+												label={type}
+											/>
+										</Grid>
+									))}
+								</Grid>
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableCell className={classes.borderlessLeft}>
+								<Typography noWrap>Points of interest:</Typography>
 							</TableCell>
 							<TableCell className={classes.borderlessRight}>
 								<TextField
 									variant="outlined"
+									fullWidth
 									multiline
 									rows={4}
 									rowsMax={4}
@@ -172,11 +272,12 @@ export function HexagonDetails(props: HexagonDetailsProps): ReactElement {
 						</TableRow>
 						<TableRow>
 							<TableCell className={classes.borderlessLeft}>
-								<Typography>Notes:</Typography>
+								<Typography noWrap>Notes:</Typography>
 							</TableCell>
 							<TableCell className={classes.borderlessRight}>
 								<TextField
 									variant="outlined"
+									fullWidth
 									multiline
 									rows={4}
 									rowsMax={4}
