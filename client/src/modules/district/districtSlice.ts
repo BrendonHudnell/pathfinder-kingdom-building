@@ -63,13 +63,8 @@ export const fetchDistricts = createAsyncThunk(
 export const addNewDistrict = createAsyncThunk(
 	// TODO fix when server is hooked up
 	'district/addNewDistrict',
-	async ({
-		districtId,
-		settlementId,
-	}: {
-		districtId: EntityId;
-		settlementId: EntityId;
-	}) => {
+	async (settlementId: EntityId) => {
+		const districtId = Math.floor(Math.random() * 10000);
 		const newDistrict: District = {
 			id: districtId,
 			settlementId,

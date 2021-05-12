@@ -31,13 +31,8 @@ export const fetchSettlements = createAsyncThunk(
 export const addNewSettlement = createAsyncThunk(
 	// TODO fix when server is hooked up
 	'settlement/addNewSettlement',
-	async ({
-		hexId,
-		settlementId,
-	}: {
-		hexId: EntityId;
-		settlementId: EntityId;
-	}) => {
+	async (hexId: EntityId) => {
+		const settlementId = Math.floor(Math.random() * 10000);
 		const newSettlement: Settlement = {
 			id: settlementId,
 			name: `Settlement ${settlementId}`,

@@ -74,12 +74,7 @@ export function HexagonDetails(props: HexagonDetailsProps): ReactElement {
 	const improvements = getTerrainImprovements(hexData);
 
 	async function addSettlement(): Promise<void> {
-		// TODO fix when server is hooked up
-		const settlementId = Math.floor(Math.random() * 10000);
-
-		const resultAction = await dispatch(
-			addNewSettlement({ hexId, settlementId })
-		);
+		const resultAction = await dispatch(addNewSettlement(hexId));
 		const newSettlement = unwrapResult(resultAction);
 		dispatch(settlementIdUpdated({ hexId, settlementId: newSettlement.id }));
 
