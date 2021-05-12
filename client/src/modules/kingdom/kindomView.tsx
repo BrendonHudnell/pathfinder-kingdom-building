@@ -16,6 +16,7 @@ import { LinkButton } from '../../components/linkButton';
 import { useLeadershipBonusByType } from '../leadership';
 import { useAllSettlementsBonusByType } from '../settlement';
 import {
+	selectClaimedHexes,
 	useClaimedHexesConsumptionDecrease,
 	useClaimedHexesEconomyBonus,
 	useClaimedHexesLoyaltyBonus,
@@ -31,6 +32,7 @@ import {
 	treasuryUpdated,
 	unrestUpdated,
 } from './kingdomSlice';
+import { selectTotalDistricts } from '../district';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -75,7 +77,11 @@ export function KingdomView(): ReactElement {
 	const hexLoyalty = useClaimedHexesLoyaltyBonus();
 	const hexConsumptionDecrease = useClaimedHexesConsumptionDecrease();
 
-	// TODO need to add Size, Population, Control DC, and Terrain Income
+	// TODO need to add Size, Population, and Terrain Income
+	const controlDC =
+		20 +
+		useAppSelector((state) => selectClaimedHexes(state)).length +
+		useAppSelector((state) => selectTotalDistricts(state));
 
 	const totalConsumption = consumption - hexConsumptionDecrease; // add size, # of districts, army slices info
 
@@ -212,6 +218,10 @@ export function KingdomView(): ReactElement {
 				</Grid>
 
 				<Grid container item spacing={2} alignItems="center">
+					<Grid item>
+						<Typography>Control DC: {controlDC}</Typography>
+					</Grid>
+					<Grid />
 					<Grid item>
 						<Typography>Economy: {totalEconomy}</Typography>
 					</Grid>
