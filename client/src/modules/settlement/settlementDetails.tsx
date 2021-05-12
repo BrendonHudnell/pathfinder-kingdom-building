@@ -1,13 +1,16 @@
 import React, { ReactElement } from 'react';
 import { Grid, makeStyles, TextField, Typography } from '@material-ui/core';
 
-import { useAppDispatch } from '../../components/store';
+import { useAppDispatch, useAppSelector } from '../../components/store';
+import { numberReducer } from '../../components/arrayNumberReducer';
+import { buildingList, selectDistrictsBySettlementId } from '../district';
 import { nameUpdated, Settlement } from './settlementSlice';
 import {
 	useSettlementBonusByType,
 	useSettlementPopulation,
 	getSettlementSize,
 	useSettlementUnrest,
+	getSettlementBaseValue,
 } from './settlementUtils';
 
 const useStyles = makeStyles((theme) => {
@@ -38,6 +41,27 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 
 	const size = getSettlementSize(population);
 
+	const districtList = useAppSelector((state) =>
+		selectDistrictsBySettlementId(state, id)
+	);
+	const totalDistricts = districtList.filter(
+		(district) => district.lotIds.filter((lotId) => lotId !== -1).length
+	).length;
+	const totalLots = districtList
+		.map((district) => district.lotIds.filter((lotId) => lotId !== -1).length)
+		.reduce(numberReducer, 0);
+
+	const baseValue =
+		getSettlementBaseValue(size) +
+		districtList
+			.map((district) =>
+				district.lotIds
+					.filter((lotId) => lotId !== -1)
+					.map((lotId) => buildingList[lotId].baseValueIncrease ?? 0)
+					.reduce(numberReducer, 0)
+			)
+			.reduce(numberReducer, 0);
+
 	return (
 		<Grid container spacing={2} className={classes.container}>
 			<Grid container item spacing={2} alignItems="center">
@@ -56,6 +80,9 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 				<Grid item>
 					<Typography>Population: {population.toLocaleString()}</Typography>
 				</Grid>
+				<Grid item>
+					<Typography>Base Value: {baseValue.toLocaleString()}gp</Typography>
+				</Grid>
 			</Grid>
 
 			<Grid container item spacing={2} alignItems="center">
@@ -71,6 +98,13 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 				<Grid item />
 				<Grid item>
 					<Typography>Unrest: {unrest}</Typography>
+				</Grid>
+				<Grid item />
+				<Grid item>
+					<Typography>Total districts: {totalDistricts}</Typography>
+				</Grid>
+				<Grid item>
+					<Typography>Total lots: {totalLots}</Typography>
 				</Grid>
 			</Grid>
 		</Grid>
