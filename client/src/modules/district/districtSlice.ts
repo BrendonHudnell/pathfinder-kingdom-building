@@ -167,6 +167,7 @@ export const { lotUpdated, lotCleared } = districtSlice.actions;
 export const {
 	selectAll: selectAllDistricts,
 	selectById: selectDistrictById,
+	selectTotal: selectTotalDistricts,
 } = districtAdapter.getSelectors<RootState>((state) => state.district);
 
 export const selectDistrictsBySettlementId = createSelector(

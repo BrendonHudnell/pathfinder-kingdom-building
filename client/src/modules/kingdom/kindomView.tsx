@@ -33,7 +33,7 @@ import {
 	treasuryUpdated,
 	unrestUpdated,
 } from './kingdomSlice';
-import { selectTotalDistricts } from '../district';
+import { selectTotalDistricts, useTotalPopulation } from '../district';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -79,6 +79,7 @@ export function KingdomView(): ReactElement {
 	const hexConsumptionDecrease = useClaimedHexesConsumptionDecrease();
 
 	// TODO need to add Size and Population
+	const population = useTotalPopulation();
 	const size = useAppSelector((state) => selectClaimedHexes(state)).length;
 	const totalDistricts = useAppSelector((state) => selectTotalDistricts(state));
 	const controlDC = 20 + size + totalDistricts;
@@ -224,6 +225,9 @@ export function KingdomView(): ReactElement {
 					<Grid item />
 					<Grid item>
 						<Typography>Size (hexes): {size}</Typography>
+					</Grid>
+					<Grid item>
+						<Typography>Population: {population.toLocaleString()}</Typography>
 					</Grid>
 				</Grid>
 
