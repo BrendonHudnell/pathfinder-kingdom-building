@@ -46,6 +46,20 @@ export function getSettlementSize(population: number): SettlementSize {
 	}
 }
 
+export function getSettlementBaseValue(settlementSize: SettlementSize): number {
+	if (settlementSize === 'Small Town') {
+		return 1000;
+	} else if (settlementSize === 'Large Town') {
+		return 2000;
+	} else if (settlementSize === 'Small City') {
+		return 4000;
+	} else if (settlementSize === 'Large City') {
+		return 8000;
+	} else {
+		return 16000;
+	}
+}
+
 export function useSettlementBonusByType(
 	settlementId: EntityId,
 	type: SettlementStat
