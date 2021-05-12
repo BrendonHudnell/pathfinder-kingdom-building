@@ -1,5 +1,7 @@
+import { numberReducer } from '../../components/arrayNumberReducer';
+import { useAppSelector } from '../../components/store';
 import { BuildingId } from './buildingTypes';
-import { District } from './districtSlice';
+import { District, selectAllDistricts } from './districtSlice';
 
 export function createEmptyLotArray(): BuildingId[] {
 	const emptyArray: BuildingId[] = [];
@@ -7,6 +9,17 @@ export function createEmptyLotArray(): BuildingId[] {
 		emptyArray.push(-1);
 	}
 	return emptyArray;
+}
+
+export function useTotalPopulation(): number {
+	const districtList = useAppSelector((state) => selectAllDistricts(state));
+
+	return (
+		250 *
+		districtList
+			.map((district) => district.lotIds.filter((lotId) => lotId !== -1).length)
+			.reduce(numberReducer, 0)
+	);
 }
 
 // TODO remove everything below when hooked up to DB

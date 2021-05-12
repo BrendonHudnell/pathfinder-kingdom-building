@@ -16,10 +16,12 @@ import { LinkButton } from '../../components/linkButton';
 import { useLeadershipBonusByType } from '../leadership';
 import { useAllSettlementsBonusByType } from '../settlement';
 import {
+	selectClaimedHexes,
 	useClaimedHexesConsumptionDecrease,
 	useClaimedHexesEconomyBonus,
 	useClaimedHexesLoyaltyBonus,
 	useClaimedHexesStabilityBonus,
+	useClaimedHexesTerrainIncome,
 } from '../hex';
 import {
 	alignmentUpdated,
@@ -31,6 +33,7 @@ import {
 	treasuryUpdated,
 	unrestUpdated,
 } from './kingdomSlice';
+import { selectTotalDistricts, useTotalPopulation } from '../district';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -75,9 +78,15 @@ export function KingdomView(): ReactElement {
 	const hexLoyalty = useClaimedHexesLoyaltyBonus();
 	const hexConsumptionDecrease = useClaimedHexesConsumptionDecrease();
 
-	// TODO need to add Size, Population, Control DC, and Terrain Income
+	// TODO need to add Size and Population
+	const population = useTotalPopulation();
+	const size = useAppSelector((state) => selectClaimedHexes(state)).length;
+	const totalDistricts = useAppSelector((state) => selectTotalDistricts(state));
+	const controlDC = 20 + size + totalDistricts;
+	const terrainIncome = useClaimedHexesTerrainIncome();
 
-	const totalConsumption = consumption - hexConsumptionDecrease; // add size, # of districts, army slices info
+	const totalConsumption =
+		consumption + size + totalDistricts - hexConsumptionDecrease; // add army slice info
 
 	const totalEconomy =
 		kingdomEconomy +
@@ -209,9 +218,24 @@ export function KingdomView(): ReactElement {
 							Consumption: {totalConsumption > 0 ? totalConsumption : 0}
 						</Typography>
 					</Grid>
+					<Grid item />
+					<Grid item>
+						<Typography>Terrain Income: {terrainIncome}</Typography>
+					</Grid>
+					<Grid item />
+					<Grid item>
+						<Typography>Size (hexes): {size}</Typography>
+					</Grid>
+					<Grid item>
+						<Typography>Population: {population.toLocaleString()}</Typography>
+					</Grid>
 				</Grid>
 
 				<Grid container item spacing={2} alignItems="center">
+					<Grid item>
+						<Typography>Control DC: {controlDC}</Typography>
+					</Grid>
+					<Grid item />
 					<Grid item>
 						<Typography>Economy: {totalEconomy}</Typography>
 					</Grid>
