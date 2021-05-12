@@ -79,14 +79,13 @@ export function KingdomView(): ReactElement {
 	const hexConsumptionDecrease = useClaimedHexesConsumptionDecrease();
 
 	// TODO need to add Size and Population
-	const controlDC =
-		20 +
-		useAppSelector((state) => selectClaimedHexes(state)).length +
-		useAppSelector((state) => selectTotalDistricts(state));
-
+	const size = useAppSelector((state) => selectClaimedHexes(state)).length;
+	const totalDistricts = useAppSelector((state) => selectTotalDistricts(state));
+	const controlDC = 20 + size + totalDistricts;
 	const terrainIncome = useClaimedHexesTerrainIncome();
 
-	const totalConsumption = consumption - hexConsumptionDecrease; // add size, # of districts, army slices info
+	const totalConsumption =
+		consumption + size + totalDistricts - hexConsumptionDecrease; // add army slice info
 
 	const totalEconomy =
 		kingdomEconomy +
@@ -221,6 +220,10 @@ export function KingdomView(): ReactElement {
 					<Grid item />
 					<Grid item>
 						<Typography>Terrain Income: {terrainIncome}</Typography>
+					</Grid>
+					<Grid item />
+					<Grid item>
+						<Typography>Size (hexes): {size}</Typography>
 					</Grid>
 				</Grid>
 
