@@ -21,6 +21,7 @@ import {
 	useClaimedHexesEconomyBonus,
 	useClaimedHexesLoyaltyBonus,
 	useClaimedHexesStabilityBonus,
+	useClaimedHexesTerrainIncome,
 } from '../hex';
 import {
 	alignmentUpdated,
@@ -77,11 +78,13 @@ export function KingdomView(): ReactElement {
 	const hexLoyalty = useClaimedHexesLoyaltyBonus();
 	const hexConsumptionDecrease = useClaimedHexesConsumptionDecrease();
 
-	// TODO need to add Size, Population, and Terrain Income
+	// TODO need to add Size and Population
 	const controlDC =
 		20 +
 		useAppSelector((state) => selectClaimedHexes(state)).length +
 		useAppSelector((state) => selectTotalDistricts(state));
+
+	const terrainIncome = useClaimedHexesTerrainIncome();
 
 	const totalConsumption = consumption - hexConsumptionDecrease; // add size, # of districts, army slices info
 
@@ -215,13 +218,17 @@ export function KingdomView(): ReactElement {
 							Consumption: {totalConsumption > 0 ? totalConsumption : 0}
 						</Typography>
 					</Grid>
+					<Grid item />
+					<Grid item>
+						<Typography>Terrain Income: {terrainIncome}</Typography>
+					</Grid>
 				</Grid>
 
 				<Grid container item spacing={2} alignItems="center">
 					<Grid item>
 						<Typography>Control DC: {controlDC}</Typography>
 					</Grid>
-					<Grid />
+					<Grid item />
 					<Grid item>
 						<Typography>Economy: {totalEconomy}</Typography>
 					</Grid>
