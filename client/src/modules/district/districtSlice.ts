@@ -162,7 +162,6 @@ export const { lotUpdated, lotCleared } = districtSlice.actions;
 export const {
 	selectAll: selectAllDistricts,
 	selectById: selectDistrictById,
-	selectTotal: selectTotalDistricts,
 } = districtAdapter.getSelectors<RootState>((state) => state.district);
 
 export const selectDistrictsBySettlementId = createSelector(
@@ -172,6 +171,14 @@ export const selectDistrictsBySettlementId = createSelector(
 	],
 	(districts, settlementId) =>
 		districts.filter((district) => district.settlementId == settlementId)
+);
+
+export const selectTotalDistricts = createSelector(
+	[selectAllDistricts],
+	(districts) =>
+		districts.filter(
+			(district) => district.lotIds.filter((lotId) => lotId !== -1).length > 0
+		).length
 );
 
 export const districtReducer = districtSlice.reducer;
