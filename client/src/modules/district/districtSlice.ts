@@ -63,13 +63,8 @@ export const fetchDistricts = createAsyncThunk(
 export const addNewDistrict = createAsyncThunk(
 	// TODO fix when server is hooked up
 	'district/addNewDistrict',
-	async ({
-		districtId,
-		settlementId,
-	}: {
-		districtId: EntityId;
-		settlementId: EntityId;
-	}) => {
+	async (settlementId: EntityId) => {
+		const districtId = Math.floor(Math.random() * 10000);
 		const newDistrict: District = {
 			id: districtId,
 			settlementId,
@@ -167,7 +162,6 @@ export const { lotUpdated, lotCleared } = districtSlice.actions;
 export const {
 	selectAll: selectAllDistricts,
 	selectById: selectDistrictById,
-	selectTotal: selectTotalDistricts,
 } = districtAdapter.getSelectors<RootState>((state) => state.district);
 
 export const selectDistrictsBySettlementId = createSelector(
@@ -177,6 +171,14 @@ export const selectDistrictsBySettlementId = createSelector(
 	],
 	(districts, settlementId) =>
 		districts.filter((district) => district.settlementId == settlementId)
+);
+
+export const selectTotalDistricts = createSelector(
+	[selectAllDistricts],
+	(districts) =>
+		districts.filter(
+			(district) => district.lotIds.filter((lotId) => lotId !== -1).length > 0
+		).length
 );
 
 export const districtReducer = districtSlice.reducer;
