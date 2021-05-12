@@ -55,10 +55,7 @@ export function HexagonView(props: HexagonViewProps): ReactElement {
 
 	return (
 		<Fragment>
-			<Tooltip
-				id={`hexagon-tooltip-${hexId}`}
-				title={<HexagonTooltip hexData={hexData} />}
-			>
+			<Tooltip title={<HexagonTooltip hexData={hexData} />}>
 				<Hexagon
 					className={classes.cursor}
 					q={hex.q}

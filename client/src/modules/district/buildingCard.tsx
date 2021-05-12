@@ -1,9 +1,10 @@
 import React, { ReactElement } from 'react';
-import { Card, Typography } from '@material-ui/core';
+import { Card, Tooltip, Typography } from '@material-ui/core';
 import { EntityId } from '@reduxjs/toolkit';
 import { useDrag } from 'react-dnd';
 
 import { Building } from './buildingTypes';
+import { BuildingCardTooltip } from './buildingCardTooltip';
 
 export interface BuildingCardProps {
 	building: Building;
@@ -36,8 +37,10 @@ export function BuildingCard(props: BuildingCardProps): ReactElement {
 	return isDragging ? (
 		<Card ref={dragPreview} />
 	) : (
-		<Card ref={drag}>
-			<Typography>{building.name}</Typography>
-		</Card>
+		<Tooltip title={<BuildingCardTooltip building={building} />}>
+			<Card ref={drag}>
+				<Typography>{building.name}</Typography>
+			</Card>
+		</Tooltip>
 	);
 }

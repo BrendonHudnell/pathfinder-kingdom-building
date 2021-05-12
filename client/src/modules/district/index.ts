@@ -1,4 +1,5 @@
 export * from './buildingCard';
+export * from './buildingCardTooltip';
 export * from './buildingList';
 export * from './buildingTypes';
 export * from './districtSlice';
