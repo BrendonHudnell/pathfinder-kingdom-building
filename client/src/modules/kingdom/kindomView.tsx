@@ -23,6 +23,7 @@ import {
 	useClaimedHexesStabilityBonus,
 	useClaimedHexesTerrainIncome,
 } from '../hex';
+import { selectTotalDistricts, useTotalPopulation } from '../district';
 import {
 	alignmentUpdated,
 	holidayEdictLevelUpdated,
@@ -33,7 +34,7 @@ import {
 	treasuryUpdated,
 	unrestUpdated,
 } from './kingdomSlice';
-import { selectTotalDistricts, useTotalPopulation } from '../district';
+import { useAlignmentBonuses, useEdictsBonuses } from './kingdomUtils';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -47,14 +48,11 @@ export function KingdomView(): ReactElement {
 	const classes = useStyles();
 
 	const dispatch = useAppDispatch();
+
 	const name = useAppSelector((state) => state.kingdom.name);
 	const alignment = useAppSelector((state) => state.kingdom.alignment);
 	const month = useAppSelector((state) => state.kingdom.month);
 	const treasury = useAppSelector((state) => state.kingdom.treasury);
-	const consumption = useAppSelector((state) => state.kingdom.consumption);
-	const kingdomEconomy = useAppSelector((state) => state.kingdom.economy);
-	const kingdomStability = useAppSelector((state) => state.kingdom.stability);
-	const kingdomLoyalty = useAppSelector((state) => state.kingdom.loyalty);
 	const currentUnrest = useAppSelector((state) => state.kingdom.unrest);
 	const holidayEdictLevel = useAppSelector(
 		(state) => state.kingdom.holidayEdictLevel
@@ -65,6 +63,13 @@ export function KingdomView(): ReactElement {
 	const taxationEdictLevel = useAppSelector(
 		(state) => state.kingdom.taxationEdictLevel
 	);
+	const edictBonuses = useEdictsBonuses();
+	const alignmentBonuses = useAlignmentBonuses();
+	const consumption = edictBonuses.consumption;
+	const kingdomEconomy = edictBonuses.economy + alignmentBonuses.economy;
+	const kingdomStability = edictBonuses.stability + alignmentBonuses.stability;
+	const kingdomLoyalty = edictBonuses.loyalty + alignmentBonuses.loyalty;
+
 	const leadershipEconomy = useLeadershipBonusByType('Economy');
 	const leadershipStability = useLeadershipBonusByType('Stability');
 	const leadershipLoyalty = useLeadershipBonusByType('Loyalty');
@@ -78,7 +83,6 @@ export function KingdomView(): ReactElement {
 	const hexLoyalty = useClaimedHexesLoyaltyBonus();
 	const hexConsumptionDecrease = useClaimedHexesConsumptionDecrease();
 
-	// TODO need to add Size and Population
 	const population = useTotalPopulation();
 	const size = useAppSelector((state) => selectClaimedHexes(state)).length;
 	const totalDistricts = useAppSelector((state) => selectTotalDistricts(state));
@@ -86,7 +90,7 @@ export function KingdomView(): ReactElement {
 	const terrainIncome = useClaimedHexesTerrainIncome();
 
 	const totalConsumption =
-		consumption + size + totalDistricts - hexConsumptionDecrease; // add army slice info
+		consumption + size + totalDistricts - hexConsumptionDecrease; // TODO add army slice info
 
 	const totalEconomy =
 		kingdomEconomy +
