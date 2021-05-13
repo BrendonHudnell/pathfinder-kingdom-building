@@ -7,7 +7,6 @@ import {
 } from '@reduxjs/toolkit';
 
 import { RootState } from '../../components/store';
-// import { initialSettlements } from './settlementUtils';
 
 export interface Settlement {
 	id: EntityId;

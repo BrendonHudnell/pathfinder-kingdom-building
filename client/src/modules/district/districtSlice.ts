@@ -9,7 +9,7 @@ import {
 
 import { RootState } from '../../components/store';
 import { BuildingId } from './buildingTypes';
-import { createEmptyLotArray /*initialDistricts */ } from './districtUtils';
+import { createEmptyLotArray } from './districtUtils';
 
 // {
 // 	name: 'Watergate',
@@ -150,7 +150,6 @@ export const districtSlice = createSlice({
 			builder.addCase(
 				addNewDistrict.fulfilled,
 				(state, action: PayloadAction<District>) => {
-					console.log(action.payload);
 					districtAdapter.addOne(state, action.payload);
 				}
 			);

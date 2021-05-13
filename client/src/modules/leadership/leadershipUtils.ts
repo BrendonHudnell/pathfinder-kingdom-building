@@ -10,7 +10,7 @@ export interface RoleConstants {
 	unrest: number;
 }
 
-export const staticRoleThings: RoleConstants[] = [
+export const roleConstantsList: RoleConstants[] = [
 	{
 		name: 'Ruler',
 		attributeOptions: ['Charisma'],
@@ -118,6 +118,16 @@ export const staticRoleThings: RoleConstants[] = [
 	},
 ];
 
+export const roleBenefitList = [
+	'Economy',
+	'Stability',
+	'Loyalty',
+	'Economy and Stability',
+	'Economy and Loyalty',
+	'Stability and Loyalty',
+	'Economy and Stability and Loyalty',
+];
+
 export type KingdomStat = 'Economy' | 'Stability' | 'Loyalty';
 
 export function useLeadershipBonusByType(type: KingdomStat): number {
@@ -136,7 +146,7 @@ export function useLeadershipUnrest(): number {
 		.filter((role) => role.vacant)
 		.map((role) => role.name);
 
-	return staticRoleThings
+	return roleConstantsList
 		.filter((role) => vacantRoleNames.indexOf(role.name) >= 0)
 		.map((role) => role.unrest)
 		.reduce(numberReducer, 0);
@@ -164,7 +174,7 @@ export function getLeadershipNegativesByType(
 		.filter((role) => role.vacant)
 		.map((role) => role.name);
 
-	return staticRoleThings
+	return roleConstantsList
 		.filter(
 			(role) =>
 				vacantRoleNames.indexOf(role.name) >= 0 &&
