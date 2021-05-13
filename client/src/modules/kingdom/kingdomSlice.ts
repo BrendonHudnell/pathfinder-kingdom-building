@@ -1,16 +1,22 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { initialKingdomState } from './kingdomUtils';
+import {
+	Alignment,
+	HolidayEdict,
+	initialKingdomState,
+	PromotionEdict,
+	TaxationEdict,
+} from './kingdomUtils';
 
 export interface KingdomState {
 	name: string;
-	alignment: string;
+	alignment: Alignment;
 	month: number;
 	treasury: number;
 	unrest: number;
-	holidayEdictLevel: number;
-	promotionEdictLevel: number;
-	taxationEdictLevel: number;
+	holidayEdict: HolidayEdict;
+	promotionEdict: PromotionEdict;
+	taxationEdict: TaxationEdict;
 }
 
 export const fetchKingdomData = createAsyncThunk(
@@ -28,11 +34,11 @@ export const kingdomSlice = createSlice({
 		nameUpdated: (state, action: PayloadAction<string>) => {
 			state.name = action.payload;
 		},
-		alignmentUpdated: (state, action: PayloadAction<string>) => {
+		alignmentUpdated: (state, action: PayloadAction<Alignment>) => {
 			state.alignment = action.payload;
 		},
 		incrementMonth: (state) => {
-			state.month += 1;
+			state.month++;
 		},
 		treasuryUpdated: (state, action: PayloadAction<number>) => {
 			state.treasury = action.payload;
@@ -40,14 +46,20 @@ export const kingdomSlice = createSlice({
 		unrestUpdated: (state, action: PayloadAction<number>) => {
 			state.unrest = action.payload;
 		},
-		holidayEdictLevelUpdated: (state, action: PayloadAction<number>) => {
-			state.holidayEdictLevel = action.payload;
+		holidayEdictLevelUpdated: (state, action: PayloadAction<HolidayEdict>) => {
+			state.holidayEdict = action.payload;
 		},
-		promotionEdictLevelUpdated: (state, action: PayloadAction<number>) => {
-			state.promotionEdictLevel = action.payload;
+		promotionEdictLevelUpdated: (
+			state,
+			action: PayloadAction<PromotionEdict>
+		) => {
+			state.promotionEdict = action.payload;
 		},
-		taxationEdictLevelUpdated: (state, action: PayloadAction<number>) => {
-			state.taxationEdictLevel = action.payload;
+		taxationEdictLevelUpdated: (
+			state,
+			action: PayloadAction<TaxationEdict>
+		) => {
+			state.taxationEdict = action.payload;
 		},
 	},
 	extraReducers: (builder) => {
@@ -57,11 +69,11 @@ export const kingdomSlice = createSlice({
 				const kingdom = action.payload;
 
 				state.alignment = kingdom.alignment;
-				state.holidayEdictLevel = kingdom.holidayEdictLevel;
+				state.holidayEdict = kingdom.holidayEdict;
 				state.month = kingdom.month;
 				state.name = kingdom.name;
-				state.promotionEdictLevel = kingdom.promotionEdictLevel;
-				state.taxationEdictLevel = kingdom.taxationEdictLevel;
+				state.promotionEdict = kingdom.promotionEdict;
+				state.taxationEdict = kingdom.taxationEdict;
 				state.treasury = kingdom.treasury;
 				state.unrest = kingdom.unrest;
 			}

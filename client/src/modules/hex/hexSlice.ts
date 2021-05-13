@@ -10,7 +10,6 @@ import {
 import { RootState } from '../../components/store';
 import {
 	ExplorationState,
-	// initialHexes,
 	SpecialTerrainType,
 	TerrainImprovementType,
 	TerrainType,

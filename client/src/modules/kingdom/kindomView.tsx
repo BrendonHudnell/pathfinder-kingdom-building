@@ -34,7 +34,14 @@ import {
 	treasuryUpdated,
 	unrestUpdated,
 } from './kingdomSlice';
-import { useAlignmentBonuses, useEdictsBonuses } from './kingdomUtils';
+import {
+	Alignment,
+	HolidayEdict,
+	PromotionEdict,
+	TaxationEdict,
+	useAlignmentBonuses,
+	useEdictsBonuses,
+} from './kingdomUtils';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -55,13 +62,13 @@ export function KingdomView(): ReactElement {
 	const treasury = useAppSelector((state) => state.kingdom.treasury);
 	const currentUnrest = useAppSelector((state) => state.kingdom.unrest);
 	const holidayEdictLevel = useAppSelector(
-		(state) => state.kingdom.holidayEdictLevel
+		(state) => state.kingdom.holidayEdict
 	);
 	const promotionEdictLevel = useAppSelector(
-		(state) => state.kingdom.promotionEdictLevel
+		(state) => state.kingdom.promotionEdict
 	);
 	const taxationEdictLevel = useAppSelector(
-		(state) => state.kingdom.taxationEdictLevel
+		(state) => state.kingdom.taxationEdict
 	);
 	const edictBonuses = useEdictsBonuses();
 	const alignmentBonuses = useAlignmentBonuses();
@@ -153,18 +160,14 @@ export function KingdomView(): ReactElement {
 							style={{ minWidth: '16ch' }}
 							value={alignment}
 							onChange={(e) =>
-								dispatch(alignmentUpdated(e.target.value as string))
+								dispatch(alignmentUpdated(e.target.value as Alignment))
 							}
 						>
-							<MenuItem value={'LG'}>Lawful Good</MenuItem>
-							<MenuItem value={'NG'}>Neutral Good</MenuItem>
-							<MenuItem value={'CG'}>Chaotic Good</MenuItem>
-							<MenuItem value={'LN'}>Lawful Neutral</MenuItem>
-							<MenuItem value={'N'}>Neutral</MenuItem>
-							<MenuItem value={'CN'}>Chaotic Neutral</MenuItem>
-							<MenuItem value={'LE'}>Lawful Evil</MenuItem>
-							<MenuItem value={'NE'}>Neutral Evil</MenuItem>
-							<MenuItem value={'CE'}>Chaotic Evil</MenuItem>
+							{Object.values(Alignment).map((value) => (
+								<MenuItem key={value} value={value}>
+									{value}
+								</MenuItem>
+							))}
 						</Select>
 					</Grid>
 					<Grid item>
@@ -272,14 +275,16 @@ export function KingdomView(): ReactElement {
 							style={{ minWidth: '10ch' }}
 							value={holidayEdictLevel}
 							onChange={(e) =>
-								dispatch(holidayEdictLevelUpdated(Number(e.target.value)))
+								dispatch(
+									holidayEdictLevelUpdated(e.target.value as HolidayEdict)
+								)
 							}
 						>
-							<MenuItem value={0}>None</MenuItem>
-							<MenuItem value={1}>1/year</MenuItem>
-							<MenuItem value={2}>6/year</MenuItem>
-							<MenuItem value={3}>12/year</MenuItem>
-							<MenuItem value={4}>24/year</MenuItem>
+							{Object.values(HolidayEdict).map((value) => (
+								<MenuItem key={value} value={value}>
+									{value}
+								</MenuItem>
+							))}
 						</Select>
 					</Grid>
 					<Grid item>
@@ -290,14 +295,16 @@ export function KingdomView(): ReactElement {
 							style={{ minWidth: '13ch' }}
 							value={promotionEdictLevel}
 							onChange={(e) =>
-								dispatch(promotionEdictLevelUpdated(Number(e.target.value)))
+								dispatch(
+									promotionEdictLevelUpdated(e.target.value as PromotionEdict)
+								)
 							}
 						>
-							<MenuItem value={0}>None</MenuItem>
-							<MenuItem value={1}>Token</MenuItem>
-							<MenuItem value={2}>Standard</MenuItem>
-							<MenuItem value={3}>Aggressive</MenuItem>
-							<MenuItem value={4}>Expansionist</MenuItem>
+							{Object.values(PromotionEdict).map((value) => (
+								<MenuItem key={value} value={value}>
+									{value}
+								</MenuItem>
+							))}
 						</Select>
 					</Grid>
 					<Grid item>
@@ -308,14 +315,16 @@ export function KingdomView(): ReactElement {
 							style={{ minWidth: '13ch' }}
 							value={taxationEdictLevel}
 							onChange={(e) =>
-								dispatch(taxationEdictLevelUpdated(Number(e.target.value)))
+								dispatch(
+									taxationEdictLevelUpdated(e.target.value as TaxationEdict)
+								)
 							}
 						>
-							<MenuItem value={0}>None</MenuItem>
-							<MenuItem value={1}>Light</MenuItem>
-							<MenuItem value={2}>Normal</MenuItem>
-							<MenuItem value={3}>Heavy</MenuItem>
-							<MenuItem value={4}>Overwhelming</MenuItem>
+							{Object.values(TaxationEdict).map((value) => (
+								<MenuItem key={value} value={value}>
+									{value}
+								</MenuItem>
+							))}
 						</Select>
 					</Grid>
 				</Grid>
