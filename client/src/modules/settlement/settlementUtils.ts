@@ -6,7 +6,6 @@ import {
 	selectAllDistricts,
 	selectDistrictsBySettlementId,
 } from '../district';
-import { Settlement } from './settlementSlice';
 
 export type SettlementSize =
 	| 'Small Town'
@@ -121,25 +120,3 @@ export function useSettlementUnrest(settlementId: EntityId): number {
 
 	return total;
 }
-
-// TODO remove everything below when hooked up to DB
-export const initialSettlements: Settlement[] = [
-	{
-		id: 1,
-		name: 'Test Settlement 1',
-		hexId: 69,
-		districts: [1, 2, 3],
-	},
-	{
-		id: 2,
-		name: 'Test Settlement 2',
-		hexId: 3,
-		districts: [4, 5, 6],
-	},
-	{
-		id: 3,
-		name: 'Test Settlement 3',
-		hexId: 23,
-		districts: [7, 8, 9],
-	},
-];
