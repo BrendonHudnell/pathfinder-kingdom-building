@@ -7,7 +7,6 @@ import {
 } from '@reduxjs/toolkit';
 
 import { RootState } from '../../components/store';
-// import { initialRoles } from './leadershipUtils';
 
 export interface Role {
 	id: number;

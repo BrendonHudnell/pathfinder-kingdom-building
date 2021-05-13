@@ -22,17 +22,7 @@ import {
 	vacantToggled,
 	viceroyDeleted,
 } from './leadershipSlice';
-import { staticRoleThings } from './leadershipUtils';
-
-const benefitList = [
-	'Economy',
-	'Stability',
-	'Loyalty',
-	'Economy and Stability',
-	'Economy and Loyalty',
-	'Stability and Loyalty',
-	'Economy and Stability and Loyalty',
-];
+import { roleBenefitList, roleConstantsList } from './leadershipUtils';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -58,7 +48,9 @@ export function RoleRow(props: RoleRowProps): ReactElement {
 		benefit,
 	} = props.role;
 
-	const { attributeOptions } = staticRoleThings.find((el) => el.name === name)!;
+	const { attributeOptions } = roleConstantsList.find(
+		(el) => el.name === name
+	)!;
 
 	const classes = useStyles();
 
@@ -142,12 +134,12 @@ export function RoleRow(props: RoleRowProps): ReactElement {
 						}
 					>
 						{name === 'Ruler' || name === 'Second Ruler'
-							? benefitList.map((benefit) => (
+							? roleBenefitList.map((benefit) => (
 									<MenuItem key={`${id}.${benefit}`} value={benefit}>
 										{benefit}
 									</MenuItem>
 							  ))
-							: benefitList.slice(0, 3).map((benefit) => (
+							: roleBenefitList.slice(0, 3).map((benefit) => (
 									<MenuItem key={`${id}.${benefit}`} value={benefit}>
 										{benefit}
 									</MenuItem>
