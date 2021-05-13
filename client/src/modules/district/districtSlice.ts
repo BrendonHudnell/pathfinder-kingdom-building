@@ -9,7 +9,7 @@ import {
 
 import { RootState } from '../../components/store';
 import { BuildingId } from './buildingTypes';
-import { createEmptyLotArray /*initialDistricts */ } from './districtUtils';
+import { createEmptyLotArray } from './districtUtils';
 
 // {
 // 	name: 'Watergate',

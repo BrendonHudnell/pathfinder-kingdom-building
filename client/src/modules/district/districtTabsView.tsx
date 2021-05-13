@@ -1,13 +1,5 @@
-import React, { ReactElement, ReactNode, useState } from 'react';
-import {
-	AppBar,
-	Box,
-	Grid,
-	makeStyles,
-	Paper,
-	Tab,
-	Tabs,
-} from '@material-ui/core';
+import React, { ReactElement, useState } from 'react';
+import { AppBar, Grid, makeStyles, Paper, Tab, Tabs } from '@material-ui/core';
 import { EntityId } from '@reduxjs/toolkit';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -17,6 +9,7 @@ import { Trashcan } from './trashcan';
 import { BuildingList } from './buildingList';
 import { addNewDistrict, selectDistrictsBySettlementId } from './districtSlice';
 import { DistrictView } from './districtView';
+import { TabPanel } from './districtTabPanel';
 
 const useStyles = makeStyles({
 	root: {
@@ -90,21 +83,5 @@ export function DistrictTabsView(props: DistrictTabsViewProps): ReactElement {
 				</Grid>
 			</DndProvider>
 		</Paper>
-	);
-}
-
-export interface TabPanelProps {
-	children?: ReactNode;
-	index: number;
-	value: number;
-}
-
-export function TabPanel(props: TabPanelProps): ReactElement {
-	const { children, value, index } = props;
-
-	return (
-		<Box p={3} hidden={value !== index}>
-			{children}
-		</Box>
 	);
 }

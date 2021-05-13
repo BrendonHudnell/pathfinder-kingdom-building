@@ -3,6 +3,7 @@ export * from './buildingCardTooltip';
 export * from './buildingList';
 export * from './buildingTypes';
 export * from './districtSlice';
+export * from './districtTabPanel';
 export * from './districtTabsView';
 export * from './districtUtils';
 export * from './districtView';

@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { makeStyles } from '@material-ui/core';
+import { Box, makeStyles } from '@material-ui/core';
 import { EntityId } from '@reduxjs/toolkit';
 
 import { useAppSelector } from '../../components/store';
@@ -30,7 +30,7 @@ export function DistrictView(props: DistrictViewProps): ReactElement {
 	);
 
 	return (
-		<div className={classes.root}>
+		<Box className={classes.root}>
 			{district
 				? district.lotIds.map((lotId, index) => (
 						<Lot
@@ -41,6 +41,6 @@ export function DistrictView(props: DistrictViewProps): ReactElement {
 						/>
 				  ))
 				: null}
-		</div>
+		</Box>
 	);
 }
