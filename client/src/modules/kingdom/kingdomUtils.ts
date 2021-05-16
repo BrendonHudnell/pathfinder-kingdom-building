@@ -37,6 +37,90 @@ export enum TaxationEdict {
 	OVERWHELMING = 'Overwhelming',
 }
 
+export interface HolidayEdictMenuItem {
+	title: string;
+	value: HolidayEdict;
+}
+
+export interface PromotionEdictMenuItem {
+	title: string;
+	value: PromotionEdict;
+}
+
+export interface TaxationEdictMenuItem {
+	title: string;
+	value: TaxationEdict;
+}
+
+export const holidayEdictMenuItems: HolidayEdictMenuItem[] = [
+	{
+		title: '-1 Loyalty, +0 Consumption',
+		value: HolidayEdict.NONE,
+	},
+	{
+		title: '+1 Loyalty, +1 Consumption',
+		value: HolidayEdict.ONE,
+	},
+	{
+		title: '+2 Loyalty, +2 Consumption',
+		value: HolidayEdict.SIX,
+	},
+	{
+		title: '+3 Loyalty, +4 Consumption',
+		value: HolidayEdict.TWELVE,
+	},
+	{
+		title: '+4 Loyalty, +8 Consumption',
+		value: HolidayEdict.TWENTYFOUR,
+	},
+];
+
+export const promotionEdictMenuItems: PromotionEdictMenuItem[] = [
+	{
+		title: '-1 Stability, +0 Consumption',
+		value: PromotionEdict.NONE,
+	},
+	{
+		title: '+1 Stability, +1 Consumption',
+		value: PromotionEdict.TOKEN,
+	},
+	{
+		title: '+2 Stability, +2 Consumption',
+		value: PromotionEdict.STANDARD,
+	},
+	{
+		title: '+3 Stability, +4 Consumption',
+		value: PromotionEdict.AGGRESSIVE,
+	},
+	{
+		title: '+4 Stability, +8 Consumption',
+		value: PromotionEdict.EXPANSIONIST,
+	},
+];
+
+export const taxationEdictMenuItems: TaxationEdictMenuItem[] = [
+	{
+		title: '+0 Economy, +1 Loyalty',
+		value: TaxationEdict.NONE,
+	},
+	{
+		title: '+1 Economy, -1 Loyalty',
+		value: TaxationEdict.LIGHT,
+	},
+	{
+		title: '+2 Economy, -2 Loyalty',
+		value: TaxationEdict.NORMAL,
+	},
+	{
+		title: '+3 Economy, -4 Loyalty',
+		value: TaxationEdict.HEAVY,
+	},
+	{
+		title: '+4 Economy, -8 Loyalty',
+		value: TaxationEdict.OVERWHELMING,
+	},
+];
+
 export interface AlignmentBonusObject {
 	economy: number;
 	stability: number;

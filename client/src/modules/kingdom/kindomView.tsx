@@ -37,11 +37,11 @@ import {
 import {
 	Alignment,
 	HolidayEdict,
-	holidayEdictTooltips,
+	holidayEdictMenuItems,
 	PromotionEdict,
-	promotionEdictTooltips,
+	promotionEdictMenuItems,
 	TaxationEdict,
-	taxationEdictTooltips,
+	taxationEdictMenuItems,
 	useAlignmentBonuses,
 	useEdictsBonuses,
 } from './kingdomUtils';
@@ -334,7 +334,7 @@ export function KingdomView(): ReactElement {
 								)
 							}
 						>
-							{holidayEdictTooltips.map((item) => (
+							{holidayEdictMenuItems.map((item) => (
 								<MenuItem key={item.value} value={item.value}>
 									<Tooltip title={<Typography>{item.title}</Typography>}>
 										<Typography>{item.value}</Typography>
@@ -356,7 +356,7 @@ export function KingdomView(): ReactElement {
 								)
 							}
 						>
-							{promotionEdictTooltips.map((item) => (
+							{promotionEdictMenuItems.map((item) => (
 								<MenuItem key={item.value} value={item.value}>
 									<Tooltip title={<Typography>{item.title}</Typography>}>
 										<Typography>{item.value}</Typography>
@@ -378,7 +378,7 @@ export function KingdomView(): ReactElement {
 								)
 							}
 						>
-							{taxationEdictTooltips.map((item) => (
+							{taxationEdictMenuItems.map((item) => (
 								<MenuItem key={item.value} value={item.value}>
 									<Tooltip title={<Typography>{item.title}</Typography>}>
 										<Typography>{item.value}</Typography>
