@@ -37,6 +37,11 @@ export enum TaxationEdict {
 	OVERWHELMING = 'Overwhelming',
 }
 
+export interface AlignmentMenuItem {
+	title: string;
+	value: Alignment;
+}
+
 export interface HolidayEdictMenuItem {
 	title: string;
 	value: HolidayEdict;
@@ -51,6 +56,45 @@ export interface TaxationEdictMenuItem {
 	title: string;
 	value: TaxationEdict;
 }
+
+export const alignmentMenuItems: AlignmentMenuItem[] = [
+	{
+		title: '+2 Economy, +2 Loyalty',
+		value: Alignment.LG,
+	},
+	{
+		title: '+2 Stability, +2 Loyalty',
+		value: Alignment.NG,
+	},
+	{
+		title: '+4 Loyalty',
+		value: Alignment.CG,
+	},
+	{
+		title: '+2 Economy, +2 Stability',
+		value: Alignment.LN,
+	},
+	{
+		title: '+4 Stability',
+		value: Alignment.N,
+	},
+	{
+		title: '+2 Stability, +2 Loyalty',
+		value: Alignment.CN,
+	},
+	{
+		title: '+4 Economy',
+		value: Alignment.LE,
+	},
+	{
+		title: '+2 Economy, +2 Stability',
+		value: Alignment.NE,
+	},
+	{
+		title: '+2 Economy, +2 Loyalty',
+		value: Alignment.CE,
+	},
+];
 
 export const holidayEdictMenuItems: HolidayEdictMenuItem[] = [
 	{

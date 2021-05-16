@@ -36,6 +36,7 @@ import {
 } from './kingdomSlice';
 import {
 	Alignment,
+	alignmentMenuItems,
 	HolidayEdict,
 	holidayEdictMenuItems,
 	PromotionEdict,
@@ -167,9 +168,11 @@ export function KingdomView(): ReactElement {
 								dispatch(alignmentUpdated(e.target.value as Alignment))
 							}
 						>
-							{Object.values(Alignment).map((value) => (
-								<MenuItem key={value} value={value}>
-									{value}
+							{alignmentMenuItems.map((item) => (
+								<MenuItem key={item.value} value={item.value}>
+									<Tooltip title={<Typography>{item.title}</Typography>}>
+										<Typography>{item.value}</Typography>
+									</Tooltip>
 								</MenuItem>
 							))}
 						</Select>
