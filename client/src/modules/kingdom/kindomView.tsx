@@ -37,11 +37,15 @@ import {
 import {
 	Alignment,
 	HolidayEdict,
+	holidayEdictTooltips,
 	PromotionEdict,
+	promotionEdictTooltips,
 	TaxationEdict,
+	taxationEdictTooltips,
 	useAlignmentBonuses,
 	useEdictsBonuses,
 } from './kingdomUtils';
+import { KingdomTooltip } from './kingdomTooltip';
 
 const useStyles = makeStyles((theme) => {
 	return {
@@ -221,9 +225,18 @@ export function KingdomView(): ReactElement {
 					</Grid>
 					<Grid item />
 					<Grid item>
-						<Typography>
-							Consumption: {totalConsumption > 0 ? totalConsumption : 0}
-						</Typography>
+						<KingdomTooltip
+							positives={{
+								'# of hexes': size,
+								'# of districts': totalDistricts,
+								edicts: edictBonuses.consumption,
+							}}
+							negatives={{ 'terrain improvements': hexConsumptionDecrease }}
+						>
+							<Typography>
+								Consumption: {totalConsumption > 0 ? totalConsumption : 0}
+							</Typography>
+						</KingdomTooltip>
 					</Grid>
 					<Grid item />
 					<Grid item>
@@ -240,17 +253,58 @@ export function KingdomView(): ReactElement {
 
 				<Grid container item spacing={2} alignItems="center">
 					<Grid item>
-						<Typography>Control DC: {controlDC}</Typography>
+						<KingdomTooltip
+							positives={{
+								base: 20,
+								'# of hexes': size,
+								'# of districts': totalDistricts,
+							}}
+						>
+							<Typography>Control DC: {controlDC}</Typography>
+						</KingdomTooltip>
 					</Grid>
 					<Grid item />
 					<Grid item>
-						<Typography>Economy: {totalEconomy}</Typography>
+						<KingdomTooltip
+							positives={{
+								buildings: settlementEconomy,
+								edicts: edictBonuses.economy,
+								leadership: leadershipEconomy,
+								hexes: hexEconomy,
+								alignment: alignmentBonuses.economy,
+							}}
+							negatives={{ unrest: currentUnrest }}
+						>
+							<Typography>Economy: {totalEconomy}</Typography>
+						</KingdomTooltip>
 					</Grid>
 					<Grid item>
-						<Typography>Stability: {totalStability}</Typography>
+						<KingdomTooltip
+							positives={{
+								buildings: settlementStability,
+								edicts: edictBonuses.stability,
+								leadership: leadershipStability,
+								hexes: hexStability,
+								alignment: alignmentBonuses.stability,
+							}}
+							negatives={{ unrest: currentUnrest }}
+						>
+							<Typography>Stability: {totalStability}</Typography>
+						</KingdomTooltip>
 					</Grid>
 					<Grid item>
-						<Typography>Loyalty: {totalLoyalty}</Typography>
+						<KingdomTooltip
+							positives={{
+								buildings: settlementLoyalty,
+								edicts: edictBonuses.loyalty,
+								leadership: leadershipLoyalty,
+								hexes: hexLoyalty,
+								alignment: alignmentBonuses.loyalty,
+							}}
+							negatives={{ unrest: currentUnrest }}
+						>
+							<Typography>Loyalty: {totalLoyalty}</Typography>
+						</KingdomTooltip>
 					</Grid>
 					<Grid item />
 					<Grid item>
@@ -280,9 +334,11 @@ export function KingdomView(): ReactElement {
 								)
 							}
 						>
-							{Object.values(HolidayEdict).map((value) => (
-								<MenuItem key={value} value={value}>
-									{value}
+							{holidayEdictTooltips.map((item) => (
+								<MenuItem key={item.value} value={item.value}>
+									<Tooltip title={<Typography>{item.title}</Typography>}>
+										<Typography>{item.value}</Typography>
+									</Tooltip>
 								</MenuItem>
 							))}
 						</Select>
@@ -300,9 +356,11 @@ export function KingdomView(): ReactElement {
 								)
 							}
 						>
-							{Object.values(PromotionEdict).map((value) => (
-								<MenuItem key={value} value={value}>
-									{value}
+							{promotionEdictTooltips.map((item) => (
+								<MenuItem key={item.value} value={item.value}>
+									<Tooltip title={<Typography>{item.title}</Typography>}>
+										<Typography>{item.value}</Typography>
+									</Tooltip>
 								</MenuItem>
 							))}
 						</Select>
@@ -320,9 +378,11 @@ export function KingdomView(): ReactElement {
 								)
 							}
 						>
-							{Object.values(TaxationEdict).map((value) => (
-								<MenuItem key={value} value={value}>
-									{value}
+							{taxationEdictTooltips.map((item) => (
+								<MenuItem key={item.value} value={item.value}>
+									<Tooltip title={<Typography>{item.title}</Typography>}>
+										<Typography>{item.value}</Typography>
+									</Tooltip>
 								</MenuItem>
 							))}
 						</Select>
