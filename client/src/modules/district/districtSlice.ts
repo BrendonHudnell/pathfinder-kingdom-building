@@ -148,6 +148,10 @@ export const districtSlice = createSlice({
 
 			if (state.ids.includes(districtId)) {
 				state.entities[districtId]![direction].terrain = terrain;
+				if (terrain !== DistrictTerrainType.LAND) {
+					state.entities[districtId]![direction].wall = false;
+					state.entities[districtId]![direction].moat = false;
+				}
 			}
 		},
 		wallUpdated: (

@@ -59,32 +59,65 @@ export function DistrictView(props: DistrictViewProps): ReactElement {
 
 	const usedLots = district?.lotIds.filter((lot) => lot !== -1).length ?? 0;
 
-	const borderNorth =
+	const terrainNorth =
 		district?.north.terrain === DistrictTerrainType.CLIFF
 			? 'lightgray'
 			: district?.north.terrain === DistrictTerrainType.WATER
 			? 'blue'
 			: 'green';
-	const borderSouth =
+	const terrainSouth =
 		district?.south.terrain === DistrictTerrainType.CLIFF
 			? 'lightgray'
 			: district?.south.terrain === DistrictTerrainType.WATER
 			? 'blue'
 			: 'green';
-	const borderEast =
+	const terrainEast =
 		district?.east.terrain === DistrictTerrainType.CLIFF
 			? 'lightgray'
 			: district?.east.terrain === DistrictTerrainType.WATER
 			? 'blue'
 			: 'green';
-	const borderWest =
+	const terrainWest =
 		district?.west.terrain === DistrictTerrainType.CLIFF
 			? 'lightgray'
 			: district?.west.terrain === DistrictTerrainType.WATER
 			? 'blue'
 			: 'green';
 
-	const colorClass =
+	const fortificationNorth =
+		district?.north.wall && district.north.moat
+			? 'darkblue'
+			: district?.north.wall
+			? 'gray'
+			: district?.north.moat
+			? 'lightblue'
+			: 'transparent';
+	const fortificationSouth =
+		district?.south.wall && district.south.moat
+			? 'darkblue'
+			: district?.south.wall
+			? 'gray'
+			: district?.south.moat
+			? 'lightblue'
+			: 'transparent';
+	const fortificationEast =
+		district?.east.wall && district.east.moat
+			? 'darkblue'
+			: district?.east.wall
+			? 'gray'
+			: district?.east.moat
+			? 'lightblue'
+			: 'transparent';
+	const fortificationWest =
+		district?.west.wall && district.west.moat
+			? 'darkblue'
+			: district?.west.wall
+			? 'gray'
+			: district?.west.moat
+			? 'lightblue'
+			: 'transparent';
+
+	const backgroundClass =
 		district?.paved && district?.sewers
 			? classes.pavedAndSewers
 			: district?.paved
@@ -170,44 +203,54 @@ export function DistrictView(props: DistrictViewProps): ReactElement {
 					marginTop={3}
 					border={24}
 					style={{
-						borderLeftColor: borderEast,
-						borderRightColor: borderWest,
-						borderTopColor: borderNorth,
-						borderBottomColor: borderSouth,
+						borderLeftColor: fortificationEast,
+						borderRightColor: fortificationWest,
+						borderTopColor: fortificationNorth,
+						borderBottomColor: fortificationSouth,
 					}}
 				>
-					<Grid className={colorClass} container>
-						<LotGridRow
-							district={district}
-							inclusiveStart={0}
-							exclusiveEnd={6}
-						/>
-						<LotGridRow
-							district={district}
-							inclusiveStart={6}
-							exclusiveEnd={12}
-						/>
-						<LotGridRow
-							district={district}
-							inclusiveStart={12}
-							exclusiveEnd={18}
-						/>
-						<LotGridRow
-							district={district}
-							inclusiveStart={18}
-							exclusiveEnd={24}
-						/>
-						<LotGridRow
-							district={district}
-							inclusiveStart={24}
-							exclusiveEnd={30}
-						/>
-						<LotGridRow
-							district={district}
-							inclusiveStart={30}
-							exclusiveEnd={36}
-						/>
-					</Grid>
+					<Box
+						border={24}
+						style={{
+							borderLeftColor: terrainEast,
+							borderRightColor: terrainWest,
+							borderTopColor: terrainNorth,
+							borderBottomColor: terrainSouth,
+						}}
+					>
+						<Grid className={backgroundClass} container>
+							<LotGridRow
+								district={district}
+								inclusiveStart={0}
+								exclusiveEnd={6}
+							/>
+							<LotGridRow
+								district={district}
+								inclusiveStart={6}
+								exclusiveEnd={12}
+							/>
+							<LotGridRow
+								district={district}
+								inclusiveStart={12}
+								exclusiveEnd={18}
+							/>
+							<LotGridRow
+								district={district}
+								inclusiveStart={18}
+								exclusiveEnd={24}
+							/>
+							<LotGridRow
+								district={district}
+								inclusiveStart={24}
+								exclusiveEnd={30}
+							/>
+							<LotGridRow
+								district={district}
+								inclusiveStart={30}
+								exclusiveEnd={36}
+							/>
+						</Grid>
+					</Box>
 				</Box>
 			) : null}
 		</Fragment>
