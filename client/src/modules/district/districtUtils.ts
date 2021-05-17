@@ -3,6 +3,14 @@ import { useAppSelector } from '../../components/store';
 import { BuildingId } from './buildingTypes';
 import { selectAllDistricts } from './districtSlice';
 
+export enum DistrictTerrainType {
+	LAND = 'Land',
+	WATER = 'Water',
+	CLIFF = 'Cliff',
+}
+
+export type Direction = 'north' | 'south' | 'east' | 'west';
+
 export function createEmptyLotArray(): BuildingId[] {
 	const emptyArray: BuildingId[] = [];
 	for (let i = 0; i < 36; i++) {

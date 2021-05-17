@@ -9,7 +9,11 @@ import {
 
 import { RootState } from '../../components/store';
 import { BuildingId } from './buildingTypes';
-import { createEmptyLotArray } from './districtUtils';
+import {
+	createEmptyLotArray,
+	Direction,
+	DistrictTerrainType,
+} from './districtUtils';
 
 // {
 // 	name: 'Watergate',
@@ -26,22 +30,22 @@ export interface District {
 	paved: boolean;
 	sewers: boolean;
 	north: {
-		terrain: 'Land' | 'Water' | 'Cliff';
+		terrain: DistrictTerrainType;
 		wall: boolean; // TODO handle watergate
 		moat: boolean;
 	};
 	south: {
-		terrain: 'Land' | 'Water' | 'Cliff';
+		terrain: DistrictTerrainType;
 		wall: boolean;
 		moat: boolean;
 	};
 	east: {
-		terrain: 'Land' | 'Water' | 'Cliff';
+		terrain: DistrictTerrainType;
 		wall: boolean;
 		moat: boolean;
 	};
 	west: {
-		terrain: 'Land' | 'Water' | 'Cliff';
+		terrain: DistrictTerrainType;
 		wall: boolean;
 		moat: boolean;
 	};
@@ -72,22 +76,22 @@ export const addNewDistrict = createAsyncThunk(
 			paved: false,
 			sewers: false,
 			north: {
-				terrain: 'Land',
+				terrain: DistrictTerrainType.LAND,
 				wall: false,
 				moat: false,
 			},
 			south: {
-				terrain: 'Land',
+				terrain: DistrictTerrainType.LAND,
 				wall: false,
 				moat: false,
 			},
 			east: {
-				terrain: 'Land',
+				terrain: DistrictTerrainType.LAND,
 				wall: false,
 				moat: false,
 			},
 			west: {
-				terrain: 'Land',
+				terrain: DistrictTerrainType.LAND,
 				wall: false,
 				moat: false,
 			},
@@ -102,6 +106,78 @@ export const districtSlice = createSlice({
 	name: 'district',
 	initialState,
 	reducers: {
+		nameUpdated: (
+			state,
+			action: PayloadAction<{ districtId: EntityId; name: string }>
+		) => {
+			const { districtId, name } = action.payload;
+
+			if (state.ids.includes(districtId)) {
+				state.entities[districtId]!.name = name;
+			}
+		},
+		pavedUpdated: (
+			state,
+			action: PayloadAction<{ districtId: EntityId; paved: boolean }>
+		) => {
+			const { districtId, paved } = action.payload;
+
+			if (state.ids.includes(districtId)) {
+				state.entities[districtId]!.paved = paved;
+			}
+		},
+		sewersUpdated: (
+			state,
+			action: PayloadAction<{ districtId: EntityId; sewers: boolean }>
+		) => {
+			const { districtId, sewers } = action.payload;
+
+			if (state.ids.includes(districtId)) {
+				state.entities[districtId]!.sewers = sewers;
+			}
+		},
+		terrainUpdated: (
+			state,
+			action: PayloadAction<{
+				districtId: EntityId;
+				direction: Direction;
+				terrain: DistrictTerrainType;
+			}>
+		) => {
+			const { districtId, direction, terrain } = action.payload;
+
+			if (state.ids.includes(districtId)) {
+				state.entities[districtId]![direction].terrain = terrain;
+			}
+		},
+		wallUpdated: (
+			state,
+			action: PayloadAction<{
+				districtId: EntityId;
+				direction: Direction;
+				wall: boolean;
+			}>
+		) => {
+			const { districtId, direction, wall } = action.payload;
+
+			if (state.ids.includes(districtId)) {
+				state.entities[districtId]![direction].wall = wall;
+			}
+		},
+		moatUpdated: (
+			state,
+			action: PayloadAction<{
+				districtId: EntityId;
+				direction: Direction;
+				moat: boolean;
+			}>
+		) => {
+			const { districtId, direction, moat } = action.payload;
+
+			if (state.ids.includes(districtId)) {
+				state.entities[districtId]![direction].moat = moat;
+			}
+		},
 		lotUpdated: (
 			state,
 			action: PayloadAction<{
@@ -156,7 +232,16 @@ export const districtSlice = createSlice({
 	},
 });
 
-export const { lotUpdated, lotCleared } = districtSlice.actions;
+export const {
+	nameUpdated,
+	pavedUpdated,
+	sewersUpdated,
+	terrainUpdated,
+	wallUpdated,
+	moatUpdated,
+	lotUpdated,
+	lotCleared,
+} = districtSlice.actions;
 
 export const {
 	selectAll: selectAllDistricts,
