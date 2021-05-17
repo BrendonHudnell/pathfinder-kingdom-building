@@ -8,6 +8,27 @@ import { BuildingId, buildingList } from './buildingTypes';
 import { lotUpdated } from './districtSlice';
 import { BuildingCard, BuildingCardItem } from './buildingCard';
 
+const useStyles = makeStyles((theme) => {
+	return {
+		rowTop: {
+			marginTop: theme.spacing(3),
+			marginBottom: theme.spacing(0.5),
+		},
+		rowBottom: {
+			marginTop: theme.spacing(0.5),
+			marginBottom: theme.spacing(3),
+		},
+		colLeft: {
+			marginLeft: theme.spacing(3),
+			marginRight: theme.spacing(0.5),
+		},
+		colRight: {
+			marginLeft: theme.spacing(0.5),
+			marginRight: theme.spacing(3),
+		},
+	};
+});
+
 export interface LotProps {
 	districtId: EntityId;
 	buildingId: BuildingId;
@@ -17,16 +38,7 @@ export interface LotProps {
 export function Lot(props: LotProps): ReactElement {
 	const { districtId, buildingId, index } = props;
 
-	const classes = makeStyles({
-		root: {
-			width: '12.5%',
-			height: '12.5%',
-			marginLeft: index % 2 === 0 ? '3%' : '0.5%',
-			marginRight: index % 2 === 1 ? '3%' : '0.5%',
-			marginTop: Math.floor(index / 6) % 2 === 0 ? '3%' : '0.5%',
-			marginBottom: Math.floor(index / 6) % 2 === 1 ? '3%' : '0.5%',
-		},
-	})();
+	const classes = useStyles();
 
 	const dispatch = useAppDispatch();
 
@@ -60,9 +72,13 @@ export function Lot(props: LotProps): ReactElement {
 
 	const building = buildingList[buildingId];
 
+	const rowStyle =
+		Math.floor(index / 6) % 2 ? classes.rowBottom : classes.rowTop;
+	const colStyle = index % 2 ? classes.colRight : classes.colLeft;
+
 	return (
 		<Card
-			className={classes.root}
+			className={`${rowStyle} ${colStyle}`}
 			style={
 				isActive
 					? { backgroundColor: 'green' }

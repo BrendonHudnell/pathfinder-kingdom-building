@@ -45,6 +45,7 @@ export enum TerrainImprovementType {
 	QUARRY = 'Quarry',
 	ROAD = 'Road',
 	SAWMILL = 'Sawmill',
+	VINEYARD = 'Vineyard',
 	WATCHTOWER = 'Watchtower',
 }
 
@@ -164,6 +165,7 @@ export function useClaimedHexesConsumptionDecrease(): number {
 	const claimedHexes = useAppSelector((state) => selectClaimedHexes(state));
 	let farmTotal = 0;
 	let fisheryTotal = 0;
+	let vineyardTotal = 0;
 	let fortTotal = 0;
 
 	claimedHexes.forEach((hex) => {
@@ -177,12 +179,17 @@ export function useClaimedHexesConsumptionDecrease(): number {
 				? (fisheryTotal += 2)
 				: fisheryTotal++;
 		}
+		if (hex.terrainImprovements.includes(TerrainImprovementType.VINEYARD)) {
+			hex.specialTerrain.includes(SpecialTerrainType.RESOURCE)
+				? (vineyardTotal += 2)
+				: vineyardTotal++;
+		}
 		if (hex.terrainImprovements.includes(TerrainImprovementType.FORT)) {
 			fortTotal++;
 		}
 	});
 
-	return farmTotal + fisheryTotal - fortTotal;
+	return farmTotal + fisheryTotal + vineyardTotal - fortTotal;
 }
 
 export function useClaimedHexesTerrainIncome(): number {
@@ -310,6 +317,7 @@ export function getTerrainImprovements(
 			improvements.push(TerrainImprovementType.MINE);
 			improvements.push(TerrainImprovementType.QUARRY);
 			improvements.push(TerrainImprovementType.ROAD);
+			improvements.push(TerrainImprovementType.VINEYARD);
 			improvements.push(TerrainImprovementType.WATCHTOWER);
 			break;
 		case TerrainType.JUNGLE:
