@@ -17,7 +17,10 @@ import {
 	selectDistrictById,
 	sewersUpdated,
 } from './districtSlice';
-import { DistrictTerrainType } from './districtUtils';
+import {
+	getDistrictFortificationColor,
+	getDistrictTerrainColor,
+} from './districtUtils';
 import { LotGridRow } from './lotGridRow';
 import { DistrictBorderGrid } from './districtBorderGrid';
 
@@ -59,63 +62,27 @@ export function DistrictView(props: DistrictViewProps): ReactElement {
 
 	const usedLots = district?.lotIds.filter((lot) => lot !== -1).length ?? 0;
 
-	const terrainNorth =
-		district?.north.terrain === DistrictTerrainType.CLIFF
-			? 'lightgray'
-			: district?.north.terrain === DistrictTerrainType.WATER
-			? 'blue'
-			: 'green';
-	const terrainSouth =
-		district?.south.terrain === DistrictTerrainType.CLIFF
-			? 'lightgray'
-			: district?.south.terrain === DistrictTerrainType.WATER
-			? 'blue'
-			: 'green';
-	const terrainEast =
-		district?.east.terrain === DistrictTerrainType.CLIFF
-			? 'lightgray'
-			: district?.east.terrain === DistrictTerrainType.WATER
-			? 'blue'
-			: 'green';
-	const terrainWest =
-		district?.west.terrain === DistrictTerrainType.CLIFF
-			? 'lightgray'
-			: district?.west.terrain === DistrictTerrainType.WATER
-			? 'blue'
-			: 'green';
+	const terrainNorth = getDistrictTerrainColor(district?.north.terrain);
+	const terrainSouth = getDistrictTerrainColor(district?.south.terrain);
+	const terrainEast = getDistrictTerrainColor(district?.east.terrain);
+	const terrainWest = getDistrictTerrainColor(district?.west.terrain);
 
-	const fortificationNorth =
-		district?.north.wall && district.north.moat
-			? 'darkblue'
-			: district?.north.wall
-			? 'gray'
-			: district?.north.moat
-			? 'lightblue'
-			: 'transparent';
-	const fortificationSouth =
-		district?.south.wall && district.south.moat
-			? 'darkblue'
-			: district?.south.wall
-			? 'gray'
-			: district?.south.moat
-			? 'lightblue'
-			: 'transparent';
-	const fortificationEast =
-		district?.east.wall && district.east.moat
-			? 'darkblue'
-			: district?.east.wall
-			? 'gray'
-			: district?.east.moat
-			? 'lightblue'
-			: 'transparent';
-	const fortificationWest =
-		district?.west.wall && district.west.moat
-			? 'darkblue'
-			: district?.west.wall
-			? 'gray'
-			: district?.west.moat
-			? 'lightblue'
-			: 'transparent';
+	const fortificationNorth = getDistrictFortificationColor(
+		district?.north.wall,
+		district?.north.moat
+	);
+	const fortificationSouth = getDistrictFortificationColor(
+		district?.south.wall,
+		district?.south.moat
+	);
+	const fortificationEast = getDistrictFortificationColor(
+		district?.east.wall,
+		district?.east.moat
+	);
+	const fortificationWest = getDistrictFortificationColor(
+		district?.west.wall,
+		district?.west.moat
+	);
 
 	const backgroundClass =
 		district?.paved && district?.sewers

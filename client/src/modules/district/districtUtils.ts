@@ -29,3 +29,29 @@ export function useTotalPopulation(): number {
 			.reduce(numberReducer, 0)
 	);
 }
+
+export function getDistrictTerrainColor(terrain?: DistrictTerrainType): string {
+	if (terrain === DistrictTerrainType.CLIFF) {
+		return 'lightgray';
+	}
+	if (terrain === DistrictTerrainType.WATER) {
+		return 'blue';
+	}
+	return 'green';
+}
+
+export function getDistrictFortificationColor(
+	wall?: boolean,
+	moat?: boolean
+): string {
+	if (wall && moat) {
+		return 'darkblue';
+	}
+	if (wall) {
+		return 'gray';
+	}
+	if (moat) {
+		return 'lightblue';
+	}
+	return 'transparent';
+}
