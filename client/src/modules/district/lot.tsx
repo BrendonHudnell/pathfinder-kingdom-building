@@ -11,20 +11,16 @@ import { BuildingCard, BuildingCardItem } from './buildingCard';
 const useStyles = makeStyles((theme) => {
 	return {
 		rowTop: {
-			marginTop: theme.spacing(3),
-			marginBottom: theme.spacing(0.5),
+			marginTop: theme.spacing(2),
 		},
 		rowBottom: {
-			marginTop: theme.spacing(0.5),
-			marginBottom: theme.spacing(3),
+			marginBottom: theme.spacing(2),
 		},
 		colLeft: {
-			marginLeft: theme.spacing(3),
-			marginRight: theme.spacing(0.5),
+			marginLeft: theme.spacing(2),
 		},
 		colRight: {
-			marginLeft: theme.spacing(0.5),
-			marginRight: theme.spacing(3),
+			marginRight: theme.spacing(2),
 		},
 	};
 });
@@ -89,6 +85,15 @@ export function Lot(props: LotProps): ReactElement {
 			ref={drop}
 		>
 			{index}
+			<br />
+			<img
+				style={{ height: '100%', width: '100%' }}
+				src={
+					buildingId !== -1
+						? `/assets/images/${building.name?.replace(/ /g, '_')}.png`
+						: '/assets/images/Empty_Lot.png'
+				}
+			/>
 			<br />
 			{buildingId >= 0 ? (
 				<BuildingCard

@@ -1,7 +1,7 @@
-import React, { ReactElement } from 'react';
+import React, { Fragment, ReactElement } from 'react';
 import { Card, Tooltip, Typography } from '@material-ui/core';
 import { EntityId } from '@reduxjs/toolkit';
-import { useDrag } from 'react-dnd';
+import { DragPreviewImage, useDrag } from 'react-dnd';
 
 import { Building } from './buildingTypes';
 import { BuildingCardTooltip } from './buildingCardTooltip';
@@ -26,21 +26,22 @@ export function BuildingCard(props: BuildingCardProps): ReactElement {
 		districtId,
 	};
 
-	const [{ isDragging }, drag, dragPreview] = useDrag(() => ({
+	const [_, drag, preview] = useDrag(() => ({
 		type: 'Building',
 		item,
-		collect: (monitor) => ({
-			isDragging: monitor.isDragging(),
-		}),
 	}));
 
-	return isDragging ? (
-		<Card ref={dragPreview} />
-	) : (
-		<Tooltip title={<BuildingCardTooltip building={building} />}>
-			<Card ref={drag}>
-				<Typography>{building.name}</Typography>
-			</Card>
-		</Tooltip>
+	return (
+		<Fragment>
+			<DragPreviewImage
+				connect={preview}
+				src={`/assets/images/${building.name?.replace(/ /g, '_')}.png`}
+			/>
+			<Tooltip title={<BuildingCardTooltip building={building} />}>
+				<Card ref={drag}>
+					<Typography>{building.name}</Typography>
+				</Card>
+			</Tooltip>
+		</Fragment>
 	);
 }
