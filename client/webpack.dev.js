@@ -20,9 +20,9 @@ const copyPlugin = new CopyPlugin({
 		{
 			from: path.resolve(__dirname, 'src', 'assets'),
 			to: path.resolve(__dirname, 'build', 'assets'),
-		}
-	]
-})
+		},
+	],
+});
 
 module.exports = {
 	mode: 'development',
