@@ -1,23 +1,19 @@
 import React, { Fragment, ReactElement } from 'react';
-import { Card, Tooltip, Typography } from '@material-ui/core';
+import { Tooltip } from '@material-ui/core';
 import { EntityId } from '@reduxjs/toolkit';
 import { DragPreviewImage, useDrag } from 'react-dnd';
 
 import { Building } from './buildingTypes';
 import { BuildingTooltip } from './buildingTooltip';
+import { BuildingCardItem } from './buildingCard';
 
-export interface BuildingCardProps {
+export interface LotCardProps {
 	building: Building;
 	lotNumber?: number;
 	districtId?: EntityId;
 }
 
-export interface BuildingCardItem extends Building {
-	lotNumber?: number;
-	districtId?: EntityId;
-}
-
-export function BuildingCard(props: BuildingCardProps): ReactElement {
+export function LotCard(props: LotCardProps): ReactElement {
 	const { building, lotNumber, districtId } = props;
 
 	const item: BuildingCardItem = {
@@ -26,9 +22,12 @@ export function BuildingCard(props: BuildingCardProps): ReactElement {
 		districtId,
 	};
 
-	const [_, drag, preview] = useDrag(() => ({
+	const [{ isDragging }, drag, preview] = useDrag(() => ({
 		type: 'Building',
 		item,
+		collect: (monitor) => ({
+			isDragging: monitor.isDragging(),
+		}),
 	}));
 
 	return (
@@ -37,11 +36,19 @@ export function BuildingCard(props: BuildingCardProps): ReactElement {
 				connect={preview}
 				src={`/assets/images/${building.name?.replace(/ /g, '_')}.png`}
 			/>
-			<Tooltip title={<BuildingTooltip building={building} />}>
-				<Card ref={drag}>
-					<Typography>{building.name}</Typography>
-				</Card>
-			</Tooltip>
+			{isDragging ? (
+				<img
+					ref={drag}
+					src={`/assets/images/${building.name?.replace(/ /g, '_')}.png`}
+				/>
+			) : (
+				<Tooltip title={<BuildingTooltip building={building} inLot />}>
+					<img
+						ref={drag}
+						src={`/assets/images/${building.name?.replace(/ /g, '_')}.png`}
+					/>
+				</Tooltip>
+			)}
 		</Fragment>
 	);
 }

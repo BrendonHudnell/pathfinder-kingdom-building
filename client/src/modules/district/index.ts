@@ -1,5 +1,5 @@
 export * from './buildingCard';
-export * from './buildingCardTooltip';
+export * from './buildingTooltip';
 export * from './buildingList';
 export * from './buildingTypes';
 export * from './districtBorderGrid';
@@ -9,5 +9,6 @@ export * from './districtTabsView';
 export * from './districtUtils';
 export * from './districtView';
 export * from './lot';
-export * from './lotGridRow';
+export * from './lotCard';
+export * from './lotTableRow';
 export * from './trashcan';

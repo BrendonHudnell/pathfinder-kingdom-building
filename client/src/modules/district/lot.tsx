@@ -1,15 +1,19 @@
 import React, { ReactElement } from 'react';
-import { Card, makeStyles } from '@material-ui/core';
+import { Container, makeStyles } from '@material-ui/core';
 import { useDrop } from 'react-dnd';
-import { EntityId } from '@reduxjs/toolkit';
 
 import { useAppDispatch } from '../../components/store';
 import { BuildingId, buildingList } from './buildingTypes';
-import { lotUpdated } from './districtSlice';
-import { BuildingCard, BuildingCardItem } from './buildingCard';
+import { District, lotUpdated } from './districtSlice';
+import { BuildingCardItem } from './buildingCard';
+import { LotCard } from './lotCard';
 
 const useStyles = makeStyles((theme) => {
 	return {
+		fitContent: {
+			width: 'fit-content',
+			height: 'fit-content',
+		},
 		rowTop: {
 			marginTop: theme.spacing(2),
 		},
@@ -26,13 +30,13 @@ const useStyles = makeStyles((theme) => {
 });
 
 export interface LotProps {
-	districtId: EntityId;
+	district: District;
 	buildingId: BuildingId;
 	index: number;
 }
 
 export function Lot(props: LotProps): ReactElement {
-	const { districtId, buildingId, index } = props;
+	const { district, buildingId, index } = props;
 
 	const classes = useStyles();
 
@@ -43,7 +47,7 @@ export function Lot(props: LotProps): ReactElement {
 
 		dispatch(
 			lotUpdated({
-				districtId,
+				districtId: district.id,
 				newLotNumber: index,
 				oldLotNumber: lotNumber,
 				buildingId: id,
@@ -51,11 +55,15 @@ export function Lot(props: LotProps): ReactElement {
 		);
 	}
 
+	function handleCanDrop(/*item: BuildingCardItem*/): boolean {
+		return buildingId === -1;
+	}
+
 	const [{ isOver, canDrop }, drop] = useDrop(
 		() => ({
 			accept: 'Building',
 			drop: onDrop,
-			canDrop: () => buildingId === -1,
+			canDrop: handleCanDrop,
 			collect: (monitor) => ({
 				isOver: monitor.isOver(),
 				canDrop: monitor.canDrop(),
@@ -73,8 +81,9 @@ export function Lot(props: LotProps): ReactElement {
 	const colStyle = index % 2 ? classes.colRight : classes.colLeft;
 
 	return (
-		<Card
-			className={`${rowStyle} ${colStyle}`}
+		<Container
+			disableGutters
+			className={`${rowStyle} ${colStyle} ${classes.fitContent}`}
 			style={
 				isActive
 					? { backgroundColor: 'green' }
@@ -86,24 +95,15 @@ export function Lot(props: LotProps): ReactElement {
 		>
 			{index}
 			<br />
-			<img
-				style={{ height: '100%', width: '100%' }}
-				src={
-					buildingId !== -1
-						? `/assets/images/${building.name?.replace(/ /g, '_')}.png`
-						: '/assets/images/Empty_Lot.png'
-				}
-			/>
-			<br />
 			{buildingId >= 0 ? (
-				<BuildingCard
+				<LotCard
 					building={building}
 					lotNumber={index}
-					districtId={districtId}
+					districtId={district.id}
 				/>
 			) : (
-				'empty'
+				<img src="/assets/images/Empty_Lot.png" />
 			)}
-		</Card>
+		</Container>
 	);
 }

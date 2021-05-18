@@ -4,14 +4,14 @@ import { Box, Typography } from '@material-ui/core';
 import { signedNumber } from '../../components/signedNumber';
 import { Building } from './buildingTypes';
 
-export interface BuildingCardTooltipProps {
+export interface BuildingTooltipProps {
 	building: Building;
+	inLot?: boolean;
 }
 
-export function BuildingCardTooltip(
-	props: BuildingCardTooltipProps
-): ReactElement {
-	const { description, cost, economy, stability, loyalty } = props.building;
+export function BuildingTooltip(props: BuildingTooltipProps): ReactElement {
+	const { building, inLot } = props;
+	const { name, description, cost, economy, stability, loyalty } = building;
 
 	const bonuses =
 		(economy ? `${signedNumber(economy)} Economy ` : '') +
@@ -20,6 +20,7 @@ export function BuildingCardTooltip(
 
 	return (
 		<Box>
+			{inLot ? <Typography>{name}</Typography> : null}
 			<Typography>Cost: {cost}</Typography>
 			{bonuses ? <Typography>Bonuses: {bonuses}</Typography> : null}
 			<Typography>{description}</Typography>

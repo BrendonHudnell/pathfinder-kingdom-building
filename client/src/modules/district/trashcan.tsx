@@ -40,7 +40,6 @@ const useStyles = makeStyles((theme) => {
 			justifyContent: 'center',
 			fontWeight: 'bold',
 			fontSize: 20,
-			marginLeft: theme.spacing(3),
 		},
 	};
 });
