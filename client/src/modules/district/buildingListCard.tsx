@@ -14,7 +14,6 @@ import {
 	BuildingListType,
 	buildingListTypeToLotTypeMap,
 } from './buildingTypes';
-import { getBuildingDisplayTypeByListType } from './buildingUtils';
 
 export interface BuildingListCardProps {
 	buildingListType: BuildingListType;
@@ -47,11 +46,6 @@ export function BuildingListCard(props: BuildingListCardProps): ReactElement {
 		}
 	}, [textRef.current]);
 
-	let building = buildingListType.replace(/ /g, '_');
-	if (getBuildingDisplayTypeByListType(buildingListType) !== 'Bridge') {
-		building = building.replace(/_V([^_V]*)$/, '_H$1');
-	}
-
 	return (
 		<Fragment>
 			<DragPreviewImage
@@ -66,7 +60,10 @@ export function BuildingListCard(props: BuildingListCardProps): ReactElement {
 						</Grid>
 						<Grid item>
 							<img
-								src={`/assets/images/${building}.png`}
+								src={`/assets/images/${buildingListType.replace(
+									/ /g,
+									'_'
+								)}.png`}
 								height={height ? height : 'auto'}
 							/>
 						</Grid>
@@ -83,7 +80,10 @@ export function BuildingListCard(props: BuildingListCardProps): ReactElement {
 							</Grid>
 							<Grid item>
 								<img
-									src={`/assets/images/${building}.png`}
+									src={`/assets/images/${buildingListType.replace(
+										/ /g,
+										'_'
+									)}.png`}
 									height={height ? height : 'auto'}
 								/>
 							</Grid>

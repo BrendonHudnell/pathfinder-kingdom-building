@@ -16,6 +16,9 @@ export function getBuildingDisplayTypeByLotType(
 	if (first === 'Waterfront') {
 		return 'Waterfront';
 	}
+	if (first === 'Waterway') {
+		return 'Waterway';
+	}
 	return base.replace('_', ' ') as BuildingDisplayType;
 }
 
@@ -31,6 +34,9 @@ export function getBuildingDisplayTypeByListType(
 	if (parts[0] === 'Waterfront') {
 		return 'Waterfront';
 	}
+	if (parts[0] === 'Waterway') {
+		return 'Waterway';
+	}
 	if (last === 'H' || last === 'V') {
 		return listType.slice(0, -2) as BuildingDisplayType;
 	}
@@ -42,6 +48,9 @@ export function getBuildingListTypeByLotType(
 ): BuildingListType {
 	const [base, ext] = lotType.split(' ');
 
+	if (base.slice(-2) === '_H' || base.slice(-2) === '_V') {
+		return base as BuildingListType;
+	}
 	if (ext === 'L' || ext === 'R') {
 		return (base + ' H') as BuildingListType;
 	}
