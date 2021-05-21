@@ -10,6 +10,9 @@ export function getBuildingDisplayTypeByLotType(
 	const base = lotType.split(' ')[0];
 	const first = base.split('_')[0];
 
+	if (first === 'Bridge') {
+		return 'Bridge';
+	}
 	if (first === 'Waterfront') {
 		return 'Waterfront';
 	}
@@ -22,11 +25,14 @@ export function getBuildingDisplayTypeByListType(
 	const parts = listType.split(' ');
 	const last = parts[parts.length - 1];
 
-	if (last === 'H' || last === 'V') {
-		return listType.slice(0, -2) as BuildingDisplayType;
+	if (parts[0] === 'Bridge') {
+		return 'Bridge';
 	}
 	if (parts[0] === 'Waterfront') {
 		return 'Waterfront';
+	}
+	if (last === 'H' || last === 'V') {
+		return listType.slice(0, -2) as BuildingDisplayType;
 	}
 	return listType as BuildingDisplayType;
 }
