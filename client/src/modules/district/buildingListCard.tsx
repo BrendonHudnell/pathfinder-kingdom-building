@@ -1,5 +1,11 @@
-import React, { Fragment, ReactElement } from 'react';
-import { Card, Tooltip, Typography } from '@material-ui/core';
+import React, {
+	createRef,
+	Fragment,
+	ReactElement,
+	useEffect,
+	useState,
+} from 'react';
+import { Card, Grid, Tooltip, Typography } from '@material-ui/core';
 import { DragPreviewImage, useDrag } from 'react-dnd';
 
 import { BuildingListTooltip } from './buildingListTooltip';
@@ -32,6 +38,18 @@ export function BuildingListCard(props: BuildingListCardProps): ReactElement {
 		}),
 	}));
 
+	const [height, setHeight] = useState(0);
+	const textRef = createRef<HTMLSpanElement>();
+	useEffect(() => {
+		if (textRef.current) {
+			setHeight(textRef.current.offsetHeight);
+		}
+	}, [textRef.current]);
+
+	const imgSrc = `/assets/images/${buildingListType
+		.replace(/ /g, '_')
+		.replace(/_V([^_V]*)$/, '_H$1')}.png`;
+
 	return (
 		<Fragment>
 			<DragPreviewImage
@@ -40,14 +58,28 @@ export function BuildingListCard(props: BuildingListCardProps): ReactElement {
 			/>
 			{isDragging ? (
 				<Card ref={drag}>
-					<Typography>{buildingListType}</Typography>
+					<Grid container spacing={3}>
+						<Grid item>
+							<Typography ref={textRef}>{buildingListType}</Typography>
+						</Grid>
+						<Grid item>
+							<img src={imgSrc} height={height ? height : 'auto'} />
+						</Grid>
+					</Grid>
 				</Card>
 			) : (
 				<Tooltip
 					title={<BuildingListTooltip buildingListType={buildingListType} />}
 				>
 					<Card ref={drag}>
-						<Typography>{buildingListType}</Typography>
+						<Grid container spacing={3}>
+							<Grid item>
+								<Typography ref={textRef}>{buildingListType}</Typography>
+							</Grid>
+							<Grid item>
+								<img src={imgSrc} height={height ? height : 'auto'} />
+							</Grid>
+						</Grid>
 					</Card>
 				</Tooltip>
 			)}

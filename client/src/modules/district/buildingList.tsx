@@ -10,12 +10,13 @@ export function BuildingList(): ReactElement {
 	return (
 		<Fragment>
 			<TextField
+				fullWidth
 				variant="outlined"
 				size="small"
 				placeholder="Search"
 				onChange={(e) => setSearchString(e.target.value.toLowerCase())}
 			/>
-			<Box style={{ height: '80vh', overflowY: 'scroll' }}>
+			<Box style={{ height: '70vh', overflowY: 'scroll' }}>
 				{Object.values(BuildingListType)
 					.filter((buildingListType) =>
 						buildingListType.toLowerCase().includes(searchString)

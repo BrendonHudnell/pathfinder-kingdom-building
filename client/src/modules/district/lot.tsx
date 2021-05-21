@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Container, makeStyles } from '@material-ui/core';
+import { Box, Container, makeStyles } from '@material-ui/core';
 import { useDrop } from 'react-dnd';
 
 import { useAppDispatch } from '../../components/store';
@@ -204,7 +204,9 @@ export function Lot(props: LotProps): ReactElement {
 			{lotType ? (
 				<LotCard lotType={lotType} lotNumber={index} />
 			) : (
-				<img src="/assets/images/Empty_Lot.png" />
+				<Box border={1}>
+					<img src="/assets/images/Empty_Lot.png" />
+				</Box>
 			)}
 		</Container>
 	);
