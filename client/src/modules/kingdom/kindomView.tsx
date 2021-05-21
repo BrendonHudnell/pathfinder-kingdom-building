@@ -218,7 +218,7 @@ export function KingdomView(): ReactElement {
 					</Grid>
 					<Grid item>
 						<TextField
-							style={{ width: '5ch' }}
+							style={{ minWidth: '5ch' }}
 							type="number"
 							value={treasury}
 							onChange={(e) =>
@@ -315,7 +315,7 @@ export function KingdomView(): ReactElement {
 					</Grid>
 					<Grid item>
 						<TextField
-							style={{ width: '5ch' }}
+							style={{ minWidth: '5ch' }}
 							type="number"
 							value={currentUnrest}
 							onChange={(e) => dispatch(unrestUpdated(Number(e.target.value)))}

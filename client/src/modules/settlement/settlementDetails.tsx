@@ -3,7 +3,11 @@ import { Grid, makeStyles, TextField, Typography } from '@material-ui/core';
 
 import { useAppDispatch, useAppSelector } from '../../components/store';
 import { numberReducer } from '../../components/arrayNumberReducer';
-import { buildingList, selectDistrictsBySettlementId } from '../district';
+import {
+	buildingInfoList,
+	getBuildingDisplayTypeByLotType,
+	selectDistrictsBySettlementId,
+} from '../district';
 import { nameUpdated, Settlement } from './settlementSlice';
 import {
 	useSettlementBonusByType,
@@ -45,19 +49,23 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 		selectDistrictsBySettlementId(state, id)
 	);
 	const totalDistricts = districtList.filter(
-		(district) => district.lotIds.filter((lotId) => lotId !== -1).length
+		(district) => district.lotTypeList.filter((lotType) => lotType).length
 	).length;
 	const totalLots = districtList
-		.map((district) => district.lotIds.filter((lotId) => lotId !== -1).length)
+		.map((district) => district.lotTypeList.filter((lotType) => lotType).length)
 		.reduce(numberReducer, 0);
 
 	const baseValue =
 		getSettlementBaseValue(size) +
 		districtList
 			.map((district) =>
-				district.lotIds
-					.filter((lotId) => lotId !== -1)
-					.map((lotId) => buildingList[lotId].baseValueIncrease ?? 0)
+				district.lotTypeList
+					.filter((lotType) => lotType)
+					.map(
+						(lotType) =>
+							buildingInfoList[getBuildingDisplayTypeByLotType(lotType!)]
+								.baseValueIncrease ?? 0
+					)
 					.reduce(numberReducer, 0)
 			)
 			.reduce(numberReducer, 0);

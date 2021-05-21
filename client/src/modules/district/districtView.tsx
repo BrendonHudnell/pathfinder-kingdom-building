@@ -26,6 +26,7 @@ import {
 import { LotTableRow } from './lotTableRow';
 import { DistrictBorderGrid } from './districtBorderGrid';
 import { BuildingList } from './buildingList';
+import { Trashcan } from './trashcan';
 
 const useStyles = makeStyles({
 	dirt: {
@@ -63,7 +64,8 @@ export function DistrictView(props: DistrictViewProps): ReactElement {
 		selectDistrictById(state, districtId)
 	);
 
-	const usedLots = district?.lotIds.filter((lot) => lot !== -1).length ?? 0;
+	const usedLots =
+		district?.lotTypeList.filter((lotType) => lotType).length ?? 0;
 
 	const terrainNorth = getDistrictTerrainColor(district?.north.terrain);
 	const terrainSouth = getDistrictTerrainColor(district?.south.terrain);
@@ -171,7 +173,15 @@ export function DistrictView(props: DistrictViewProps): ReactElement {
 			{district ? (
 				<Grid container spacing={3}>
 					<Grid item>
-						<BuildingList />
+						<Grid container direction="column" alignItems="center" spacing={3}>
+							<Grid item />
+							<Grid item>
+								<BuildingList />
+							</Grid>
+							<Grid item>
+								<Trashcan districtId={districtId} />
+							</Grid>
+						</Grid>
 					</Grid>
 					<Grid item xs>
 						<Box

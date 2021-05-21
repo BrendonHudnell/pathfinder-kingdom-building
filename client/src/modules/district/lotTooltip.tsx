@@ -2,16 +2,23 @@ import React, { ReactElement } from 'react';
 import { Box, Typography } from '@material-ui/core';
 
 import { signedNumber } from '../../components/signedNumber';
-import { Building } from './buildingTypes';
+import { getBuildingDisplayTypeByLotType } from './buildingUtils';
+import { buildingInfoList, LotType } from './buildingTypes';
 
-export interface BuildingTooltipProps {
-	building: Building;
-	inLot?: boolean;
+export interface LotTooltipProps {
+	lotType: LotType;
 }
 
-export function BuildingTooltip(props: BuildingTooltipProps): ReactElement {
-	const { building, inLot } = props;
-	const { name, description, cost, economy, stability, loyalty } = building;
+export function LotTooltip(props: LotTooltipProps): ReactElement {
+	const displayType = getBuildingDisplayTypeByLotType(props.lotType);
+	const {
+		name,
+		description,
+		cost,
+		economy,
+		stability,
+		loyalty,
+	} = buildingInfoList[displayType];
 
 	const bonuses =
 		(economy ? `${signedNumber(economy)} Economy ` : '') +
@@ -20,7 +27,7 @@ export function BuildingTooltip(props: BuildingTooltipProps): ReactElement {
 
 	return (
 		<Box>
-			{inLot ? <Typography>{name}</Typography> : null}
+			<Typography>{name}</Typography>
 			<Typography>Cost: {cost}</Typography>
 			{bonuses ? <Typography>Bonuses: {bonuses}</Typography> : null}
 			<Typography>{description}</Typography>

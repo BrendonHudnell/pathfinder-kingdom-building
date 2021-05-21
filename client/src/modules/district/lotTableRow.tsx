@@ -15,16 +15,16 @@ export function LotTableRow(props: LotTableRowProps): ReactElement {
 
 	return (
 		<TableRow>
-			{district.lotIds
+			{district.lotTypeList
 				.slice(inclusiveStart, exclusiveEnd)
-				.map((lotId, index) => (
+				.map((lotType, index) => (
 					<TableCell
 						style={{ padding: 0, borderWidth: 0 }}
 						key={`${district.name}-lot-${index + inclusiveStart}`}
 					>
 						<Lot
 							district={district}
-							buildingId={lotId}
+							lotType={lotType}
 							index={index + inclusiveStart}
 						/>
 					</TableCell>

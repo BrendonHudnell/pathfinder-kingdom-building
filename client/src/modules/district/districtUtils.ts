@@ -1,6 +1,6 @@
 import { numberReducer } from '../../components/arrayNumberReducer';
 import { useAppSelector } from '../../components/store';
-import { BuildingId } from './buildingTypes';
+import { LotType } from './buildingTypes';
 import { selectAllDistricts } from './districtSlice';
 
 export enum DistrictTerrainType {
@@ -11,10 +11,10 @@ export enum DistrictTerrainType {
 
 export type Direction = 'north' | 'south' | 'east' | 'west';
 
-export function createEmptyLotArray(): BuildingId[] {
-	const emptyArray: BuildingId[] = [];
+export function createEmptyLotArray(): (LotType | null)[] {
+	const emptyArray: (LotType | null)[] = [];
 	for (let i = 0; i < 36; i++) {
-		emptyArray.push(-1);
+		emptyArray.push(null);
 	}
 	return emptyArray;
 }
@@ -25,7 +25,9 @@ export function useTotalPopulation(): number {
 	return (
 		250 *
 		districtList
-			.map((district) => district.lotIds.filter((lotId) => lotId !== -1).length)
+			.map(
+				(district) => district.lotTypeList.filter((lotType) => lotType).length
+			)
 			.reduce(numberReducer, 0)
 	);
 }

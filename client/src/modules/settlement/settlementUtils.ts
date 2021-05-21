@@ -2,7 +2,8 @@ import { EntityId } from '@reduxjs/toolkit';
 
 import { useAppSelector } from '../../components/store';
 import {
-	buildingList,
+	buildingInfoList,
+	getBuildingDisplayTypeByLotType,
 	selectAllDistricts,
 	selectDistrictsBySettlementId,
 } from '../district';
@@ -23,7 +24,7 @@ export function useSettlementPopulation(settlementId: EntityId): number {
 		selectDistrictsBySettlementId(state, settlementId)
 	);
 	districts.forEach((district) =>
-		district.lotIds.forEach((lotId) => (lotId >= 0 ? numLots++ : ''))
+		district.lotTypeList.forEach((lotType) => (lotType ? numLots++ : ''))
 	);
 
 	const population = 250 * numLots;
@@ -69,9 +70,13 @@ export function useSettlementBonusByType(
 		selectDistrictsBySettlementId(state, settlementId)
 	);
 	districts.forEach((district) =>
-		district.lotIds.forEach((lotId) =>
-			lotId >= 0 ? (total += buildingList[lotId][type] ?? 0) : 0
-		)
+		district.lotTypeList.forEach((lotType) => {
+			if (lotType) {
+				const displayType = getBuildingDisplayTypeByLotType(lotType);
+				const info = buildingInfoList[displayType];
+				total += Math.floor((info[type] ?? 0) / info.size);
+			}
+		})
 	);
 
 	return total;
@@ -83,9 +88,13 @@ export function useAllSettlementsBonusByType(type: SettlementStat): number {
 	const districts = useAppSelector((state) => selectAllDistricts(state));
 
 	districts.forEach((district) =>
-		district.lotIds.forEach((lotId) =>
-			lotId >= 0 ? (total += buildingList[lotId][type] ?? 0) : 0
-		)
+		district.lotTypeList.forEach((lotType) => {
+			if (lotType) {
+				const displayType = getBuildingDisplayTypeByLotType(lotType);
+				const info = buildingInfoList[displayType];
+				total += Math.floor((info[type] ?? 0) / info.size);
+			}
+		})
 	);
 
 	return total;
@@ -97,8 +106,12 @@ export function useAllSettlementsUnrest(): number {
 	const districts = useAppSelector((state) => selectAllDistricts(state));
 
 	districts.forEach((district) =>
-		district.lotIds.forEach((lotId) =>
-			lotId >= 0 ? (total += buildingList[lotId].unrest ?? 0) : 0
+		district.lotTypeList.forEach((lotType) =>
+			lotType
+				? (total +=
+						buildingInfoList[getBuildingDisplayTypeByLotType(lotType)].unrest ??
+						0)
+				: 0
 		)
 	);
 
@@ -113,8 +126,12 @@ export function useSettlementUnrest(settlementId: EntityId): number {
 	);
 
 	districts.forEach((district) =>
-		district.lotIds.forEach((lotId) =>
-			lotId >= 0 ? (total += buildingList[lotId].unrest ?? 0) : 0
+		district.lotTypeList.forEach((lotType) =>
+			lotType
+				? (total +=
+						buildingInfoList[getBuildingDisplayTypeByLotType(lotType)].unrest ??
+						0)
+				: 0
 		)
 	);
 
