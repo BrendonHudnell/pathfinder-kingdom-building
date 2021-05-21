@@ -7,15 +7,28 @@ import {
 export function getBuildingDisplayTypeByLotType(
 	lotType: LotType
 ): BuildingDisplayType {
-	return lotType.split(' ')[0].replace('_', ' ') as BuildingDisplayType;
+	const base = lotType.split(' ')[0];
+	const first = base.split('_')[0];
+
+	if (first === 'Waterfront') {
+		return 'Waterfront';
+	}
+	return base.replace('_', ' ') as BuildingDisplayType;
 }
 
 export function getBuildingDisplayTypeByListType(
-	lotType: BuildingListType
+	listType: BuildingListType
 ): BuildingDisplayType {
-	return (lotType.substr(-1) === 'H' || lotType.substr(-1) === 'V'
-		? lotType.slice(0, -2)
-		: lotType) as BuildingDisplayType;
+	const parts = listType.split(' ');
+	const last = parts[parts.length - 1];
+
+	if (last === 'H' || last === 'V') {
+		return listType.slice(0, -2) as BuildingDisplayType;
+	}
+	if (parts[0] === 'Waterfront') {
+		return 'Waterfront';
+	}
+	return listType as BuildingDisplayType;
 }
 
 export function getBuildingListTypeByLotType(

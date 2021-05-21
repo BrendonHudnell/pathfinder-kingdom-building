@@ -91,11 +91,53 @@ export const buildingListTypeToLotTypeMap: BuildingListTypeToLotTypeMap = {
 		'University BR',
 	],
 	Watchtower: ['Watchtower'],
-	Waterfront: [
-		'Waterfront TL',
-		'Waterfront TR',
-		'Waterfront BL',
-		'Waterfront BR',
+	'Waterfront Bottom': [
+		'Waterfront_Bottom TL',
+		'Waterfront_Bottom TR',
+		'Waterfront_Bottom BL',
+		'Waterfront_Bottom BR',
+	],
+	'Waterfront TL Corner': [
+		'Waterfront_TL_Corner TL',
+		'Waterfront_TL_Corner TR',
+		'Waterfront_TL_Corner BL',
+		'Waterfront_TL_Corner BR',
+	],
+	'Waterfront TR Corner': [
+		'Waterfront_TR_Corner TL',
+		'Waterfront_TR_Corner TR',
+		'Waterfront_TR_Corner BL',
+		'Waterfront_TR_Corner BR',
+	],
+	'Waterfront BL Corner': [
+		'Waterfront_BL_Corner TL',
+		'Waterfront_BL_Corner TR',
+		'Waterfront_BL_Corner BL',
+		'Waterfront_BL_Corner BR',
+	],
+	'Waterfront BR Corner': [
+		'Waterfront_BR_Corner TL',
+		'Waterfront_BR_Corner TR',
+		'Waterfront_BR_Corner BL',
+		'Waterfront_BR_Corner BR',
+	],
+	'Waterfront Left': [
+		'Waterfront_Left TL',
+		'Waterfront_Left TR',
+		'Waterfront_Left BL',
+		'Waterfront_Left BR',
+	],
+	'Waterfront Right': [
+		'Waterfront_Right TL',
+		'Waterfront_Right TR',
+		'Waterfront_Right BL',
+		'Waterfront_Right BR',
+	],
+	'Waterfront Top': [
+		'Waterfront_Top TL',
+		'Waterfront_Top TR',
+		'Waterfront_Top BL',
+		'Waterfront_Top BR',
 	],
 	Waterway: ['Waterway'],
 };
