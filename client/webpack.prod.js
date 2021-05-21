@@ -1,6 +1,7 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ExtractCssChunksPlugin = require('extract-css-chunks-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 const htmlPlugin = new HtmlWebPackPlugin({
@@ -13,6 +14,15 @@ const cleanWebpackPlugin = new CleanWebpackPlugin();
 const extractCssChunksPlugin = new ExtractCssChunksPlugin({
 	filename: '[name].[hash].css',
 	chunkFilename: '[id].[hash].css',
+});
+
+const copyPlugin = new CopyPlugin({
+	patterns: [
+		{
+			from: path.resolve(__dirname, 'src', 'assets'),
+			to: path.resolve(__dirname, 'build', 'assets'),
+		},
+	],
 });
 
 module.exports = {
@@ -63,5 +73,5 @@ module.exports = {
 			},
 		],
 	},
-	plugins: [cleanWebpackPlugin, htmlPlugin, extractCssChunksPlugin],
+	plugins: [cleanWebpackPlugin, htmlPlugin, extractCssChunksPlugin, copyPlugin],
 };

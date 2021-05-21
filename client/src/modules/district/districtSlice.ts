@@ -8,7 +8,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import { RootState } from '../../components/store';
-import { BuildingId } from './buildingTypes';
+import { LotType } from './buildingTypes';
 import {
 	createEmptyLotArray,
 	Direction,
@@ -49,7 +49,7 @@ export interface District {
 		wall: boolean;
 		moat: boolean;
 	};
-	lotIds: BuildingId[];
+	lotTypeList: (LotType | null)[];
 }
 
 const districtAdapter = createEntityAdapter<District>();
@@ -95,7 +95,7 @@ export const addNewDistrict = createAsyncThunk(
 				wall: false,
 				moat: false,
 			},
-			lotIds: createEmptyLotArray(),
+			lotTypeList: createEmptyLotArray(),
 		};
 
 		return newDistrict;
@@ -187,36 +187,36 @@ export const districtSlice = createSlice({
 			action: PayloadAction<{
 				districtId: EntityId;
 				newLotNumber: number;
-				oldLotNumber?: number;
-				buildingId: BuildingId;
+				oldLotNumber: number;
+				lotType: LotType;
 			}>
 		) => {
 			const {
 				districtId,
 				newLotNumber,
 				oldLotNumber,
-				buildingId,
+				lotType,
 			} = action.payload;
 
 			if (state.ids.includes(districtId)) {
-				state.entities[districtId]!.lotIds[newLotNumber] = buildingId;
-				if (oldLotNumber !== undefined) {
-					state.entities[districtId]!.lotIds[oldLotNumber] = -1;
+				state.entities[districtId]!.lotTypeList[newLotNumber] = lotType;
+				if (oldLotNumber !== -1) {
+					state.entities[districtId]!.lotTypeList[oldLotNumber] = null;
 				}
 			}
 		},
 		lotCleared: (
 			state,
-			action: PayloadAction<{ districtId?: EntityId; oldLotNumber?: number }>
+			action: PayloadAction<{ districtId?: EntityId; oldLotNumber: number }>
 		) => {
 			const { districtId, oldLotNumber } = action.payload;
 
 			if (
 				districtId !== undefined &&
-				oldLotNumber !== undefined &&
+				oldLotNumber !== -1 &&
 				state.ids.includes(districtId)
 			) {
-				state.entities[districtId]!.lotIds[oldLotNumber] = -1;
+				state.entities[districtId]!.lotTypeList[oldLotNumber] = null;
 			}
 		},
 	},
@@ -265,7 +265,8 @@ export const selectTotalDistricts = createSelector(
 	[selectAllDistricts],
 	(districts) =>
 		districts.filter(
-			(district) => district.lotIds.filter((lotId) => lotId !== -1).length > 0
+			(district) =>
+				district.lotTypeList.filter((lotlotType) => lotlotType).length > 0
 		).length
 );
 

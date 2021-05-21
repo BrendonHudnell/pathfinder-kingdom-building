@@ -5,6 +5,8 @@ import {
 	FormControlLabel,
 	Grid,
 	makeStyles,
+	Table,
+	TableBody,
 	TextField,
 	Typography,
 } from '@material-ui/core';
@@ -21,8 +23,10 @@ import {
 	getDistrictFortificationColor,
 	getDistrictTerrainColor,
 } from './districtUtils';
-import { LotGridRow } from './lotGridRow';
+import { LotTableRow } from './lotTableRow';
 import { DistrictBorderGrid } from './districtBorderGrid';
+import { BuildingList } from './buildingList';
+import { Trashcan } from './trashcan';
 
 const useStyles = makeStyles({
 	dirt: {
@@ -60,7 +64,8 @@ export function DistrictView(props: DistrictViewProps): ReactElement {
 		selectDistrictById(state, districtId)
 	);
 
-	const usedLots = district?.lotIds.filter((lot) => lot !== -1).length ?? 0;
+	const usedLots =
+		district?.lotTypeList.filter((lotType) => lotType).length ?? 0;
 
 	const terrainNorth = getDistrictTerrainColor(district?.north.terrain);
 	const terrainSouth = getDistrictTerrainColor(district?.south.terrain);
@@ -96,8 +101,8 @@ export function DistrictView(props: DistrictViewProps): ReactElement {
 	return (
 		<Fragment>
 			{district ? (
-				<Grid container spacing={2} alignItems="center">
-					<Grid container item spacing={2} alignItems="center">
+				<Grid container spacing={2} alignItems="center" justify="space-evenly">
+					<Grid container item spacing={8} alignItems="center">
 						<Grid item>
 							<TextField
 								value={district.name}
@@ -166,59 +171,82 @@ export function DistrictView(props: DistrictViewProps): ReactElement {
 				</Grid>
 			) : null}
 			{district ? (
-				<Box
-					marginTop={3}
-					border={24}
-					style={{
-						borderLeftColor: fortificationEast,
-						borderRightColor: fortificationWest,
-						borderTopColor: fortificationNorth,
-						borderBottomColor: fortificationSouth,
-					}}
-				>
-					<Box
-						border={24}
-						style={{
-							borderLeftColor: terrainEast,
-							borderRightColor: terrainWest,
-							borderTopColor: terrainNorth,
-							borderBottomColor: terrainSouth,
-						}}
-					>
-						<Grid className={backgroundClass} container>
-							<LotGridRow
-								district={district}
-								inclusiveStart={0}
-								exclusiveEnd={6}
-							/>
-							<LotGridRow
-								district={district}
-								inclusiveStart={6}
-								exclusiveEnd={12}
-							/>
-							<LotGridRow
-								district={district}
-								inclusiveStart={12}
-								exclusiveEnd={18}
-							/>
-							<LotGridRow
-								district={district}
-								inclusiveStart={18}
-								exclusiveEnd={24}
-							/>
-							<LotGridRow
-								district={district}
-								inclusiveStart={24}
-								exclusiveEnd={30}
-							/>
-							<LotGridRow
-								district={district}
-								inclusiveStart={30}
-								exclusiveEnd={36}
-							/>
+				<Grid container spacing={3}>
+					<Grid item>
+						<Grid container direction="column" alignItems="center" spacing={3}>
+							<Grid item />
+							<Grid item>
+								<BuildingList />
+							</Grid>
+							<Grid item>
+								<Trashcan districtId={districtId} />
+							</Grid>
 						</Grid>
-					</Box>
-				</Box>
+					</Grid>
+					<Grid item xs>
+						<Box
+							marginTop={3}
+							border={24}
+							style={{
+								borderLeftColor: fortificationEast,
+								borderRightColor: fortificationWest,
+								borderTopColor: fortificationNorth,
+								borderBottomColor: fortificationSouth,
+								width: 'fit-content',
+							}}
+						>
+							<Box
+								border={24}
+								style={{
+									borderLeftColor: terrainEast,
+									borderRightColor: terrainWest,
+									borderTopColor: terrainNorth,
+									borderBottomColor: terrainSouth,
+									width: 'fit-content',
+								}}
+							>
+								<Table
+									size="small"
+									style={{ width: 'fit-content' }}
+									className={backgroundClass}
+								>
+									<TableBody>
+										<LotTableRow
+											district={district}
+											inclusiveStart={0}
+											exclusiveEnd={6}
+										/>
+										<LotTableRow
+											district={district}
+											inclusiveStart={6}
+											exclusiveEnd={12}
+										/>
+										<LotTableRow
+											district={district}
+											inclusiveStart={12}
+											exclusiveEnd={18}
+										/>
+										<LotTableRow
+											district={district}
+											inclusiveStart={18}
+											exclusiveEnd={24}
+										/>
+										<LotTableRow
+											district={district}
+											inclusiveStart={24}
+											exclusiveEnd={30}
+										/>
+										<LotTableRow
+											district={district}
+											inclusiveStart={30}
+											exclusiveEnd={36}
+										/>
+									</TableBody>
+								</Table>
+							</Box>
+						</Box>
+					</Grid>
+				</Grid>
 			) : null}
 		</Fragment>
 	);

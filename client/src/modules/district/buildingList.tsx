@@ -1,29 +1,32 @@
-import React, { ReactElement, useState } from 'react';
-import { Box, Paper, TextField } from '@material-ui/core';
+import React, { Fragment, ReactElement, useState } from 'react';
+import { Box, TextField } from '@material-ui/core';
 
-import { buildingList } from './buildingTypes';
-import { BuildingCard } from './buildingCard';
+import { BuildingListCard } from './buildingListCard';
+import { BuildingListType } from './buildingTypes';
 
 export function BuildingList(): ReactElement {
 	const [searchString, setSearchString] = useState('');
 
 	return (
-		<Paper>
+		<Fragment>
 			<TextField
+				variant="outlined"
+				size="small"
 				placeholder="Search"
 				onChange={(e) => setSearchString(e.target.value.toLowerCase())}
 			/>
 			<Box style={{ height: '80vh', overflowY: 'scroll' }}>
-				{buildingList
-					.filter(
-						(building) =>
-							building.name &&
-							building.name.toLowerCase().includes(searchString)
+				{Object.values(BuildingListType)
+					.filter((buildingListType) =>
+						buildingListType.toLowerCase().includes(searchString)
 					)
-					.map((building) => (
-						<BuildingCard key={building.name} building={building} />
+					.map((buildingListType) => (
+						<BuildingListCard
+							key={buildingListType}
+							buildingListType={buildingListType}
+						/>
 					))}
 			</Box>
-		</Paper>
+		</Fragment>
 	);
 }

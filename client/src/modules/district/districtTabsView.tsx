@@ -1,12 +1,10 @@
 import React, { ReactElement, useState } from 'react';
-import { AppBar, Grid, makeStyles, Paper, Tab, Tabs } from '@material-ui/core';
+import { AppBar, makeStyles, Paper, Tab, Tabs } from '@material-ui/core';
 import { EntityId } from '@reduxjs/toolkit';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import { useAppDispatch, useAppSelector } from '../../components/store';
-import { Trashcan } from './trashcan';
-import { BuildingList } from './buildingList';
 import { addNewDistrict, selectDistrictsBySettlementId } from './districtSlice';
 import { DistrictView } from './districtView';
 import { TabPanel } from './districtTabPanel';
@@ -62,25 +60,15 @@ export function DistrictTabsView(props: DistrictTabsViewProps): ReactElement {
 				</Tabs>
 			</AppBar>
 			<DndProvider backend={HTML5Backend}>
-				<Grid container>
-					<Grid item>
-						<BuildingList />
-					</Grid>
-					<Grid item xs>
-						{districts.map((district, index) => (
-							<TabPanel
-								key={`district-tab-panel.${district.id}`}
-								value={value}
-								index={index}
-							>
-								{value === index ? (
-									<DistrictView districtId={district.id} />
-								) : null}
-							</TabPanel>
-						))}
-						<Trashcan />
-					</Grid>
-				</Grid>
+				{districts.map((district, index) => (
+					<TabPanel
+						key={`district-tab-panel.${district.id}`}
+						value={value}
+						index={index}
+					>
+						{value === index ? <DistrictView districtId={district.id} /> : null}
+					</TabPanel>
+				))}
 			</DndProvider>
 		</Paper>
 	);

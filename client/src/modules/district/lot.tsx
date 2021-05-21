@@ -1,84 +1,197 @@
 import React, { ReactElement } from 'react';
-import { Card, makeStyles } from '@material-ui/core';
+import { Container, makeStyles } from '@material-ui/core';
 import { useDrop } from 'react-dnd';
-import { EntityId } from '@reduxjs/toolkit';
 
 import { useAppDispatch } from '../../components/store';
-import { BuildingId, buildingList } from './buildingTypes';
-import { lotUpdated } from './districtSlice';
-import { BuildingCard, BuildingCardItem } from './buildingCard';
+import {
+	getLotOffsetByLotType,
+	getNewLotTypesByLotType,
+	getSizeByLotType,
+} from './buildingUtils';
+import { District, lotUpdated } from './districtSlice';
+import { LotCard } from './lotCard';
+import { BuildingDragItem, LotType } from './buildingTypes';
+
+const firstRow = [0, 1, 2, 3, 4, 5];
+const lastRow = [30, 31, 32, 33, 34, 35];
+const firstCol = [0, 6, 12, 18, 24, 30];
+const lastCol = [5, 11, 17, 23, 29, 35];
 
 const useStyles = makeStyles((theme) => {
 	return {
+		fitContent: {
+			width: 'fit-content',
+			height: 'fit-content',
+		},
 		rowTop: {
-			marginTop: theme.spacing(3),
-			marginBottom: theme.spacing(0.5),
+			marginTop: theme.spacing(2),
 		},
 		rowBottom: {
-			marginTop: theme.spacing(0.5),
-			marginBottom: theme.spacing(3),
+			marginBottom: theme.spacing(2),
 		},
 		colLeft: {
-			marginLeft: theme.spacing(3),
-			marginRight: theme.spacing(0.5),
+			marginLeft: theme.spacing(2),
 		},
 		colRight: {
-			marginLeft: theme.spacing(0.5),
-			marginRight: theme.spacing(3),
+			marginRight: theme.spacing(2),
 		},
 	};
 });
 
 export interface LotProps {
-	districtId: EntityId;
-	buildingId: BuildingId;
+	lotType: LotType | null;
+	district: District;
 	index: number;
 }
 
 export function Lot(props: LotProps): ReactElement {
-	const { districtId, buildingId, index } = props;
+	const { lotType, district, index } = props;
 
 	const classes = useStyles();
 
 	const dispatch = useAppDispatch();
 
-	function onDrop(item: BuildingCardItem): void {
-		const { lotNumber, id } = item;
+	function onDrop(item: BuildingDragItem): void {
+		const { lotNumber, lotType, isMove } = item;
 
-		dispatch(
-			lotUpdated({
-				districtId,
-				newLotNumber: index,
-				oldLotNumber: lotNumber,
-				buildingId: id,
-			})
-		);
+		const size = getSizeByLotType(lotType[0]);
+
+		if (size === 1) {
+			dispatch(
+				lotUpdated({
+					districtId: district.id,
+					newLotNumber: index,
+					oldLotNumber: lotNumber,
+					lotType: lotType[0],
+				})
+			);
+		} else {
+			const offset = getLotOffsetByLotType(lotType[0]);
+			const newLotType = getNewLotTypesByLotType(lotType[0]);
+
+			if (isMove && lotNumber < index) {
+				offset.reverse();
+				newLotType.reverse();
+			}
+			if (isMove) {
+				offset.forEach((_, idx) =>
+					dispatch(
+						lotUpdated({
+							districtId: district.id,
+							newLotNumber: index + offset[idx],
+							oldLotNumber: lotNumber + offset[idx],
+							lotType: newLotType[idx],
+						})
+					)
+				);
+			} else {
+				offset.forEach((_, idx) =>
+					dispatch(
+						lotUpdated({
+							districtId: district.id,
+							newLotNumber: index + offset[idx],
+							oldLotNumber: lotNumber,
+							lotType: newLotType[idx],
+						})
+					)
+				);
+			}
+		}
+	}
+
+	function handleCanDrop(item: BuildingDragItem): boolean {
+		const { lotType: incomingLotType, lotNumber, isMove } = item;
+
+		const size = getSizeByLotType(incomingLotType[0]);
+
+		if (size !== 1) {
+			const offset = getLotOffsetByLotType(incomingLotType[0]);
+			const [_, ext] = incomingLotType[0].split(' ');
+
+			if (isMove) {
+				let dropOk = true;
+				const oldLotNumbers = offset.map((oset) => lotNumber + oset);
+				const newLotNumbers = offset.map((oset) => index + oset);
+				const difference = newLotNumbers.filter(
+					(lotNumber) => !oldLotNumbers.includes(lotNumber)
+				);
+				difference.forEach((lotNumber) => {
+					if (district.lotTypeList[lotNumber]) {
+						dropOk = false;
+					}
+				});
+				if (!dropOk) {
+					return false;
+				}
+			}
+
+			if (ext === 'TL') {
+				return (
+					!lastCol.includes(index) &&
+					!lastRow.includes(index) &&
+					index !== lotNumber
+				);
+			}
+			if (ext === 'TR') {
+				return (
+					!firstCol.includes(index) &&
+					!lastRow.includes(index) &&
+					index !== lotNumber
+				);
+			}
+			if (ext === 'BL') {
+				return (
+					!lastCol.includes(index) &&
+					!firstRow.includes(index) &&
+					index !== lotNumber
+				);
+			}
+			if (ext === 'BR') {
+				return (
+					!firstCol.includes(index) &&
+					!firstRow.includes(index) &&
+					index !== lotNumber
+				);
+			}
+			if (ext === 'L') {
+				return !lastCol.includes(index) && index !== lotNumber;
+			}
+			if (ext === 'R') {
+				return !firstCol.includes(index) && index !== lotNumber;
+			}
+			if (ext === 'T') {
+				return !lastRow.includes(index) && index !== lotNumber;
+			}
+			if (ext === 'B') {
+				return !firstRow.includes(index) && index !== lotNumber;
+			}
+		}
+		return !lotType;
 	}
 
 	const [{ isOver, canDrop }, drop] = useDrop(
 		() => ({
-			accept: 'Building',
+			accept: ['BuildingCard', 'LotCard'],
 			drop: onDrop,
-			canDrop: () => buildingId === -1,
+			canDrop: handleCanDrop,
 			collect: (monitor) => ({
 				isOver: monitor.isOver(),
 				canDrop: monitor.canDrop(),
 			}),
 		}),
-		[buildingId]
+		[lotType, district, index]
 	);
 
 	const isActive = isOver && canDrop;
-
-	const building = buildingList[buildingId];
 
 	const rowStyle =
 		Math.floor(index / 6) % 2 ? classes.rowBottom : classes.rowTop;
 	const colStyle = index % 2 ? classes.colRight : classes.colLeft;
 
 	return (
-		<Card
-			className={`${rowStyle} ${colStyle}`}
+		<Container
+			disableGutters
+			className={`${rowStyle} ${colStyle} ${classes.fitContent}`}
 			style={
 				isActive
 					? { backgroundColor: 'green' }
@@ -88,17 +201,11 @@ export function Lot(props: LotProps): ReactElement {
 			}
 			ref={drop}
 		>
-			{index}
-			<br />
-			{buildingId >= 0 ? (
-				<BuildingCard
-					building={building}
-					lotNumber={index}
-					districtId={districtId}
-				/>
+			{lotType ? (
+				<LotCard lotType={lotType} lotNumber={index} />
 			) : (
-				'empty'
+				<img src="/assets/images/Empty_Lot.png" />
 			)}
-		</Card>
+		</Container>
 	);
 }

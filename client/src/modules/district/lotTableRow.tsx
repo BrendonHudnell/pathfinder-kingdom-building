@@ -1,35 +1,34 @@
 import React, { ReactElement } from 'react';
-import { Grid } from '@material-ui/core';
+import { TableCell, TableRow } from '@material-ui/core';
 
 import { Lot } from './lot';
 import { District } from './districtSlice';
 
-export interface LotGridRowProps {
+export interface LotTableRowProps {
 	district: District;
 	inclusiveStart: number;
 	exclusiveEnd: number;
 }
 
-export function LotGridRow(props: LotGridRowProps): ReactElement {
+export function LotTableRow(props: LotTableRowProps): ReactElement {
 	const { district, inclusiveStart, exclusiveEnd } = props;
 
 	return (
-		<Grid container item alignItems="center">
-			{district.lotIds
+		<TableRow>
+			{district.lotTypeList
 				.slice(inclusiveStart, exclusiveEnd)
-				.map((lotId, index) => (
-					<Grid
-						item
-						xs={2}
+				.map((lotType, index) => (
+					<TableCell
+						style={{ padding: 0, borderWidth: 0 }}
 						key={`${district.name}-lot-${index + inclusiveStart}`}
 					>
 						<Lot
-							districtId={district.id}
-							buildingId={lotId}
+							district={district}
+							lotType={lotType}
 							index={index + inclusiveStart}
 						/>
-					</Grid>
+					</TableCell>
 				))}
-		</Grid>
+		</TableRow>
 	);
 }

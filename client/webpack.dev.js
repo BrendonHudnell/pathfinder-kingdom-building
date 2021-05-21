@@ -1,6 +1,7 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ExtractCssChunksPlugin = require('extract-css-chunks-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 const htmlPlugin = new HtmlWebPackPlugin({
@@ -14,6 +15,15 @@ const extractCssChunksPlugin = new ExtractCssChunksPlugin({
 	chunkFilename: '[id].css',
 });
 
+const copyPlugin = new CopyPlugin({
+	patterns: [
+		{
+			from: path.resolve(__dirname, 'src', 'assets'),
+			to: path.resolve(__dirname, 'build', 'assets'),
+		},
+	],
+});
+
 module.exports = {
 	mode: 'development',
 	entry: './src/main.tsx',
@@ -24,7 +34,6 @@ module.exports = {
 		publicPath: '/',
 	},
 	resolve: {
-		// Add '.ts' and '.tsx' as resolvable extensions.
 		extensions: ['.ts', '.tsx', '.js'],
 	},
 	devtool: 'inline-source-map',
@@ -76,5 +85,5 @@ module.exports = {
 			},
 		],
 	},
-	plugins: [cleanWebpackPlugin, htmlPlugin, extractCssChunksPlugin],
+	plugins: [cleanWebpackPlugin, htmlPlugin, extractCssChunksPlugin, copyPlugin],
 };
