@@ -76,6 +76,14 @@ export function useSettlementBonusByType(
 				const info = buildingInfoList[displayType];
 				total += Math.floor((info[type] ?? 0) / info.size);
 			}
+			if (district.paved) {
+				type === 'economy' ? (total += 2) : '';
+				type === 'stability' ? total++ : '';
+			}
+			if (district.sewers) {
+				type === 'stability' ? (total += 2) : '';
+				type === 'loyalty' ? total++ : '';
+			}
 		})
 	);
 
@@ -87,53 +95,23 @@ export function useAllSettlementsBonusByType(type: SettlementStat): number {
 
 	const districts = useAppSelector((state) => selectAllDistricts(state));
 
-	districts.forEach((district) =>
+	districts.forEach((district) => {
 		district.lotTypeList.forEach((lotType) => {
 			if (lotType) {
 				const displayType = getBuildingDisplayTypeByLotType(lotType);
 				const info = buildingInfoList[displayType];
 				total += Math.floor((info[type] ?? 0) / info.size);
 			}
-		})
-	);
-
-	return total;
-}
-
-export function useAllSettlementsUnrest(): number {
-	let total = 0;
-
-	const districts = useAppSelector((state) => selectAllDistricts(state));
-
-	districts.forEach((district) =>
-		district.lotTypeList.forEach((lotType) =>
-			lotType
-				? (total +=
-						buildingInfoList[getBuildingDisplayTypeByLotType(lotType)].unrest ??
-						0)
-				: 0
-		)
-	);
-
-	return total;
-}
-
-export function useSettlementUnrest(settlementId: EntityId): number {
-	let total = 0;
-
-	const districts = useAppSelector((state) =>
-		selectDistrictsBySettlementId(state, settlementId)
-	);
-
-	districts.forEach((district) =>
-		district.lotTypeList.forEach((lotType) =>
-			lotType
-				? (total +=
-						buildingInfoList[getBuildingDisplayTypeByLotType(lotType)].unrest ??
-						0)
-				: 0
-		)
-	);
+		});
+		if (district.paved) {
+			type === 'economy' ? (total += 2) : '';
+			type === 'stability' ? total++ : '';
+		}
+		if (district.sewers) {
+			type === 'stability' ? (total += 2) : '';
+			type === 'loyalty' ? total++ : '';
+		}
+	});
 
 	return total;
 }

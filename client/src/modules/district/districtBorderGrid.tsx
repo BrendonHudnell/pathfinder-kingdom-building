@@ -6,6 +6,7 @@ import {
 	MenuItem,
 	FormControlLabel,
 	Checkbox,
+	Tooltip,
 } from '@material-ui/core';
 
 import { useAppDispatch } from '../../components/store';
@@ -16,6 +17,7 @@ import {
 	wallUpdated,
 } from './districtSlice';
 import { Direction, DistrictTerrainType } from './districtUtils';
+import { DistrictTooltip } from './districtTooltip';
 
 export interface DistrictBorderGridProps {
 	district: District;
@@ -61,44 +63,48 @@ export function DistrictBorderGrid(
 			<Grid container spacing={2} alignItems="center" justify="center">
 				<Grid item>
 					{district[direction].terrain === DistrictTerrainType.LAND ? (
-						<FormControlLabel
-							control={
-								<Checkbox
-									checked={district[direction].wall}
-									onChange={(e) =>
-										dispatch(
-											wallUpdated({
-												districtId: district.id,
-												direction,
-												wall: e.target.checked,
-											})
-										)
-									}
-								/>
-							}
-							label="Wall"
-						/>
+						<Tooltip title={<DistrictTooltip displayType="City Wall" />}>
+							<FormControlLabel
+								control={
+									<Checkbox
+										checked={district[direction].wall}
+										onChange={(e) =>
+											dispatch(
+												wallUpdated({
+													districtId: district.id,
+													direction,
+													wall: e.target.checked,
+												})
+											)
+										}
+									/>
+								}
+								label="Wall"
+							/>
+						</Tooltip>
 					) : null}
 				</Grid>
 				<Grid item>
 					{district[direction].terrain === DistrictTerrainType.LAND ? (
-						<FormControlLabel
-							control={
-								<Checkbox
-									checked={district[direction].moat}
-									onChange={(e) =>
-										dispatch(
-											moatUpdated({
-												districtId: district.id,
-												direction,
-												moat: e.target.checked,
-											})
-										)
-									}
-								/>
-							}
-							label="Moat"
-						/>
+						<Tooltip title={<DistrictTooltip displayType="Moat" />}>
+							<FormControlLabel
+								control={
+									<Checkbox
+										checked={district[direction].moat}
+										onChange={(e) =>
+											dispatch(
+												moatUpdated({
+													districtId: district.id,
+													direction,
+													moat: e.target.checked,
+												})
+											)
+										}
+									/>
+								}
+								label="Moat"
+							/>
+						</Tooltip>
 					) : null}
 				</Grid>
 			</Grid>

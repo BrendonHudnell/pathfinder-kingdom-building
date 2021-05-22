@@ -8,6 +8,7 @@ import {
 	Table,
 	TableBody,
 	TextField,
+	Tooltip,
 	Typography,
 } from '@material-ui/core';
 import { EntityId } from '@reduxjs/toolkit';
@@ -27,6 +28,7 @@ import { LotTableRow } from './lotTableRow';
 import { DistrictBorderGrid } from './districtBorderGrid';
 import { BuildingList } from './buildingList';
 import { Trashcan } from './trashcan';
+import { DistrictTooltip } from './districtTooltip';
 
 const useStyles = makeStyles({
 	dirt: {
@@ -118,34 +120,41 @@ export function DistrictView(props: DistrictViewProps): ReactElement {
 							<Typography>Free Lots: {36 - usedLots}</Typography>
 						</Grid>
 						<Grid item>
-							<FormControlLabel
-								control={
-									<Checkbox
-										checked={district.paved}
-										onChange={(e) =>
-											dispatch(
-												pavedUpdated({ districtId, paved: e.target.checked })
-											)
-										}
-									/>
-								}
-								label="Paved Roads"
-							/>
+							<Tooltip title={<DistrictTooltip displayType="Sewer System" />}>
+								<FormControlLabel
+									control={
+										<Checkbox
+											checked={district.paved}
+											onChange={(e) =>
+												dispatch(
+													pavedUpdated({ districtId, paved: e.target.checked })
+												)
+											}
+										/>
+									}
+									label="Paved Streets"
+								/>
+							</Tooltip>
 						</Grid>
 						<Grid item>
-							<FormControlLabel
-								control={
-									<Checkbox
-										checked={district.sewers}
-										onChange={(e) =>
-											dispatch(
-												sewersUpdated({ districtId, sewers: e.target.checked })
-											)
-										}
-									/>
-								}
-								label="Sewers"
-							/>
+							<Tooltip title={<DistrictTooltip displayType="Sewer System" />}>
+								<FormControlLabel
+									control={
+										<Checkbox
+											checked={district.sewers}
+											onChange={(e) =>
+												dispatch(
+													sewersUpdated({
+														districtId,
+														sewers: e.target.checked,
+													})
+												)
+											}
+										/>
+									}
+									label="Sewer System"
+								/>
+							</Tooltip>
 						</Grid>
 					</Grid>
 					<DistrictBorderGrid

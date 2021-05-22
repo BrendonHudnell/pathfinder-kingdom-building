@@ -7,6 +7,7 @@ export * from './districtBorderGrid';
 export * from './districtSlice';
 export * from './districtTabPanel';
 export * from './districtTabsView';
+export * from './districtTooltip';
 export * from './districtUtils';
 export * from './districtView';
 export * from './lot';

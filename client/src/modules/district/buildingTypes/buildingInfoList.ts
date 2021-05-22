@@ -159,6 +159,15 @@ export const buildingInfoList: BuildingInfoList = {
 			'Cannot be adjacent to a Dump, Graveyard, Stable, Stockyard, or Tannery',
 		special: 'Can share lot with another building',
 	},
+	'City Wall': {
+		name: 'City Wall',
+		description:
+			'A fortification of one side of a district with a sturdy wall. The GM may allow for cliffs and other natural features to function as a City Wall for one or more sides of a district. You may construct gates through your own city wall at no cost.',
+		cost: 2,
+		size: 0,
+		unrest: -2,
+		defense: 1,
+	},
 	'Dance Hall': {
 		name: 'Dance Hall',
 		description:
@@ -417,6 +426,16 @@ export const buildingInfoList: BuildingInfoList = {
 		stability: 1,
 		loyalty: 3,
 	},
+	Moat: {
+		name: 'Moat',
+		description:
+			'A fortification of one side of a district with an open or water-filled ditch, often backed by a low dike or embankment. The GM may allow a river or similar natural feature to function as a moat for one or more sides of a district',
+		cost: 2,
+		size: 0,
+		unrest: -1,
+		defense: 1,
+		special: 'Cannot be damaged by siege engines.',
+	},
 	Monastery: {
 		name: 'Monastery',
 		description:
@@ -493,6 +512,14 @@ export const buildingInfoList: BuildingInfoList = {
 		loyalty: 1,
 		unrest: -1,
 	},
+	'Paved Streets': {
+		name: 'Paved Streets',
+		description: 'Brick or stone pavement that speeds transportation.',
+		cost: 24,
+		size: 0,
+		economy: 2,
+		stability: 1,
+	},
 	Pier: {
 		name: 'Pier',
 		description:
@@ -504,6 +531,16 @@ export const buildingInfoList: BuildingInfoList = {
 		limit: 'Adjacent to water district border',
 		upgradeTo: ['Waterfront'],
 		baseValueIncrease: 1000,
+	},
+	'Sewer System': {
+		name: 'Sewer System',
+		description:
+			'An underground sanitation system that keeps the settlement clean, though it may become home to criminals and monsters.',
+		cost: 24,
+		size: 0,
+		stability: 2,
+		loyalty: 1,
+		discount: ['Cistern', 'Dump'],
 	},
 	Shop: {
 		name: 'Shop',

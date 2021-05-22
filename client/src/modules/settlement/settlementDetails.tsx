@@ -13,7 +13,6 @@ import {
 	useSettlementBonusByType,
 	useSettlementPopulation,
 	getSettlementSize,
-	useSettlementUnrest,
 	getSettlementBaseValue,
 } from './settlementUtils';
 
@@ -39,7 +38,6 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 	const economy = useSettlementBonusByType(id, 'economy');
 	const stability = useSettlementBonusByType(id, 'stability');
 	const loyalty = useSettlementBonusByType(id, 'loyalty');
-	const unrest = useSettlementUnrest(id);
 
 	const population = useSettlementPopulation(id);
 
@@ -102,10 +100,6 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 				</Grid>
 				<Grid item>
 					<Typography>Loyalty: {loyalty}</Typography>
-				</Grid>
-				<Grid item />
-				<Grid item>
-					<Typography>Unrest: {unrest}</Typography>
 				</Grid>
 				<Grid item />
 				<Grid item>
