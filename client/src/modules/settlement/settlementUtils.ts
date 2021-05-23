@@ -1,6 +1,7 @@
 import { EntityId } from '@reduxjs/toolkit';
 
 import { useAppSelector } from '../../components/store';
+import { numberReducer } from '../../components/arrayNumberReducer';
 import {
 	buildingInfoList,
 	getBuildingDisplayTypeByLotType,
@@ -46,18 +47,39 @@ export function getSettlementSize(population: number): SettlementSize {
 	}
 }
 
-export function getSettlementBaseValue(settlementSize: SettlementSize): number {
-	if (settlementSize === 'Small Town') {
-		return 1000;
-	} else if (settlementSize === 'Large Town') {
-		return 2000;
-	} else if (settlementSize === 'Small City') {
-		return 4000;
-	} else if (settlementSize === 'Large City') {
-		return 8000;
+export function useSettlementBaseValue(settlementId: EntityId): number {
+	const population = useSettlementPopulation(settlementId);
+	const districts = useAppSelector((state) =>
+		selectDistrictsBySettlementId(state, settlementId)
+	);
+
+	let base: number;
+	if (population <= 2000) {
+		base = 1000;
+	} else if (population <= 5000) {
+		base = 2000;
+	} else if (population <= 10000) {
+		base = 4000;
+	} else if (population <= 25000) {
+		base = 8000;
 	} else {
-		return 16000;
+		base = 16000;
 	}
+
+	const buildings = districts
+		.map((district) =>
+			district.lotTypeList
+				.filter((lotType) => lotType)
+				.map(
+					(lotType) =>
+						buildingInfoList[getBuildingDisplayTypeByLotType(lotType!)]
+							.baseValueIncrease ?? 0
+				)
+				.reduce(numberReducer, 0)
+		)
+		.reduce(numberReducer, 0);
+
+	return base + buildings;
 }
 
 export function useSettlementBonusByType(
