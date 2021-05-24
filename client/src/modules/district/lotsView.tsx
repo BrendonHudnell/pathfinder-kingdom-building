@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Box, Grid, makeStyles, Table, TableBody } from '@material-ui/core';
+
 import { BuildingList } from './buildingList';
 import { Trashcan } from './trashcan';
 import { LotTableRow } from './lotTableRow';
