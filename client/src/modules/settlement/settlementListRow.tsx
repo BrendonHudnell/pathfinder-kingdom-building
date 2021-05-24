@@ -6,7 +6,6 @@ import { Settlement } from './settlementSlice';
 import {
 	useSettlementBonusByType,
 	getSettlementSize,
-	useSettlementUnrest,
 	useSettlementPopulation,
 } from './settlementUtils';
 
@@ -17,12 +16,11 @@ export interface SettlementRowProps {
 export function SettlementListRow(props: SettlementRowProps): ReactElement {
 	const { settlement } = props;
 
-	const population = useSettlementPopulation(settlement.id);
+	const population = useSettlementPopulation(settlement);
 	const size = getSettlementSize(population);
-	const economy = useSettlementBonusByType(settlement.id, 'economy');
-	const stability = useSettlementBonusByType(settlement.id, 'stability');
-	const loyalty = useSettlementBonusByType(settlement.id, 'loyalty');
-	const unrest = useSettlementUnrest(settlement.id);
+	const economy = useSettlementBonusByType(settlement, 'economy');
+	const stability = useSettlementBonusByType(settlement, 'stability');
+	const loyalty = useSettlementBonusByType(settlement, 'loyalty');
 
 	return (
 		<TableRow>
@@ -34,7 +32,6 @@ export function SettlementListRow(props: SettlementRowProps): ReactElement {
 			<TableCell>{economy}</TableCell>
 			<TableCell>{stability}</TableCell>
 			<TableCell>{loyalty}</TableCell>
-			<TableCell>{unrest}</TableCell>
 		</TableRow>
 	);
 }

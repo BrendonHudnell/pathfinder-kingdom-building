@@ -6,8 +6,9 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import { useAppDispatch, useAppSelector } from '../../components/store';
 import { addNewDistrict, selectDistrictsBySettlementId } from './districtSlice';
-import { DistrictView } from './districtView';
 import { TabPanel } from './districtTabPanel';
+import { DistrictDetails } from './districtDetails';
+import { LotsView } from './lotsView';
 
 const useStyles = makeStyles({
 	root: {
@@ -66,7 +67,8 @@ export function DistrictTabsView(props: DistrictTabsViewProps): ReactElement {
 						value={value}
 						index={index}
 					>
-						{value === index ? <DistrictView districtId={district.id} /> : null}
+						{value === index ? <DistrictDetails district={district} /> : null}
+						{value === index ? <LotsView district={district} /> : null}
 					</TabPanel>
 				))}
 			</DndProvider>

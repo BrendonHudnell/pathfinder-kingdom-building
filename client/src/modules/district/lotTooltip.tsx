@@ -30,6 +30,7 @@ export function LotTooltip(props: LotTooltipProps): ReactElement {
 			<Typography>{name}</Typography>
 			<Typography>Cost: {cost}</Typography>
 			{bonuses ? <Typography>Bonuses: {bonuses}</Typography> : null}
+			<br />
 			<Typography>{description}</Typography>
 		</Box>
 	);

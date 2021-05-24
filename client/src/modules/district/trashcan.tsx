@@ -4,8 +4,13 @@ import { useDrop } from 'react-dnd';
 import { EntityId } from '@reduxjs/toolkit';
 
 import { useAppDispatch } from '../../components/store';
+import { buildingRemoved } from '../settlement';
 import { lotCleared } from './districtSlice';
-import { getLotOffsetByLotType, getSizeByLotType } from './buildingUtils';
+import {
+	getBuildingDisplayTypeByLotType,
+	getLotOffsetByLotType,
+	getSizeByLotType,
+} from './buildingUtils';
 import { BuildingDragItem } from './buildingTypes';
 
 const useStyles = makeStyles({
@@ -29,11 +34,12 @@ const useStyles = makeStyles({
 });
 
 export interface TrashcanProps {
+	settlementId: EntityId;
 	districtId: EntityId;
 }
 
 export function Trashcan(props: TrashcanProps): ReactElement {
-	const { districtId } = props;
+	const { settlementId, districtId } = props;
 
 	const classes = useStyles();
 
@@ -56,6 +62,9 @@ export function Trashcan(props: TrashcanProps): ReactElement {
 			dispatch(lotCleared({ districtId, oldLotNumber: lotNumber + offset[2] }));
 			dispatch(lotCleared({ districtId, oldLotNumber: lotNumber + offset[3] }));
 		}
+
+		const displayType = getBuildingDisplayTypeByLotType(lotType[0]);
+		dispatch(buildingRemoved({ settlementId, building: displayType }));
 	}
 
 	const [{ isOver, canDrop }, drop] = useDrop(

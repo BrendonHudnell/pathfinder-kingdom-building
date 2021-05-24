@@ -7,15 +7,40 @@ import {
 export function getBuildingDisplayTypeByLotType(
 	lotType: LotType
 ): BuildingDisplayType {
-	return lotType.split(' ')[0].replace('_', ' ') as BuildingDisplayType;
+	const base = lotType.split(' ')[0];
+	const first = base.split('_')[0];
+
+	if (first === 'Bridge') {
+		return 'Bridge';
+	}
+	if (first === 'Waterfront') {
+		return 'Waterfront';
+	}
+	if (first === 'Waterway') {
+		return 'Waterway';
+	}
+	return base.replace('_', ' ') as BuildingDisplayType;
 }
 
 export function getBuildingDisplayTypeByListType(
-	lotType: BuildingListType
+	listType: BuildingListType
 ): BuildingDisplayType {
-	return (lotType.substr(-1) === 'H' || lotType.substr(-1) === 'V'
-		? lotType.slice(0, -2)
-		: lotType) as BuildingDisplayType;
+	const parts = listType.split(' ');
+	const last = parts[parts.length - 1];
+
+	if (parts[0] === 'Bridge') {
+		return 'Bridge';
+	}
+	if (parts[0] === 'Waterfront') {
+		return 'Waterfront';
+	}
+	if (parts[0] === 'Waterway') {
+		return 'Waterway';
+	}
+	if (last === 'H' || last === 'V') {
+		return listType.slice(0, -2) as BuildingDisplayType;
+	}
+	return listType as BuildingDisplayType;
 }
 
 export function getBuildingListTypeByLotType(
@@ -23,6 +48,9 @@ export function getBuildingListTypeByLotType(
 ): BuildingListType {
 	const [base, ext] = lotType.split(' ');
 
+	if (base.slice(-2) === '_H' || base.slice(-2) === '_V') {
+		return base as BuildingListType;
+	}
 	if (ext === 'L' || ext === 'R') {
 		return (base + ' H') as BuildingListType;
 	}

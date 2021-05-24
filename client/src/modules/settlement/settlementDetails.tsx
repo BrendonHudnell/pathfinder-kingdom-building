@@ -3,18 +3,13 @@ import { Grid, makeStyles, TextField, Typography } from '@material-ui/core';
 
 import { useAppDispatch, useAppSelector } from '../../components/store';
 import { numberReducer } from '../../components/arrayNumberReducer';
-import {
-	buildingInfoList,
-	getBuildingDisplayTypeByLotType,
-	selectDistrictsBySettlementId,
-} from '../district';
+import { selectDistrictsBySettlementId } from '../district';
 import { nameUpdated, Settlement } from './settlementSlice';
 import {
 	useSettlementBonusByType,
 	useSettlementPopulation,
 	getSettlementSize,
-	useSettlementUnrest,
-	getSettlementBaseValue,
+	useSettlementBaseValue,
 } from './settlementUtils';
 
 const useStyles = makeStyles((theme) => {
@@ -30,23 +25,22 @@ export interface SettlementDetailsProps {
 }
 
 export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
-	const { id, name } = props.settlement;
+	const { settlement } = props;
 
 	const classes = useStyles();
 
 	const dispatch = useAppDispatch();
 
-	const economy = useSettlementBonusByType(id, 'economy');
-	const stability = useSettlementBonusByType(id, 'stability');
-	const loyalty = useSettlementBonusByType(id, 'loyalty');
-	const unrest = useSettlementUnrest(id);
+	const economy = useSettlementBonusByType(settlement, 'economy');
+	const stability = useSettlementBonusByType(settlement, 'stability');
+	const loyalty = useSettlementBonusByType(settlement, 'loyalty');
 
-	const population = useSettlementPopulation(id);
-
+	const population = useSettlementPopulation(settlement);
 	const size = getSettlementSize(population);
+	const baseValue = useSettlementBaseValue(settlement);
 
 	const districtList = useAppSelector((state) =>
-		selectDistrictsBySettlementId(state, id)
+		selectDistrictsBySettlementId(state, settlement.id)
 	);
 	const totalDistricts = districtList.filter(
 		(district) => district.lotTypeList.filter((lotType) => lotType).length
@@ -55,29 +49,19 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 		.map((district) => district.lotTypeList.filter((lotType) => lotType).length)
 		.reduce(numberReducer, 0);
 
-	const baseValue =
-		getSettlementBaseValue(size) +
-		districtList
-			.map((district) =>
-				district.lotTypeList
-					.filter((lotType) => lotType)
-					.map(
-						(lotType) =>
-							buildingInfoList[getBuildingDisplayTypeByLotType(lotType!)]
-								.baseValueIncrease ?? 0
-					)
-					.reduce(numberReducer, 0)
-			)
-			.reduce(numberReducer, 0);
-
 	return (
 		<Grid container spacing={2} className={classes.container}>
 			<Grid container item spacing={2} alignItems="center">
 				<Grid item>
 					<TextField
-						value={name}
+						value={settlement.name}
 						onChange={(e) =>
-							dispatch(nameUpdated({ settlementId: id, name: e.target.value }))
+							dispatch(
+								nameUpdated({
+									settlementId: settlement.id,
+									name: e.target.value,
+								})
+							)
 						}
 						fullWidth
 					/>
@@ -102,10 +86,6 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 				</Grid>
 				<Grid item>
 					<Typography>Loyalty: {loyalty}</Typography>
-				</Grid>
-				<Grid item />
-				<Grid item>
-					<Typography>Unrest: {unrest}</Typography>
 				</Grid>
 				<Grid item />
 				<Grid item>

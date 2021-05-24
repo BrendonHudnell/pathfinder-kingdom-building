@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Container, makeStyles } from '@material-ui/core';
+import { Box, Container, makeStyles } from '@material-ui/core';
 import { useDrop } from 'react-dnd';
 
 import { useAppDispatch } from '../../components/store';
@@ -73,29 +73,16 @@ export function Lot(props: LotProps): ReactElement {
 				offset.reverse();
 				newLotType.reverse();
 			}
-			if (isMove) {
-				offset.forEach((_, idx) =>
-					dispatch(
-						lotUpdated({
-							districtId: district.id,
-							newLotNumber: index + offset[idx],
-							oldLotNumber: lotNumber + offset[idx],
-							lotType: newLotType[idx],
-						})
-					)
-				);
-			} else {
-				offset.forEach((_, idx) =>
-					dispatch(
-						lotUpdated({
-							districtId: district.id,
-							newLotNumber: index + offset[idx],
-							oldLotNumber: lotNumber,
-							lotType: newLotType[idx],
-						})
-					)
-				);
-			}
+			offset.forEach((_, idx) =>
+				dispatch(
+					lotUpdated({
+						districtId: district.id,
+						newLotNumber: index + offset[idx],
+						oldLotNumber: isMove ? lotNumber + offset[idx] : lotNumber,
+						lotType: newLotType[idx],
+					})
+				)
+			);
 		}
 	}
 
@@ -105,65 +92,44 @@ export function Lot(props: LotProps): ReactElement {
 		const size = getSizeByLotType(incomingLotType[0]);
 
 		if (size !== 1) {
-			const offset = getLotOffsetByLotType(incomingLotType[0]);
-			const [_, ext] = incomingLotType[0].split(' ');
+			if (index === lotNumber) {
+				return false;
+			}
 
 			if (isMove) {
-				let dropOk = true;
+				const offset = getLotOffsetByLotType(incomingLotType[0]);
+
 				const oldLotNumbers = offset.map((oset) => lotNumber + oset);
 				const newLotNumbers = offset.map((oset) => index + oset);
 				const difference = newLotNumbers.filter(
 					(lotNumber) => !oldLotNumbers.includes(lotNumber)
 				);
-				difference.forEach((lotNumber) => {
-					if (district.lotTypeList[lotNumber]) {
-						dropOk = false;
-					}
-				});
+
+				const dropOk = difference.every(
+					(lotNumber) => !district.lotTypeList[lotNumber]
+				);
 				if (!dropOk) {
 					return false;
 				}
 			}
 
+			const [_, ext] = incomingLotType[0].split(' ');
 			if (ext === 'TL') {
-				return (
-					!lastCol.includes(index) &&
-					!lastRow.includes(index) &&
-					index !== lotNumber
-				);
-			}
-			if (ext === 'TR') {
-				return (
-					!firstCol.includes(index) &&
-					!lastRow.includes(index) &&
-					index !== lotNumber
-				);
-			}
-			if (ext === 'BL') {
-				return (
-					!lastCol.includes(index) &&
-					!firstRow.includes(index) &&
-					index !== lotNumber
-				);
-			}
-			if (ext === 'BR') {
-				return (
-					!firstCol.includes(index) &&
-					!firstRow.includes(index) &&
-					index !== lotNumber
-				);
-			}
-			if (ext === 'L') {
-				return !lastCol.includes(index) && index !== lotNumber;
-			}
-			if (ext === 'R') {
-				return !firstCol.includes(index) && index !== lotNumber;
-			}
-			if (ext === 'T') {
-				return !lastRow.includes(index) && index !== lotNumber;
-			}
-			if (ext === 'B') {
-				return !firstRow.includes(index) && index !== lotNumber;
+				return !lastCol.includes(index) && !lastRow.includes(index);
+			} else if (ext === 'TR') {
+				return !firstCol.includes(index) && !lastRow.includes(index);
+			} else if (ext === 'BL') {
+				return !lastCol.includes(index) && !firstRow.includes(index);
+			} else if (ext === 'BR') {
+				return !firstCol.includes(index) && !firstRow.includes(index);
+			} else if (ext === 'L') {
+				return !lastCol.includes(index);
+			} else if (ext === 'R') {
+				return !firstCol.includes(index);
+			} else if (ext === 'T') {
+				return !lastRow.includes(index);
+			} else if (ext === 'B') {
+				return !firstRow.includes(index);
 			}
 		}
 		return !lotType;
@@ -204,7 +170,9 @@ export function Lot(props: LotProps): ReactElement {
 			{lotType ? (
 				<LotCard lotType={lotType} lotNumber={index} />
 			) : (
-				<img src="/assets/images/Empty_Lot.png" />
+				<Box border={1}>
+					<img src="/assets/images/Empty_Lot.png" />
+				</Box>
 			)}
 		</Container>
 	);

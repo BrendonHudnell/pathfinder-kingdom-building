@@ -37,7 +37,6 @@ export function SettlementListView(): ReactElement {
 						<TableCell>Economy</TableCell>
 						<TableCell>Stability</TableCell>
 						<TableCell>Loyalty</TableCell>
-						<TableCell>Unrest</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>

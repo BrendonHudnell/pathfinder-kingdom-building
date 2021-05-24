@@ -1,32 +1,128 @@
-import React, { Fragment, ReactElement, useState } from 'react';
-import { Box, TextField } from '@material-ui/core';
+import React, { ReactElement, useMemo, useState } from 'react';
+import {
+	Box,
+	Card,
+	Collapse,
+	List,
+	ListItem,
+	ListItemText,
+	makeStyles,
+	TextField,
+} from '@material-ui/core';
+import { EntityId } from '@reduxjs/toolkit';
 
 import { BuildingListCard } from './buildingListCard';
 import { BuildingListType } from './buildingTypes';
 
-export function BuildingList(): ReactElement {
+const useStyles = makeStyles({
+	button: {
+		cursor: 'pointer',
+	},
+});
+
+export interface BuildingListProps {
+	settlementId: EntityId;
+}
+
+export function BuildingList(props: BuildingListProps): ReactElement {
+	const { settlementId } = props;
+	const classes = useStyles();
+
 	const [searchString, setSearchString] = useState('');
+	const [bridgesOpen, setBridgesOpen] = useState(false);
+	const [waterwaysOpen, setWaterwaysOpen] = useState(false);
+
+	const bridges = useMemo(
+		() =>
+			Object.values(BuildingListType).filter((buildingListType) =>
+				buildingListType.includes('Bridge')
+			),
+		[]
+	);
+	const waterways = useMemo(
+		() =>
+			Object.values(BuildingListType).filter((buildingListType) =>
+				buildingListType.includes('Waterway')
+			),
+		[]
+	);
+	const buildings = useMemo(
+		() =>
+			Object.values(BuildingListType).filter(
+				(buildingListType) =>
+					!buildingListType.includes('Bridge') &&
+					!buildingListType.includes('Waterway')
+			),
+		[]
+	);
 
 	return (
-		<Fragment>
-			<TextField
-				variant="outlined"
-				size="small"
-				placeholder="Search"
-				onChange={(e) => setSearchString(e.target.value.toLowerCase())}
-			/>
-			<Box style={{ height: '80vh', overflowY: 'scroll' }}>
-				{Object.values(BuildingListType)
-					.filter((buildingListType) =>
-						buildingListType.toLowerCase().includes(searchString)
-					)
-					.map((buildingListType) => (
-						<BuildingListCard
-							key={buildingListType}
-							buildingListType={buildingListType}
-						/>
+		<List
+			component="div"
+			dense
+			disablePadding
+			subheader={
+				<TextField
+					fullWidth
+					variant="outlined"
+					size="small"
+					placeholder="Search"
+					onChange={(e) => setSearchString(e.target.value.toLowerCase())}
+				/>
+			}
+		>
+			<Box style={{ height: '70vh', overflowY: 'scroll' }}>
+				<ListItem
+					className={classes.button}
+					component={Card}
+					onClick={() => setBridgesOpen(!bridgesOpen)}
+				>
+					<ListItemText primary="Bridges" />
+					{bridgesOpen ? '^' : 'V'} {/* TODO change to icons */}
+				</ListItem>
+				<Collapse in={bridgesOpen}>
+					<List component="div" dense disablePadding>
+						{bridges.map((bridge) => (
+							<ListItem key={bridge} component={Card}>
+								<BuildingListCard
+									settlementId={settlementId}
+									buildingListType={bridge}
+								/>
+							</ListItem>
+						))}
+					</List>
+				</Collapse>
+				<ListItem
+					className={classes.button}
+					component={Card}
+					onClick={() => setWaterwaysOpen(!waterwaysOpen)}
+				>
+					<ListItemText primary="Waterways" />
+					{waterwaysOpen ? '^' : 'V'} {/* TODO change to icons */}
+				</ListItem>
+				<Collapse in={waterwaysOpen}>
+					<List component="div" dense disablePadding>
+						{waterways.map((bridge) => (
+							<ListItem key={bridge} component={Card}>
+								<BuildingListCard
+									settlementId={settlementId}
+									buildingListType={bridge}
+								/>
+							</ListItem>
+						))}
+					</List>
+				</Collapse>
+				{buildings
+					.filter((building) => building.toLowerCase().includes(searchString))
+					.map((building) => (
+						<ListItem key={building} component={Card}>
+							<BuildingListCard
+								settlementId={settlementId}
+								buildingListType={building}
+							/>
+						</ListItem>
 					))}
 			</Box>
-		</Fragment>
+		</List>
 	);
 }
