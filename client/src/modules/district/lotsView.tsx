@@ -76,10 +76,13 @@ export function LotsView(props: LotsViewProps): ReactElement {
 				<Grid container direction="column" alignItems="center" spacing={3}>
 					<Grid item />
 					<Grid item>
-						<BuildingList />
+						<BuildingList settlementId={district.settlementId} />
 					</Grid>
 					<Grid item>
-						<Trashcan districtId={district.id} />
+						<Trashcan
+							settlementId={district.settlementId}
+							districtId={district.id}
+						/>
 					</Grid>
 				</Grid>
 			</Grid>

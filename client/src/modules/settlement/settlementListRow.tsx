@@ -16,11 +16,11 @@ export interface SettlementRowProps {
 export function SettlementListRow(props: SettlementRowProps): ReactElement {
 	const { settlement } = props;
 
-	const population = useSettlementPopulation(settlement.id);
+	const population = useSettlementPopulation(settlement);
 	const size = getSettlementSize(population);
-	const economy = useSettlementBonusByType(settlement.id, 'economy');
-	const stability = useSettlementBonusByType(settlement.id, 'stability');
-	const loyalty = useSettlementBonusByType(settlement.id, 'loyalty');
+	const economy = useSettlementBonusByType(settlement, 'economy');
+	const stability = useSettlementBonusByType(settlement, 'stability');
+	const loyalty = useSettlementBonusByType(settlement, 'loyalty');
 
 	return (
 		<TableRow>

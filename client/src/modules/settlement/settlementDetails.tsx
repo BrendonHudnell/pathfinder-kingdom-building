@@ -25,22 +25,22 @@ export interface SettlementDetailsProps {
 }
 
 export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
-	const { id, name } = props.settlement;
+	const { settlement } = props;
 
 	const classes = useStyles();
 
 	const dispatch = useAppDispatch();
 
-	const economy = useSettlementBonusByType(id, 'economy');
-	const stability = useSettlementBonusByType(id, 'stability');
-	const loyalty = useSettlementBonusByType(id, 'loyalty');
+	const economy = useSettlementBonusByType(settlement, 'economy');
+	const stability = useSettlementBonusByType(settlement, 'stability');
+	const loyalty = useSettlementBonusByType(settlement, 'loyalty');
 
-	const population = useSettlementPopulation(id);
+	const population = useSettlementPopulation(settlement);
 	const size = getSettlementSize(population);
-	const baseValue = useSettlementBaseValue(id);
+	const baseValue = useSettlementBaseValue(settlement);
 
 	const districtList = useAppSelector((state) =>
-		selectDistrictsBySettlementId(state, id)
+		selectDistrictsBySettlementId(state, settlement.id)
 	);
 	const totalDistricts = districtList.filter(
 		(district) => district.lotTypeList.filter((lotType) => lotType).length
@@ -54,9 +54,14 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 			<Grid container item spacing={2} alignItems="center">
 				<Grid item>
 					<TextField
-						value={name}
+						value={settlement.name}
 						onChange={(e) =>
-							dispatch(nameUpdated({ settlementId: id, name: e.target.value }))
+							dispatch(
+								nameUpdated({
+									settlementId: settlement.id,
+									name: e.target.value,
+								})
+							)
 						}
 						fullWidth
 					/>

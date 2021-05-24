@@ -6,23 +6,31 @@ import React, {
 	useState,
 } from 'react';
 import { Grid, Tooltip, Typography } from '@material-ui/core';
-import { DragPreviewImage, useDrag } from 'react-dnd';
+import { DragPreviewImage, DragSourceMonitor, useDrag } from 'react-dnd';
+import { EntityId } from '@reduxjs/toolkit';
 
+import { useAppDispatch } from '../../components/store';
+import { buildingAdded } from '../settlement';
 import { BuildingListTooltip } from './buildingListTooltip';
 import {
 	BuildingDragItem,
 	BuildingListType,
 	buildingListTypeToLotTypeMap,
 } from './buildingTypes';
+import { getBuildingDisplayTypeByListType } from './buildingUtils';
 
 export interface BuildingListCardProps {
+	settlementId: EntityId;
 	buildingListType: BuildingListType;
 }
 
 export function BuildingListCard(props: BuildingListCardProps): ReactElement {
-	const { buildingListType } = props;
+	const { settlementId, buildingListType } = props;
+
+	const dispatch = useAppDispatch();
 
 	const lotType = buildingListTypeToLotTypeMap[buildingListType];
+	const displayType = getBuildingDisplayTypeByListType(buildingListType);
 
 	const item: BuildingDragItem = {
 		lotNumber: -1,
@@ -30,9 +38,19 @@ export function BuildingListCard(props: BuildingListCardProps): ReactElement {
 		isMove: false,
 	};
 
+	function end(
+		draggedItem: BuildingDragItem,
+		monitor: DragSourceMonitor<BuildingDragItem, unknown>
+	): void {
+		if (monitor.didDrop()) {
+			dispatch(buildingAdded({ settlementId, building: displayType }));
+		}
+	}
+
 	const [{ isDragging }, drag, preview] = useDrag(() => ({
 		type: 'BuildingCard',
 		item,
+		end,
 		collect: (monitor) => ({
 			isDragging: monitor.isDragging(),
 		}),

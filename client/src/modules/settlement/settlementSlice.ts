@@ -7,12 +7,18 @@ import {
 } from '@reduxjs/toolkit';
 
 import { RootState } from '../../components/store';
+import { BuildingDisplayType } from '../district';
+import {
+	createEmptySettlementBuildings,
+	SettlementBuildingList,
+} from './settlementUtils';
 
 export interface Settlement {
 	id: EntityId;
 	name: string;
 	hexId: EntityId;
 	districts: EntityId[];
+	buildings: SettlementBuildingList;
 }
 
 const settlementAdapter = createEntityAdapter<Settlement>();
@@ -37,6 +43,7 @@ export const addNewSettlement = createAsyncThunk(
 			name: `Settlement ${settlementId}`,
 			hexId,
 			districts: [],
+			buildings: createEmptySettlementBuildings(),
 		};
 
 		return newSettlement;
@@ -59,6 +66,36 @@ export const settlementSlice = createSlice({
 				settlement.name = name;
 			}
 		},
+		buildingAdded: (
+			state,
+			action: PayloadAction<{
+				settlementId: EntityId;
+				building: BuildingDisplayType;
+			}>
+		) => {
+			const { settlementId, building } = action.payload;
+
+			const settlement = state.entities[settlementId];
+
+			if (settlement) {
+				settlement.buildings[building]++;
+			}
+		},
+		buildingRemoved: (
+			state,
+			action: PayloadAction<{
+				settlementId: EntityId;
+				building: BuildingDisplayType;
+			}>
+		) => {
+			const { settlementId, building } = action.payload;
+
+			const settlement = state.entities[settlementId];
+
+			if (settlement) {
+				settlement.buildings[building]--;
+			}
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(
@@ -76,7 +113,11 @@ export const settlementSlice = createSlice({
 	},
 });
 
-export const { nameUpdated } = settlementSlice.actions;
+export const {
+	nameUpdated,
+	buildingAdded,
+	buildingRemoved,
+} = settlementSlice.actions;
 
 export const {
 	selectAll: selectAllSettlements,

@@ -9,6 +9,7 @@ import {
 	makeStyles,
 	TextField,
 } from '@material-ui/core';
+import { EntityId } from '@reduxjs/toolkit';
 
 import { BuildingListCard } from './buildingListCard';
 import { BuildingListType } from './buildingTypes';
@@ -19,7 +20,12 @@ const useStyles = makeStyles({
 	},
 });
 
-export function BuildingList(): ReactElement {
+export interface BuildingListProps {
+	settlementId: EntityId;
+}
+
+export function BuildingList(props: BuildingListProps): ReactElement {
+	const { settlementId } = props;
 	const classes = useStyles();
 
 	const [searchString, setSearchString] = useState('');
@@ -78,7 +84,10 @@ export function BuildingList(): ReactElement {
 					<List component="div" dense disablePadding>
 						{bridges.map((bridge) => (
 							<ListItem key={bridge} component={Card}>
-								<BuildingListCard buildingListType={bridge} />
+								<BuildingListCard
+									settlementId={settlementId}
+									buildingListType={bridge}
+								/>
 							</ListItem>
 						))}
 					</List>
@@ -95,7 +104,10 @@ export function BuildingList(): ReactElement {
 					<List component="div" dense disablePadding>
 						{waterways.map((bridge) => (
 							<ListItem key={bridge} component={Card}>
-								<BuildingListCard buildingListType={bridge} />
+								<BuildingListCard
+									settlementId={settlementId}
+									buildingListType={bridge}
+								/>
 							</ListItem>
 						))}
 					</List>
@@ -104,7 +116,10 @@ export function BuildingList(): ReactElement {
 					.filter((building) => building.toLowerCase().includes(searchString))
 					.map((building) => (
 						<ListItem key={building} component={Card}>
-							<BuildingListCard buildingListType={building} />
+							<BuildingListCard
+								settlementId={settlementId}
+								buildingListType={building}
+							/>
 						</ListItem>
 					))}
 			</Box>
