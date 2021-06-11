@@ -362,6 +362,23 @@ export function getTerrainImprovements(
 	return improvements;
 }
 
+export function getDefenseValue(hexData: HexData): number {
+	let total = 0;
+
+	const lairBonus = hexData.specialTerrain.includes(SpecialTerrainType.LAIR)
+		? 1
+		: 0;
+
+	hexData.terrainImprovements.includes(TerrainImprovementType.FORT)
+		? (total += 4 + lairBonus)
+		: '';
+	hexData.terrainImprovements.includes(TerrainImprovementType.WATCHTOWER)
+		? (total += 2 + lairBonus)
+		: '';
+
+	return total;
+}
+
 // TODO remove after hooking up DB
 function generateHexes(): HexData[] {
 	const hexes: HexData[] = [];
