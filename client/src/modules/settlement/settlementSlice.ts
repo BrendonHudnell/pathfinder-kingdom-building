@@ -113,11 +113,8 @@ export const settlementSlice = createSlice({
 	},
 });
 
-export const {
-	nameUpdated,
-	buildingAdded,
-	buildingRemoved,
-} = settlementSlice.actions;
+export const { nameUpdated, buildingAdded, buildingRemoved } =
+	settlementSlice.actions;
 
 export const {
 	selectAll: selectAllSettlements,

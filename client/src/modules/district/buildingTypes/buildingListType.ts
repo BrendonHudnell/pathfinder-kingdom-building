@@ -25,7 +25,7 @@ export enum BuildingListType {
 	CISTERN = 'Cistern',
 	DANCE_HALL = 'Dance Hall',
 	DUMP = 'Dump',
-	// 'Everflowing Spring' |
+	// EVERFLOWING_SPRING = 'Everflowing Spring',
 	EXOTIC_ARTISAN = 'Exotic Artisan',
 	FOREIGN_QUARTER = 'Foreign Quarter',
 	FOUNDRY_H = 'Foundry H',
@@ -47,7 +47,7 @@ export enum BuildingListType {
 	MAGIC_SHOP = 'Magic Shop',
 	MAGICAL_ACADEMY_H = 'Magical Academy H',
 	MAGICAL_ACADEMY_V = 'Magical Academy V',
-	// 'Magical Streetlamps' |
+	// MAGICAL_STREETLAMPS = 'Magical Streetlamps',
 	MANSION = 'Mansion',
 	MARKET_H = 'Market H',
 	MARKET_V = 'Market V',
