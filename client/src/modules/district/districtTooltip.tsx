@@ -9,9 +9,8 @@ export interface DistrictTooltipProps {
 }
 
 export function DistrictTooltip(props: DistrictTooltipProps): ReactElement {
-	const { cost, economy, stability, loyalty } = buildingInfoList[
-		props.displayType
-	];
+	const { cost, economy, stability, loyalty } =
+		buildingInfoList[props.displayType];
 
 	const bonuses =
 		(economy ? `${signedNumber(economy)} Economy ` : '') +

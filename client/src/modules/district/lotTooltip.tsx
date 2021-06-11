@@ -11,14 +11,8 @@ export interface LotTooltipProps {
 
 export function LotTooltip(props: LotTooltipProps): ReactElement {
 	const displayType = getBuildingDisplayTypeByLotType(props.lotType);
-	const {
-		name,
-		description,
-		cost,
-		economy,
-		stability,
-		loyalty,
-	} = buildingInfoList[displayType];
+	const { name, description, cost, economy, stability, loyalty } =
+		buildingInfoList[displayType];
 
 	const bonuses =
 		(economy ? `${signedNumber(economy)} Economy ` : '') +

@@ -140,8 +140,7 @@ export const {
 	viceroyDeleted,
 } = leadershipSlice.actions;
 
-export const {
-	selectAll: selectAllRoles,
-} = leadershipAdapter.getSelectors<RootState>((state) => state.leadership);
+export const { selectAll: selectAllRoles } =
+	leadershipAdapter.getSelectors<RootState>((state) => state.leadership);
 
 export const leadershipReducer = leadershipSlice.reducer;

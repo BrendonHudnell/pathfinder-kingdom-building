@@ -13,14 +13,8 @@ export function BuildingListTooltip(
 	props: BuildingListTooltipProps
 ): ReactElement {
 	const displayType = getBuildingDisplayTypeByListType(props.buildingListType);
-	const {
-		description,
-		cost,
-		economy,
-		stability,
-		loyalty,
-		unrest,
-	} = buildingInfoList[displayType];
+	const { description, cost, economy, stability, loyalty, unrest } =
+		buildingInfoList[displayType];
 
 	const bonuses =
 		(economy ? `${signedNumber(economy)} Economy ` : '') +

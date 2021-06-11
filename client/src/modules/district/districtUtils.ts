@@ -42,9 +42,31 @@ export function getDistrictTerrainColor(terrain?: DistrictTerrainType): string {
 	return 'green';
 }
 
+export function getDistrictLotBackgroundColor(
+	paved: boolean,
+	sewers: boolean
+): string {
+	if (paved && sewers) {
+		return `repeating-linear-gradient(
+			45deg,
+			grey,
+			grey 30px,
+			darkslategray 30px,
+			darkslategray 60px
+		)`;
+	}
+	if (paved) {
+		return 'grey';
+	}
+	if (sewers) {
+		return 'darkslategray';
+	}
+	return 'tan';
+}
+
 export function getDistrictFortificationColor(
-	wall?: boolean,
-	moat?: boolean
+	wall: boolean,
+	moat: boolean
 ): string {
 	if (wall && moat) {
 		return 'darkblue';

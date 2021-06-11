@@ -1,35 +1,15 @@
 import React, { ReactElement } from 'react';
-import { Box, Grid, makeStyles, Table, TableBody } from '@material-ui/core';
+import { Box, Grid, Table, TableBody } from '@material-ui/core';
 
 import { BuildingList } from './buildingList';
 import { Trashcan } from './trashcan';
 import { LotTableRow } from './lotTableRow';
 import {
 	getDistrictFortificationColor,
+	getDistrictLotBackgroundColor,
 	getDistrictTerrainColor,
 } from './districtUtils';
 import { District } from './districtSlice';
-
-const useStyles = makeStyles({
-	dirt: {
-		background: 'tan',
-	},
-	paved: {
-		background: 'grey',
-	},
-	sewers: {
-		background: 'darkslategray',
-	},
-	pavedAndSewers: {
-		background: `repeating-linear-gradient(
-			45deg,
-			grey,
-			grey 30px,
-			darkslategray 30px,
-			darkslategray 60px
-		)`,
-	},
-});
 
 export interface LotsViewProps {
 	district: District;
@@ -37,8 +17,6 @@ export interface LotsViewProps {
 
 export function LotsView(props: LotsViewProps): ReactElement {
 	const { district } = props;
-
-	const classes = useStyles();
 
 	const terrainNorth = getDistrictTerrainColor(district.north.terrain);
 	const terrainSouth = getDistrictTerrainColor(district.south.terrain);
@@ -62,14 +40,10 @@ export function LotsView(props: LotsViewProps): ReactElement {
 		district.west.moat
 	);
 
-	const backgroundClass =
-		district.paved && district.sewers
-			? classes.pavedAndSewers
-			: district.paved
-			? classes.paved
-			: district.sewers
-			? classes.sewers
-			: classes.dirt;
+	const backgroundColor = getDistrictLotBackgroundColor(
+		district.paved,
+		district.sewers
+	);
 
 	return (
 		<Grid container spacing={3}>
@@ -111,8 +85,7 @@ export function LotsView(props: LotsViewProps): ReactElement {
 					>
 						<Table
 							size="small"
-							style={{ width: 'fit-content' }}
-							className={backgroundClass}
+							style={{ width: 'fit-content', background: backgroundColor }}
 						>
 							<TableBody>
 								<LotTableRow

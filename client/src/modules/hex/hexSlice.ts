@@ -102,9 +102,10 @@ export const hexSlice = createSlice({
 			const { hexId, terrainImprovement } = action.payload;
 
 			if (state.ids.includes(hexId)) {
-				const index = state.entities[hexId]!.terrainImprovements.indexOf(
-					terrainImprovement
-				);
+				const index =
+					state.entities[hexId]!.terrainImprovements.indexOf(
+						terrainImprovement
+					);
 				if (index > -1) {
 					state.entities[hexId]!.terrainImprovements.splice(index, 1);
 				}
@@ -136,9 +137,8 @@ export const hexSlice = createSlice({
 			const { hexId, specialTerrain } = action.payload;
 
 			if (state.ids.includes(hexId)) {
-				const index = state.entities[hexId]!.specialTerrain.indexOf(
-					specialTerrain
-				);
+				const index =
+					state.entities[hexId]!.specialTerrain.indexOf(specialTerrain);
 				if (index > -1) {
 					state.entities[hexId]!.specialTerrain.splice(index, 1);
 				}
@@ -198,10 +198,8 @@ export const {
 	notesUpdated,
 } = hexSlice.actions;
 
-export const {
-	selectAll: selectAllHexes,
-	selectById: selectHexById,
-} = hexAdapter.getSelectors<RootState>((state) => state.hex);
+export const { selectAll: selectAllHexes, selectById: selectHexById } =
+	hexAdapter.getSelectors<RootState>((state) => state.hex);
 
 export const selectClaimedHexes = createSelector([selectAllHexes], (hexes) =>
 	hexes.filter(

@@ -191,12 +191,8 @@ export const districtSlice = createSlice({
 				lotType: LotType;
 			}>
 		) => {
-			const {
-				districtId,
-				newLotNumber,
-				oldLotNumber,
-				lotType,
-			} = action.payload;
+			const { districtId, newLotNumber, oldLotNumber, lotType } =
+				action.payload;
 
 			if (state.ids.includes(districtId)) {
 				state.entities[districtId]!.lotTypeList[newLotNumber] = lotType;
@@ -247,10 +243,8 @@ export const {
 	lotCleared,
 } = districtSlice.actions;
 
-export const {
-	selectAll: selectAllDistricts,
-	selectById: selectDistrictById,
-} = districtAdapter.getSelectors<RootState>((state) => state.district);
+export const { selectAll: selectAllDistricts, selectById: selectDistrictById } =
+	districtAdapter.getSelectors<RootState>((state) => state.district);
 
 export const selectDistrictsBySettlementId = createSelector(
 	[
