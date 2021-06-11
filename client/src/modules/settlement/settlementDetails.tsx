@@ -10,6 +10,7 @@ import {
 	useSettlementPopulation,
 	getSettlementSize,
 	useSettlementBaseValue,
+	useSettlementDefense,
 } from './settlementUtils';
 
 const useStyles = makeStyles((theme) => {
@@ -38,6 +39,7 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 	const population = useSettlementPopulation(settlement);
 	const size = getSettlementSize(population);
 	const baseValue = useSettlementBaseValue(settlement);
+	const defense = useSettlementDefense(settlement);
 
 	const districtList = useAppSelector((state) =>
 		selectDistrictsBySettlementId(state, settlement.id)
@@ -74,6 +76,9 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 				</Grid>
 				<Grid item>
 					<Typography>Base Value: {baseValue.toLocaleString()}gp</Typography>
+				</Grid>
+				<Grid item>
+					<Typography>Defense: {defense}</Typography>
 				</Grid>
 			</Grid>
 

@@ -25,6 +25,7 @@ import { LinkButton } from '../../components/linkButton';
 import { addNewSettlement } from '../settlement';
 import {
 	ExplorationState,
+	getDefenseValue,
 	getTerrainImprovements,
 	SpecialTerrainType,
 	TerrainImprovementType,
@@ -72,6 +73,7 @@ export function HexagonDetails(props: HexagonDetailsProps): ReactElement {
 	const dispatch = useAppDispatch();
 
 	const improvements = getTerrainImprovements(hexData);
+	const defense = getDefenseValue(hexData);
 
 	async function addSettlement(): Promise<void> {
 		const resultAction = await dispatch(addNewSettlement(hexId));
@@ -183,6 +185,14 @@ export function HexagonDetails(props: HexagonDetailsProps): ReactElement {
 							</TableCell>
 							<TableCell className={classes.borderlessRight}>
 								<Typography>{hexData.explorationState}</Typography>
+							</TableCell>
+						</TableRow>
+						<TableRow>
+							<TableCell className={classes.borderlessLeft}>
+								<Typography noWrap>Defense:</Typography>
+							</TableCell>
+							<TableCell className={classes.borderlessRight}>
+								<Typography>{defense}</Typography>
 							</TableCell>
 						</TableRow>
 						<TableRow>
