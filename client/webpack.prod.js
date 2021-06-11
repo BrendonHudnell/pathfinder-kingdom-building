@@ -2,6 +2,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ExtractCssChunksPlugin = require('extract-css-chunks-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const CompressionPlugin = require("compression-webpack-plugin");
 const path = require('path');
 
 const htmlPlugin = new HtmlWebPackPlugin({
@@ -23,6 +24,10 @@ const copyPlugin = new CopyPlugin({
 			to: path.resolve(__dirname, 'build', 'assets'),
 		},
 	],
+});
+
+const compressionPlugin = new CompressionPlugin({
+	test: /\.js(\?.*)?$/i,
 });
 
 module.exports = {
@@ -73,5 +78,5 @@ module.exports = {
 			},
 		],
 	},
-	plugins: [cleanWebpackPlugin, htmlPlugin, extractCssChunksPlugin, copyPlugin],
+	plugins: [cleanWebpackPlugin, htmlPlugin, extractCssChunksPlugin, copyPlugin, compressionPlugin],
 };
