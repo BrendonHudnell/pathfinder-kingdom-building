@@ -1,10 +1,18 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import {
+	Badge,
 	Button,
+	Dialog,
+	DialogTitle,
+	FormControlLabel,
 	Grid,
+	List,
+	ListItem,
 	makeStyles,
 	MenuItem,
 	Paper,
+	Radio,
+	RadioGroup,
 	Select,
 	TextField,
 	Tooltip,
@@ -26,6 +34,7 @@ import {
 import { selectTotalDistricts, useTotalPopulation } from '../district';
 import {
 	alignmentUpdated,
+	fameUpdated,
 	holidayEdictLevelUpdated,
 	incrementMonth,
 	nameUpdated,
@@ -37,6 +46,11 @@ import {
 import {
 	Alignment,
 	alignmentMenuItems,
+	FameKingdomLevel,
+	FameValue,
+	getKingdomFame,
+	getKingdomInfamy,
+	getUnsetKingdomFame,
 	HolidayEdict,
 	holidayEdictMenuItems,
 	PromotionEdict,
@@ -59,6 +73,8 @@ const useStyles = makeStyles((theme) => {
 export function KingdomView(): ReactElement {
 	const classes = useStyles();
 
+	const [fameOpen, setFameOpen] = useState(false);
+
 	const dispatch = useAppDispatch();
 
 	const name = useAppSelector((state) => state.kingdom.name);
@@ -75,6 +91,8 @@ export function KingdomView(): ReactElement {
 	const taxationEdictLevel = useAppSelector(
 		(state) => state.kingdom.taxationEdict
 	);
+	const fameInfo = useAppSelector((state) => state.kingdom.fame);
+
 	const edictBonuses = useEdictsBonuses();
 	const alignmentBonuses = useAlignmentBonuses();
 	const consumption = edictBonuses.consumption;
@@ -89,6 +107,13 @@ export function KingdomView(): ReactElement {
 	const settlementEconomy = useAllSettlementsBonusByType('economy');
 	const settlementStability = useAllSettlementsBonusByType('stability');
 	const settlementLoyalty = useAllSettlementsBonusByType('loyalty');
+	const settlementCorruption = useAllSettlementsBonusByType('corruption');
+	const settlementCrime = useAllSettlementsBonusByType('crime');
+	const settlementLaw = useAllSettlementsBonusByType('law');
+	const settlementLore = useAllSettlementsBonusByType('lore');
+	const settlementProductivity = useAllSettlementsBonusByType('productivity');
+	const settlementSociety = useAllSettlementsBonusByType('society');
+	const settlementFame = useAllSettlementsBonusByType('fame');
 
 	const hexEconomy = useClaimedHexesEconomyBonus();
 	const hexStability = useClaimedHexesStabilityBonus();
@@ -100,6 +125,10 @@ export function KingdomView(): ReactElement {
 	const totalDistricts = useAppSelector((state) => selectTotalDistricts(state));
 	const controlDC = 20 + size + totalDistricts;
 	const terrainIncome = useClaimedHexesTerrainIncome();
+
+	const kingdomFame = getKingdomFame(fameInfo);
+	const kingdomInfamy = getKingdomInfamy(fameInfo);
+	const kingdomUnsetFame = getUnsetKingdomFame(fameInfo, size);
 
 	const totalConsumption =
 		consumption + size + totalDistricts - hexConsumptionDecrease; // TODO add army slice info
@@ -124,6 +153,22 @@ export function KingdomView(): ReactElement {
 		settlementLoyalty +
 		hexLoyalty -
 		currentUnrest;
+
+	const totalCorruption =
+		Math.floor(settlementCorruption / 10) + alignmentBonuses.corruption;
+	const totalCrime = Math.floor(settlementCrime / 10) + alignmentBonuses.crime;
+	const totalLaw = Math.floor(settlementLaw / 10) + alignmentBonuses.law;
+	const totalLore = Math.floor(settlementLore / 10) + alignmentBonuses.lore;
+	const totalProductivity = Math.floor(settlementProductivity / 10);
+	const totalSociety =
+		Math.floor(settlementSociety / 10) + alignmentBonuses.society;
+
+	const totalFame =
+		Math.floor((settlementLore + settlementSociety) / 10) +
+		settlementFame +
+		kingdomFame; // todo add event bonuses
+	const totalInfamy =
+		Math.floor((settlementCorruption + settlementCrime) / 10) + kingdomInfamy; // todo add event bonuses
 
 	// TODO remove when server is connected
 	const state = useAppSelector((state) => state);
@@ -320,6 +365,76 @@ export function KingdomView(): ReactElement {
 							value={currentUnrest}
 							onChange={(e) => dispatch(unrestUpdated(Number(e.target.value)))}
 						/>
+					</Grid>
+				</Grid>
+
+				<Grid container item spacing={2} alignItems="center">
+					<Grid item>
+						<Typography>Corruption: {totalCorruption}</Typography>
+					</Grid>
+					<Grid item>
+						<Typography>Crime: {totalCrime}</Typography>
+					</Grid>
+					<Grid item>
+						<Typography>Law: {totalLaw}</Typography>
+					</Grid>
+					<Grid item>
+						<Typography>Lore: {totalLore}</Typography>
+					</Grid>
+					<Grid item>
+						<Typography>Productivity: {totalProductivity}</Typography>
+					</Grid>
+					<Grid item>
+						<Typography>Society: {totalSociety}</Typography>
+					</Grid>
+					<Grid item />
+					<Grid item>
+						<Typography>Fame: {totalFame}</Typography>
+					</Grid>
+					<Grid item>
+						<Typography>Infamy: {totalInfamy}</Typography>
+					</Grid>
+					<Grid item>
+						<Badge color="error" variant="dot" badgeContent={kingdomUnsetFame}>
+							<Button onClick={() => setFameOpen(true)}>Size Bonuses</Button>
+						</Badge>
+						<Dialog open={fameOpen} onClose={() => setFameOpen(false)}>
+							<DialogTitle>Fame/Infamy Kingdon Size Bonuses</DialogTitle>
+							<List dense>
+								{Object.entries(fameInfo).map(([level, info]) =>
+									size >= Number(level) ? (
+										<ListItem key={`fame-level-${level}`}>
+											<Typography>
+												Size {level} Bonus:&nbsp;&nbsp;&nbsp;&nbsp;
+											</Typography>
+											<RadioGroup
+												row
+												value={info.value}
+												onChange={(e) =>
+													dispatch(
+														fameUpdated({
+															level: Number(level) as FameKingdomLevel,
+															value: e.target.value as FameValue,
+														})
+													)
+												}
+											>
+												<FormControlLabel
+													value={FameValue.FAME}
+													control={<Radio />}
+													label="Fame"
+												/>
+												<FormControlLabel
+													value={FameValue.INFAMY}
+													control={<Radio />}
+													label="Infamy"
+												/>
+											</RadioGroup>
+										</ListItem>
+									) : null
+								)}
+							</List>
+						</Dialog>
 					</Grid>
 				</Grid>
 

@@ -2,8 +2,11 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import {
 	Alignment,
+	FameKingdomLevel,
+	FameValue,
 	HolidayEdict,
 	initialKingdomState,
+	KingdomFame,
 	PromotionEdict,
 	TaxationEdict,
 } from './kingdomUtils';
@@ -17,6 +20,7 @@ export interface KingdomState {
 	holidayEdict: HolidayEdict;
 	promotionEdict: PromotionEdict;
 	taxationEdict: TaxationEdict;
+	fame: KingdomFame;
 }
 
 export const fetchKingdomData = createAsyncThunk(
@@ -61,6 +65,15 @@ export const kingdomSlice = createSlice({
 		) => {
 			state.taxationEdict = action.payload;
 		},
+		fameUpdated: (
+			state,
+			action: PayloadAction<{ level: FameKingdomLevel; value: FameValue }>
+		) => {
+			const { level, value } = action.payload;
+
+			state.fame[level].set = true;
+			state.fame[level].value = value;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(
@@ -90,6 +103,7 @@ export const {
 	holidayEdictLevelUpdated,
 	promotionEdictLevelUpdated,
 	taxationEdictLevelUpdated,
+	fameUpdated,
 } = kingdomSlice.actions;
 
 export const kingdomReducer = kingdomSlice.reducer;
