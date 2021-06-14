@@ -10,7 +10,6 @@ import {
 	useSettlementPopulation,
 	getSettlementSize,
 	useSettlementBaseValue,
-	useSettlementDefense,
 } from './settlementUtils';
 
 const useStyles = makeStyles((theme) => {
@@ -39,7 +38,14 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 	const population = useSettlementPopulation(settlement);
 	const size = getSettlementSize(population);
 	const baseValue = useSettlementBaseValue(settlement);
-	const defense = useSettlementDefense(settlement);
+	const defense = useSettlementBonusByType(settlement, 'defense');
+
+	const corruption = useSettlementBonusByType(settlement, 'corruption');
+	const crime = useSettlementBonusByType(settlement, 'crime');
+	const law = useSettlementBonusByType(settlement, 'law');
+	const lore = useSettlementBonusByType(settlement, 'lore');
+	const productivity = useSettlementBonusByType(settlement, 'productivity');
+	const society = useSettlementBonusByType(settlement, 'society');
 
 	const districtList = useAppSelector((state) =>
 		selectDistrictsBySettlementId(state, settlement.id)
@@ -98,6 +104,27 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 				</Grid>
 				<Grid item>
 					<Typography>Total lots: {totalLots}</Typography>
+				</Grid>
+			</Grid>
+
+			<Grid container item spacing={2} alignItems="center">
+				<Grid item>
+					<Typography>Corruption: {corruption}</Typography>
+				</Grid>
+				<Grid item>
+					<Typography>Crime: {crime}</Typography>
+				</Grid>
+				<Grid item>
+					<Typography>Law: {law}</Typography>
+				</Grid>
+				<Grid item>
+					<Typography>Lore: {lore}</Typography>
+				</Grid>
+				<Grid item>
+					<Typography>Productivity: {productivity}</Typography>
+				</Grid>
+				<Grid item>
+					<Typography>Society: {society}</Typography>
 				</Grid>
 			</Grid>
 		</Grid>

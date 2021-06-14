@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 
 import { useAppDispatch } from '../../components/store';
+import { buildingAdded, buildingRemoved } from '../settlement';
 import {
 	District,
 	moatUpdated,
@@ -18,6 +19,7 @@ import {
 } from './districtSlice';
 import { Direction, DistrictTerrainType } from './districtUtils';
 import { DistrictTooltip } from './districtTooltip';
+import { BuildingDisplayType } from './buildingTypes';
 
 export interface DistrictBorderGridProps {
 	district: District;
@@ -31,6 +33,31 @@ export function DistrictBorderGrid(
 	const { district, name, direction } = props;
 
 	const dispatch = useAppDispatch();
+
+	function toggleChecked(
+		building: BuildingDisplayType,
+		checked: boolean
+	): void {
+		if (building === 'City Wall') {
+			dispatch(
+				wallUpdated({ districtId: district.id, direction, wall: checked })
+			);
+		} else if (building === 'Moat') {
+			dispatch(
+				moatUpdated({ districtId: district.id, direction, moat: checked })
+			);
+		}
+
+		if (checked) {
+			dispatch(
+				buildingAdded({ settlementId: district.settlementId, building })
+			);
+		} else {
+			dispatch(
+				buildingRemoved({ settlementId: district.settlementId, building })
+			);
+		}
+	}
 
 	return (
 		<Grid item>
@@ -69,13 +96,7 @@ export function DistrictBorderGrid(
 									<Checkbox
 										checked={district[direction].wall}
 										onChange={(e) =>
-											dispatch(
-												wallUpdated({
-													districtId: district.id,
-													direction,
-													wall: e.target.checked,
-												})
-											)
+											toggleChecked('City Wall', e.target.checked)
 										}
 									/>
 								}
@@ -91,15 +112,7 @@ export function DistrictBorderGrid(
 								control={
 									<Checkbox
 										checked={district[direction].moat}
-										onChange={(e) =>
-											dispatch(
-												moatUpdated({
-													districtId: district.id,
-													direction,
-													moat: e.target.checked,
-												})
-											)
-										}
+										onChange={(e) => toggleChecked('Moat', e.target.checked)}
 									/>
 								}
 								label="Moat"

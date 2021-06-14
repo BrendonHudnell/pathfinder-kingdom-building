@@ -1,4 +1,3 @@
-import { numberReducer } from '../../components/arrayNumberReducer';
 import { useAppSelector } from '../../components/store';
 import {
 	BuildingDisplayType,
@@ -19,7 +18,14 @@ export type SettlementStat =
 	| 'stability'
 	| 'loyalty'
 	| 'baseValueIncrease'
-	| 'defense';
+	| 'defense'
+	| 'corruption'
+	| 'crime'
+	| 'law'
+	| 'lore'
+	| 'productivity'
+	| 'society'
+	| 'fame';
 
 export type SettlementBuildingList = Record<BuildingDisplayType, number>;
 
@@ -74,30 +80,6 @@ export function useSettlementBaseValue(settlement: Settlement): number {
 	);
 
 	return baseValue + buildingBonus;
-}
-
-export function useSettlementDefense(settlement: Settlement): number {
-	const districts = useAppSelector((state) =>
-		selectDistrictsBySettlementId(state, settlement.id)
-	);
-	const fortificationBonus = districts
-		.map((district) => {
-			let districtFortificationBonus = 0;
-			district.north.wall ? districtFortificationBonus++ : '';
-			district.north.moat ? districtFortificationBonus++ : '';
-			district.south.wall ? districtFortificationBonus++ : '';
-			district.south.moat ? districtFortificationBonus++ : '';
-			district.east.wall ? districtFortificationBonus++ : '';
-			district.east.moat ? districtFortificationBonus++ : '';
-			district.west.wall ? districtFortificationBonus++ : '';
-			district.west.moat ? districtFortificationBonus++ : '';
-			return districtFortificationBonus;
-		})
-		.reduce(numberReducer, 0);
-
-	const buildingBonus = useSettlementBonusByType(settlement, 'defense');
-
-	return fortificationBonus + buildingBonus;
 }
 
 export function useSettlementBonusByType(
