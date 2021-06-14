@@ -8,6 +8,7 @@ export interface RoleConstants {
 	penalty: string[];
 	penaltyAmount: number;
 	unrest: number;
+	skillAbility: string;
 }
 
 export const roleConstantsList: RoleConstants[] = [
@@ -17,6 +18,7 @@ export const roleConstantsList: RoleConstants[] = [
 		penalty: [],
 		penaltyAmount: 0,
 		unrest: 4,
+		skillAbility: 'Knowledge (nobility)',
 	},
 	{
 		name: 'Second Ruler',
@@ -24,6 +26,7 @@ export const roleConstantsList: RoleConstants[] = [
 		penalty: [],
 		penaltyAmount: 0,
 		unrest: 0,
+		skillAbility: 'Knowledge (nobility)',
 	},
 	{
 		name: 'Consort',
@@ -31,6 +34,7 @@ export const roleConstantsList: RoleConstants[] = [
 		penalty: [],
 		penaltyAmount: 0,
 		unrest: 0,
+		skillAbility: 'Knowledge (nobility)',
 	},
 	{
 		name: 'Councilor',
@@ -38,6 +42,7 @@ export const roleConstantsList: RoleConstants[] = [
 		penalty: ['Loyalty'],
 		penaltyAmount: 2,
 		unrest: 1,
+		skillAbility: 'Knowledge (local)',
 	},
 	{
 		name: 'General',
@@ -45,6 +50,7 @@ export const roleConstantsList: RoleConstants[] = [
 		penalty: ['Loyalty'],
 		penaltyAmount: 4,
 		unrest: 0,
+		skillAbility: 'Profession (soldier)',
 	},
 	{
 		name: 'Grand Diplomat',
@@ -52,6 +58,7 @@ export const roleConstantsList: RoleConstants[] = [
 		penalty: ['Stability'],
 		penaltyAmount: 2,
 		unrest: 0,
+		skillAbility: 'Diplomacy',
 	},
 	{
 		name: 'Heir',
@@ -59,6 +66,7 @@ export const roleConstantsList: RoleConstants[] = [
 		penalty: [],
 		penaltyAmount: 0,
 		unrest: 0,
+		skillAbility: 'Knowledge (nobility)',
 	},
 	{
 		name: 'High Priest',
@@ -66,6 +74,7 @@ export const roleConstantsList: RoleConstants[] = [
 		penalty: ['Stability', 'Loyalty'],
 		penaltyAmount: 2,
 		unrest: 1,
+		skillAbility: 'Knowledge (religion)',
 	},
 	{
 		name: 'Magister',
@@ -73,6 +82,7 @@ export const roleConstantsList: RoleConstants[] = [
 		penalty: ['Economy'],
 		penaltyAmount: 4,
 		unrest: 0,
+		skillAbility: 'Knowledge (arcana)',
 	},
 	{
 		name: 'Marshal',
@@ -80,6 +90,7 @@ export const roleConstantsList: RoleConstants[] = [
 		penalty: ['Economy'],
 		penaltyAmount: 4,
 		unrest: 0,
+		skillAbility: 'Survival',
 	},
 	{
 		name: 'Royal Enforcer',
@@ -87,6 +98,7 @@ export const roleConstantsList: RoleConstants[] = [
 		penalty: [],
 		penaltyAmount: 0,
 		unrest: 0,
+		skillAbility: 'Intimidate',
 	},
 	{
 		name: 'Spymaster',
@@ -94,6 +106,7 @@ export const roleConstantsList: RoleConstants[] = [
 		penalty: ['Economy'],
 		penaltyAmount: 4,
 		unrest: 1,
+		skillAbility: 'Sense Motive',
 	},
 	{
 		name: 'Treasurer',
@@ -101,6 +114,7 @@ export const roleConstantsList: RoleConstants[] = [
 		penalty: ['Economy'],
 		penaltyAmount: 4,
 		unrest: 0,
+		skillAbility: 'Profession (merchant)',
 	},
 	{
 		name: 'Warden',
@@ -108,6 +122,7 @@ export const roleConstantsList: RoleConstants[] = [
 		penalty: ['Loyalty', 'Stability'],
 		penaltyAmount: 2,
 		unrest: 0,
+		skillAbility: 'Knowledge (engineering)',
 	},
 	{
 		name: 'Viceroy',
@@ -115,6 +130,7 @@ export const roleConstantsList: RoleConstants[] = [
 		penalty: [],
 		penaltyAmount: 0,
 		unrest: 4,
+		skillAbility: 'Knowledge (geography)',
 	},
 ];
 
@@ -160,8 +176,12 @@ export function getLeadershipPositivesByType(
 		.filter((role) => !role.vacant && role.benefit.includes(bonusType))
 		.map((role) =>
 			role.name === 'Consort' || role.name === 'Heir'
-				? Math.floor(role.abilityBonus / 2) + (role.leadership ? 1 : 0)
-				: role.abilityBonus + (role.leadership ? 1 : 0)
+				? Math.floor(role.abilityBonus / 2) +
+				  (role.leadership ? 1 : 0) +
+				  Math.floor(role.skillBonus / 5)
+				: role.abilityBonus +
+				  (role.leadership ? 1 : 0) +
+				  Math.floor(role.skillBonus / 5)
 		)
 		.reduce(numberReducer, 0);
 }
@@ -195,6 +215,7 @@ export const initialRoles: Role[] = [
 		leadership: false,
 		benefit: 'Economy',
 		vacant: true,
+		skillBonus: 0,
 	},
 	{
 		id: 2,
@@ -205,6 +226,7 @@ export const initialRoles: Role[] = [
 		leadership: false,
 		benefit: 'Loyalty',
 		vacant: true,
+		skillBonus: 0,
 	},
 	{
 		id: 3,
@@ -215,6 +237,7 @@ export const initialRoles: Role[] = [
 		leadership: false,
 		benefit: 'Loyalty',
 		vacant: true,
+		skillBonus: 0,
 	},
 	{
 		id: 4,
@@ -225,6 +248,7 @@ export const initialRoles: Role[] = [
 		leadership: false,
 		benefit: 'Stability',
 		vacant: true,
+		skillBonus: 0,
 	},
 	{
 		id: 5,
@@ -235,6 +259,7 @@ export const initialRoles: Role[] = [
 		leadership: false,
 		benefit: 'Stability',
 		vacant: true,
+		skillBonus: 0,
 	},
 	{
 		id: 6,
@@ -245,6 +270,7 @@ export const initialRoles: Role[] = [
 		leadership: false,
 		benefit: 'Loyalty',
 		vacant: true,
+		skillBonus: 0,
 	},
 	{
 		id: 7,
@@ -255,6 +281,7 @@ export const initialRoles: Role[] = [
 		leadership: false,
 		benefit: 'Stability',
 		vacant: true,
+		skillBonus: 0,
 	},
 	{
 		id: 8,
@@ -265,6 +292,7 @@ export const initialRoles: Role[] = [
 		leadership: false,
 		benefit: 'Economy',
 		vacant: true,
+		skillBonus: 0,
 	},
 	{
 		id: 9,
@@ -275,6 +303,7 @@ export const initialRoles: Role[] = [
 		leadership: false,
 		benefit: 'Economy',
 		vacant: true,
+		skillBonus: 0,
 	},
 	{
 		id: 10,
@@ -285,6 +314,7 @@ export const initialRoles: Role[] = [
 		leadership: false,
 		benefit: 'Loyalty',
 		vacant: true,
+		skillBonus: 0,
 	},
 	{
 		id: 11,
@@ -295,6 +325,7 @@ export const initialRoles: Role[] = [
 		leadership: false,
 		benefit: 'Economy',
 		vacant: true,
+		skillBonus: 0,
 	},
 	{
 		id: 12,
@@ -305,6 +336,7 @@ export const initialRoles: Role[] = [
 		leadership: false,
 		benefit: 'Economy',
 		vacant: true,
+		skillBonus: 0,
 	},
 	{
 		id: 13,
@@ -315,5 +347,6 @@ export const initialRoles: Role[] = [
 		leadership: false,
 		benefit: 'Loyalty',
 		vacant: true,
+		skillBonus: 0,
 	},
 ];

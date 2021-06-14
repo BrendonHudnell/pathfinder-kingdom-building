@@ -45,7 +45,7 @@ export function ShellLayout(): ReactElement {
 		<Router>
 			<div className={classes.layout}>
 				<KingdomView />
-				<Container className={classes.content}>
+				<Container className={classes.content} maxWidth={false}>
 					<Switch>
 						<Route exact path="/" component={HexGridView} />
 						<Route exact path="/leadership" component={LeadershipView} />

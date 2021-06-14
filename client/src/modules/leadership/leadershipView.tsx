@@ -67,6 +67,8 @@ export function LeadershipView(): ReactElement {
 						<TableCell>Attribute</TableCell>
 						<TableCell>Ability Bonus</TableCell>
 						<TableCell>Leadership?</TableCell>
+						<TableCell>Related Skill</TableCell>
+						<TableCell>Skill Bonus</TableCell>
 						<TableCell>Benefit</TableCell>
 						<TableCell>
 							<Button
