@@ -101,6 +101,9 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 					<Typography>Population: {population.toLocaleString()}</Typography>
 				</Grid>
 				<Grid item>
+					<Typography>Government:</Typography>
+				</Grid>
+				<Grid item>
 					<Select
 						style={{ minWidth: '17ch' }}
 						value={settlement.government}

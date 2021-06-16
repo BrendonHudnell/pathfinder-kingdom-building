@@ -60,7 +60,7 @@ export const settlementGovernmentMenuItems: SettlementGovernmentMenuItem[] = [
 		value: SettlementGovernment.OVERLORD,
 	},
 	{
-		title: '+2 Corruption, +2 Productivity, +2 Crime, -6 Law',
+		title: '+2 Corruption, +2 Crime, +2 Productivity, -6 Law',
 		value: SettlementGovernment.SECRET_SYNDICATE,
 	},
 ];

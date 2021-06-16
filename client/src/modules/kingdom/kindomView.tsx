@@ -35,6 +35,7 @@ import { selectTotalDistricts, useTotalPopulation } from '../district';
 import {
 	alignmentUpdated,
 	fameUpdated,
+	governmentUpdated,
 	holidayEdictLevelUpdated,
 	incrementMonth,
 	nameUpdated,
@@ -57,8 +58,11 @@ import {
 	promotionEdictMenuItems,
 	TaxationEdict,
 	taxationEdictMenuItems,
-	useAlignmentBonuses,
-	useEdictsBonuses,
+	getAlignmentBonuses,
+	getEdictsBonuses,
+	KingdomGovernment,
+	kingdomGovernmentMenuItems,
+	getKingdomGovernmentBonuses,
 } from './kingdomUtils';
 import { KingdomTooltip } from './kingdomTooltip';
 
@@ -92,9 +96,14 @@ export function KingdomView(): ReactElement {
 		(state) => state.kingdom.taxationEdict
 	);
 	const fameInfo = useAppSelector((state) => state.kingdom.fame);
+	const government = useAppSelector((state) => state.kingdom.government);
 
-	const edictBonuses = useEdictsBonuses();
-	const alignmentBonuses = useAlignmentBonuses();
+	const edictBonuses = getEdictsBonuses(
+		holidayEdictLevel,
+		promotionEdictLevel,
+		taxationEdictLevel
+	);
+	const alignmentBonuses = getAlignmentBonuses(alignment);
 	const consumption = edictBonuses.consumption;
 	const kingdomEconomy = edictBonuses.economy + alignmentBonuses.economy;
 	const kingdomStability = edictBonuses.stability + alignmentBonuses.stability;
@@ -130,6 +139,8 @@ export function KingdomView(): ReactElement {
 	const kingdomInfamy = getKingdomInfamy(fameInfo);
 	const kingdomUnsetFame = getUnsetKingdomFame(fameInfo, size);
 
+	const kingdomGovernmentBonuses = getKingdomGovernmentBonuses(government);
+
 	const totalConsumption =
 		consumption + size + totalDistricts - hexConsumptionDecrease; // TODO add army slice info
 
@@ -155,13 +166,28 @@ export function KingdomView(): ReactElement {
 		currentUnrest;
 
 	const totalCorruption =
-		Math.floor(settlementCorruption / 10) + alignmentBonuses.corruption;
-	const totalCrime = Math.floor(settlementCrime / 10) + alignmentBonuses.crime;
-	const totalLaw = Math.floor(settlementLaw / 10) + alignmentBonuses.law;
-	const totalLore = Math.floor(settlementLore / 10) + alignmentBonuses.lore;
-	const totalProductivity = Math.floor(settlementProductivity / 10);
+		Math.floor(settlementCorruption / 10) +
+		alignmentBonuses.corruption +
+		kingdomGovernmentBonuses.corruption;
+	const totalCrime =
+		Math.floor(settlementCrime / 10) +
+		alignmentBonuses.crime +
+		kingdomGovernmentBonuses.crime;
+	const totalLaw =
+		Math.floor(settlementLaw / 10) +
+		alignmentBonuses.law +
+		kingdomGovernmentBonuses.law;
+	const totalLore =
+		Math.floor(settlementLore / 10) +
+		alignmentBonuses.lore +
+		kingdomGovernmentBonuses.lore;
+	const totalProductivity =
+		Math.floor(settlementProductivity / 10) +
+		kingdomGovernmentBonuses.productivity;
 	const totalSociety =
-		Math.floor(settlementSociety / 10) + alignmentBonuses.society;
+		Math.floor(settlementSociety / 10) +
+		alignmentBonuses.society +
+		kingdomGovernmentBonuses.society;
 
 	const totalFame =
 		Math.floor((settlementLore + settlementSociety) / 10) +
@@ -214,6 +240,26 @@ export function KingdomView(): ReactElement {
 							}
 						>
 							{alignmentMenuItems.map((item) => (
+								<MenuItem key={item.value} value={item.value}>
+									<Tooltip title={<Typography>{item.title}</Typography>}>
+										<Typography>{item.value}</Typography>
+									</Tooltip>
+								</MenuItem>
+							))}
+						</Select>
+					</Grid>
+					<Grid item>
+						<Typography>Government:</Typography>
+					</Grid>
+					<Grid item>
+						<Select
+							style={{ minWidth: '17ch' }}
+							value={government}
+							onChange={(e) =>
+								dispatch(governmentUpdated(e.target.value as KingdomGovernment))
+							}
+						>
+							{kingdomGovernmentMenuItems.map((item) => (
 								<MenuItem key={item.value} value={item.value}>
 									<Tooltip title={<Typography>{item.title}</Typography>}>
 										<Typography>{item.value}</Typography>

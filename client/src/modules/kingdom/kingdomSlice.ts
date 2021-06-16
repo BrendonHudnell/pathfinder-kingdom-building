@@ -7,6 +7,7 @@ import {
 	HolidayEdict,
 	initialKingdomState,
 	KingdomFame,
+	KingdomGovernment,
 	PromotionEdict,
 	TaxationEdict,
 } from './kingdomUtils';
@@ -21,6 +22,7 @@ export interface KingdomState {
 	promotionEdict: PromotionEdict;
 	taxationEdict: TaxationEdict;
 	fame: KingdomFame;
+	government: KingdomGovernment;
 }
 
 export const fetchKingdomData = createAsyncThunk(
@@ -74,6 +76,9 @@ export const kingdomSlice = createSlice({
 			state.fame[level].set = true;
 			state.fame[level].value = value;
 		},
+		governmentUpdated: (state, action: PayloadAction<KingdomGovernment>) => {
+			state.government = action.payload;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(
@@ -104,6 +109,7 @@ export const {
 	promotionEdictLevelUpdated,
 	taxationEdictLevelUpdated,
 	fameUpdated,
+	governmentUpdated,
 } = kingdomSlice.actions;
 
 export const kingdomReducer = kingdomSlice.reducer;
