@@ -1,4 +1,5 @@
 import { numberReducer } from '../../components/arrayNumberReducer';
+import { useAppSelector } from '../../components/store';
 import { GovernmentBonusObject } from '../settlement';
 import { KingdomState } from './kingdomSlice';
 
@@ -250,9 +251,8 @@ export interface EdictBonusObject {
 	consumption: number;
 }
 
-export function getAlignmentBonuses(
-	alignment: Alignment
-): AlignmentBonusObject {
+export function useAlignmentBonuses(): AlignmentBonusObject {
+	const alignment = useAppSelector((state) => state.kingdom.alignment);
 	switch (alignment) {
 		case Alignment.LG:
 			return {
@@ -356,16 +356,13 @@ export function getAlignmentBonuses(
 	}
 }
 
-export function getEdictsBonuses(
-	holidayEdict: HolidayEdict,
-	promotionEdict: PromotionEdict,
-	taxationEdict: TaxationEdict
-): EdictBonusObject {
+export function useEdictsBonuses(): EdictBonusObject {
 	let economy = 0;
 	let stability = 0;
 	let loyalty = 0;
 	let consumption = 0;
 
+	const holidayEdict = useAppSelector((state) => state.kingdom.holidayEdict);
 	if (holidayEdict === HolidayEdict.NONE) {
 		loyalty -= 1;
 	} else if (holidayEdict === HolidayEdict.ONE) {
@@ -382,6 +379,9 @@ export function getEdictsBonuses(
 		consumption += 8;
 	}
 
+	const promotionEdict = useAppSelector(
+		(state) => state.kingdom.promotionEdict
+	);
 	if (promotionEdict === PromotionEdict.NONE) {
 		stability -= 1;
 	} else if (promotionEdict === PromotionEdict.TOKEN) {
@@ -398,6 +398,7 @@ export function getEdictsBonuses(
 		consumption += 8;
 	}
 
+	const taxationEdict = useAppSelector((state) => state.kingdom.taxationEdict);
 	if (taxationEdict === TaxationEdict.NONE) {
 		loyalty += 1;
 	} else if (taxationEdict === TaxationEdict.LIGHT) {
@@ -438,9 +439,8 @@ export function getUnsetKingdomFame(
 		.reduce(numberReducer, 0);
 }
 
-export function getKingdomGovernmentBonuses(
-	government: KingdomGovernment
-): GovernmentBonusObject {
+export function useKingdomGovernmentBonuses(): GovernmentBonusObject {
+	const government = useAppSelector((state) => state.kingdom.government);
 	switch (government) {
 		case KingdomGovernment.FEUDAL_MONARCHY:
 		case KingdomGovernment.AUTOCRACY:
