@@ -128,6 +128,7 @@ export function StatsView(): ReactElement {
 					style={{ minWidth: '5ch' }}
 					type="number"
 					value={currentUnrest}
+					inputProps={{ min: 0 }}
 					onChange={(e) => dispatch(unrestUpdated(Number(e.target.value)))}
 				/>
 			</Grid>
