@@ -19,6 +19,7 @@ import {
 	heldByUpdated,
 	leadershipToggled,
 	Role,
+	skillBonusUpdated,
 	vacantToggled,
 	viceroyDeleted,
 } from './leadershipSlice';
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme) => {
 
 export interface RoleRowProps {
 	role: Role;
+	skillsEnabled: boolean;
 }
 
 export function RoleRow(props: RoleRowProps): ReactElement {
@@ -44,11 +46,12 @@ export function RoleRow(props: RoleRowProps): ReactElement {
 		heldBy,
 		attribute,
 		abilityBonus,
+		skillBonus,
 		leadership,
 		benefit,
 	} = props.role;
 
-	const { attributeOptions } = roleConstantsList.find(
+	const { attributeOptions, skillAbility } = roleConstantsList.find(
 		(el) => el.name === name
 	)!;
 
@@ -71,6 +74,7 @@ export function RoleRow(props: RoleRowProps): ReactElement {
 			</TableCell>
 			<TableCell>
 				<TextField
+					style={{ minWidth: '30ch' }}
 					disabled={vacant}
 					value={heldBy}
 					onChange={(e) =>
@@ -121,11 +125,30 @@ export function RoleRow(props: RoleRowProps): ReactElement {
 					onChange={() => dispatch(leadershipToggled(id))}
 				/>
 			</TableCell>
+			{props.skillsEnabled ? (
+				<TableCell className={vacant ? classes.disabled : ''}>
+					<Typography>{skillAbility}</Typography>
+				</TableCell>
+			) : null}
+			{props.skillsEnabled ? (
+				<TableCell>
+					<TextField
+						disabled={vacant}
+						type="number"
+						value={skillBonus}
+						onChange={(e) =>
+							dispatch(
+								skillBonusUpdated({ id, skillBonus: Number(e.target.value) })
+							)
+						}
+					/>
+				</TableCell>
+			) : null}
 			<TableCell colSpan={name === 'Viceroy' ? 1 : 2}>
 				{name === 'Ruler' || name === 'Second Ruler' || name === 'Spymaster' ? (
 					<Select
 						disabled={vacant}
-						style={{ minWidth: '34ch' }}
+						style={{ minWidth: '30ch' }}
 						value={benefit}
 						onChange={(e) =>
 							dispatch(

@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import { ShellLayout } from './shellLayout';
 import { useAppDispatch } from '../../components/store';
@@ -75,7 +76,9 @@ export function ShellView(): ReactElement {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<ShellLayout />
+			<Router>
+				<ShellLayout />
+			</Router>
 		</ThemeProvider>
 	);
 }

@@ -1,4 +1,6 @@
+import { numberReducer } from '../../components/arrayNumberReducer';
 import { useAppSelector } from '../../components/store';
+import { GovernmentBonusObject } from '../settlement';
 import { KingdomState } from './kingdomSlice';
 
 export enum Alignment {
@@ -37,6 +39,25 @@ export enum TaxationEdict {
 	OVERWHELMING = 'Overwhelming',
 }
 
+export enum KingdomGovernment {
+	FEUDAL_MONARCHY = 'Feudal Monarchy',
+	AUTOCRACY = 'Autocracy',
+	MAGOCRACY = 'Magocracy',
+	OLIGARCHY = 'Oligarchy',
+	OVERLORD = 'Overlord',
+	REPUBLIC = 'Republic',
+	SECRET_SYNDICATE = 'Secret Syndicate',
+	THEOCRACY = 'Theocracy',
+}
+
+export type FameKingdomLevel = 1 | 11 | 26 | 51 | 101 | 201;
+
+export enum FameValue {
+	NONE = 'none',
+	FAME = 'fame',
+	INFAMY = 'infamy',
+}
+
 export interface AlignmentMenuItem {
 	title: string;
 	value: Alignment;
@@ -56,6 +77,18 @@ export interface TaxationEdictMenuItem {
 	title: string;
 	value: TaxationEdict;
 }
+
+export interface KingdomGovernmentMenuItem {
+	title: string;
+	value: KingdomGovernment;
+}
+
+export interface FameInfo {
+	set: boolean;
+	value: FameValue;
+}
+
+export type KingdomFame = Record<FameKingdomLevel, FameInfo>;
 
 export const alignmentMenuItems: AlignmentMenuItem[] = [
 	{
@@ -165,10 +198,50 @@ export const taxationEdictMenuItems: TaxationEdictMenuItem[] = [
 	},
 ];
 
+export const kingdomGovernmentMenuItems: KingdomGovernmentMenuItem[] = [
+	{
+		title: 'No bonuses',
+		value: KingdomGovernment.FEUDAL_MONARCHY,
+	},
+	{
+		title: 'No bonuses',
+		value: KingdomGovernment.AUTOCRACY,
+	},
+	{
+		title: '+2 Lore, -1 Productivity, -1 Society',
+		value: KingdomGovernment.MAGOCRACY,
+	},
+	{
+		title: '+1 Corruption, +1 Society, -1 Law, -1 Lore',
+		value: KingdomGovernment.OLIGARCHY,
+	},
+	{
+		title: '+1 Corruption, +1 Law, -1 Crime, -1 Society',
+		value: KingdomGovernment.OVERLORD,
+	},
+	{
+		title: '+1 Productivity, +1 Society, -1 Crime, -1 Law',
+		value: KingdomGovernment.REPUBLIC,
+	},
+	{
+		title: '+1 Corruption, +1 Crime, +1 Productivity, -3 Law',
+		value: KingdomGovernment.SECRET_SYNDICATE,
+	},
+	{
+		title: '+1 Law, +1 Lore, -1 Corruption, -1 Society',
+		value: KingdomGovernment.THEOCRACY,
+	},
+];
+
 export interface AlignmentBonusObject {
 	economy: number;
 	stability: number;
 	loyalty: number;
+	corruption: number;
+	crime: number;
+	law: number;
+	lore: number;
+	society: number;
 }
 
 export interface EdictBonusObject {
@@ -180,26 +253,106 @@ export interface EdictBonusObject {
 
 export function useAlignmentBonuses(): AlignmentBonusObject {
 	const alignment = useAppSelector((state) => state.kingdom.alignment);
-
 	switch (alignment) {
 		case Alignment.LG:
-			return { economy: 2, stability: 0, loyalty: 2 };
+			return {
+				economy: 2,
+				stability: 0,
+				loyalty: 2,
+				corruption: 0,
+				crime: 0,
+				law: 1,
+				lore: 0,
+				society: 1,
+			};
 		case Alignment.NG:
-			return { economy: 0, stability: 2, loyalty: 2 };
+			return {
+				economy: 0,
+				stability: 2,
+				loyalty: 2,
+				corruption: 0,
+				crime: 0,
+				law: 0,
+				lore: 1,
+				society: 1,
+			};
 		case Alignment.CG:
-			return { economy: 0, stability: 0, loyalty: 4 };
+			return {
+				economy: 0,
+				stability: 0,
+				loyalty: 4,
+				corruption: 0,
+				crime: 1,
+				law: 0,
+				lore: 0,
+				society: 1,
+			};
 		case Alignment.LN:
-			return { economy: 2, stability: 2, loyalty: 0 };
+			return {
+				economy: 2,
+				stability: 2,
+				loyalty: 0,
+				corruption: 0,
+				crime: 0,
+				law: 1,
+				lore: 1,
+				society: 0,
+			};
 		case Alignment.N:
-			return { economy: 0, stability: 4, loyalty: 0 };
+			return {
+				economy: 0,
+				stability: 4,
+				loyalty: 0,
+				corruption: 0,
+				crime: 0,
+				law: 0,
+				lore: 2,
+				society: 0,
+			};
 		case Alignment.CN:
-			return { economy: 0, stability: 2, loyalty: 2 };
+			return {
+				economy: 0,
+				stability: 2,
+				loyalty: 2,
+				corruption: 0,
+				crime: 1,
+				law: 0,
+				lore: 1,
+				society: 0,
+			};
 		case Alignment.LE:
-			return { economy: 4, stability: 0, loyalty: 0 };
+			return {
+				economy: 4,
+				stability: 0,
+				loyalty: 0,
+				corruption: 1,
+				crime: 0,
+				law: 1,
+				lore: 0,
+				society: 0,
+			};
 		case Alignment.NE:
-			return { economy: 2, stability: 2, loyalty: 0 };
+			return {
+				economy: 2,
+				stability: 2,
+				loyalty: 0,
+				corruption: 1,
+				crime: 0,
+				law: 0,
+				lore: 1,
+				society: 0,
+			};
 		case Alignment.CE:
-			return { economy: 2, stability: 0, loyalty: 2 };
+			return {
+				economy: 2,
+				stability: 0,
+				loyalty: 2,
+				corruption: 1,
+				crime: 1,
+				law: 0,
+				lore: 0,
+				society: 0,
+			};
 	}
 }
 
@@ -265,6 +418,97 @@ export function useEdictsBonuses(): EdictBonusObject {
 	return { economy, stability, loyalty, consumption };
 }
 
+export function getKingdomFame(fame: KingdomFame): number {
+	return Object.values(fame)
+		.map((level) => (level.value === FameValue.FAME ? 1 : 0))
+		.reduce(numberReducer, 0);
+}
+
+export function getKingdomInfamy(fame: KingdomFame): number {
+	return Object.values(fame)
+		.map((level) => (level.value === FameValue.INFAMY ? 1 : 0))
+		.reduce(numberReducer, 0);
+}
+
+export function getUnsetKingdomFame(
+	fame: KingdomFame,
+	kingdomSize: number
+): number {
+	return Object.entries(fame)
+		.map(([level, info]) => (kingdomSize >= Number(level) && !info.set ? 1 : 0))
+		.reduce(numberReducer, 0);
+}
+
+export function useKingdomGovernmentBonuses(): GovernmentBonusObject {
+	const government = useAppSelector((state) => state.kingdom.government);
+	switch (government) {
+		case KingdomGovernment.FEUDAL_MONARCHY:
+		case KingdomGovernment.AUTOCRACY:
+			return {
+				corruption: 0,
+				crime: 0,
+				law: 0,
+				lore: 0,
+				productivity: 0,
+				society: 0,
+			};
+		case KingdomGovernment.MAGOCRACY:
+			return {
+				corruption: 0,
+				crime: 0,
+				law: 0,
+				lore: 2,
+				productivity: -1,
+				society: -1,
+			};
+		case KingdomGovernment.OLIGARCHY:
+			return {
+				corruption: 1,
+				crime: 0,
+				law: -1,
+				lore: -1,
+				productivity: 0,
+				society: 1,
+			};
+		case KingdomGovernment.OVERLORD:
+			return {
+				corruption: 1,
+				crime: -1,
+				law: 1,
+				lore: 0,
+				productivity: 0,
+				society: -1,
+			};
+		case KingdomGovernment.REPUBLIC:
+			return {
+				corruption: 0,
+				crime: -1,
+				law: -1,
+				lore: 0,
+				productivity: 1,
+				society: 1,
+			};
+		case KingdomGovernment.SECRET_SYNDICATE:
+			return {
+				corruption: 1,
+				crime: 1,
+				law: -3,
+				lore: 0,
+				productivity: 1,
+				society: 0,
+			};
+		case KingdomGovernment.THEOCRACY:
+			return {
+				corruption: -1,
+				crime: 0,
+				law: 1,
+				lore: 1,
+				productivity: 0,
+				society: -1,
+			};
+	}
+}
+
 // TODO remove once hooked up to server to fetch initial state
 export const initialKingdomState: KingdomState = {
 	name: 'Untitled',
@@ -275,4 +519,39 @@ export const initialKingdomState: KingdomState = {
 	holidayEdict: HolidayEdict.NONE,
 	promotionEdict: PromotionEdict.NONE,
 	taxationEdict: TaxationEdict.NONE,
+	fame: {
+		1: {
+			set: false,
+			value: FameValue.NONE,
+		},
+		11: {
+			set: false,
+			value: FameValue.NONE,
+		},
+		26: {
+			set: false,
+			value: FameValue.NONE,
+		},
+		51: {
+			set: false,
+			value: FameValue.NONE,
+		},
+		101: {
+			set: false,
+			value: FameValue.NONE,
+		},
+		201: {
+			set: false,
+			value: FameValue.NONE,
+		},
+	},
+	government: KingdomGovernment.FEUDAL_MONARCHY,
+	options: {
+		settlementGovernment: false,
+		settlementModifiers: false,
+		kingdomFame: false,
+		kingdomGovernment: false,
+		kingdomModifiers: false,
+		leadershipSkills: false,
+	},
 };

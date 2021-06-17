@@ -15,6 +15,13 @@ export interface BuildingInfo {
 	upgradeTo?: BuildingDisplayType[];
 	baseValueIncrease?: number;
 	special?: string;
+	corruption?: number;
+	crime?: number;
+	law?: number;
+	lore?: number;
+	productivity?: number;
+	society?: number;
+	fame?: number;
 }
 
 export type BuildingInfoList = Record<BuildingDisplayType, BuildingInfo>;
@@ -29,6 +36,9 @@ export const buildingInfoList: BuildingInfoList = {
 		loyalty: 2,
 		discount: ["Caster's Tower", 'Library', 'Magic Shop'],
 		upgradeTo: ['University'],
+		lore: 2,
+		productivity: 1,
+		society: 2, // TODO increase Lore bonus by 2 for questions relating to one Knowledge or Profession skill
 	},
 	Alchemist: {
 		name: 'Alchemist',
@@ -47,6 +57,8 @@ export const buildingInfoList: BuildingInfoList = {
 		size: 4,
 		stability: 4,
 		limit: '1 per settlement',
+		crime: 1,
+		fame: 1,
 	},
 	Bank: {
 		name: 'Bank',
@@ -66,6 +78,7 @@ export const buildingInfoList: BuildingInfoList = {
 		stability: 1,
 		loyalty: 3,
 		discount: ['Library', 'Museum', 'Theater'],
+		fame: 1,
 	},
 	Barracks: {
 		name: 'Barracks',
@@ -76,6 +89,7 @@ export const buildingInfoList: BuildingInfoList = {
 		unrest: -1,
 		upgradeTo: ['Garrison'],
 		defense: 2,
+		law: 1,
 	},
 	'Black Market': {
 		name: 'Black Market',
@@ -87,6 +101,8 @@ export const buildingInfoList: BuildingInfoList = {
 		unrest: 1,
 		limit: 'Adjacent to 2 houses',
 		baseValueIncrease: 2000,
+		corruption: 2,
+		crime: 2,
 	},
 	Brewery: {
 		name: 'Brewery',
@@ -114,6 +130,8 @@ export const buildingInfoList: BuildingInfoList = {
 		economy: 1,
 		stability: 1,
 		loyalty: -1,
+		corruption: 1,
+		law: 1,
 	},
 	"Caster's Tower": {
 		name: "Caster's Tower",
@@ -136,6 +154,7 @@ export const buildingInfoList: BuildingInfoList = {
 		discount: ['Noble Villa', 'Town Hall'],
 		limit: '1 per settlement',
 		defense: 8,
+		fame: 1,
 	},
 	Cathedral: {
 		name: 'Cathedral',
@@ -148,6 +167,8 @@ export const buildingInfoList: BuildingInfoList = {
 		discount: ['Academy', 'Temple'],
 		limit: '1 per settlement',
 		special: 'Halves Consumption for Promotion Edicts',
+		law: 2,
+		fame: 1,
 	},
 	Cistern: {
 		name: 'Cistern',
@@ -178,6 +199,8 @@ export const buildingInfoList: BuildingInfoList = {
 		loyalty: 2,
 		unrest: 1,
 		limit: 'Adjacent to 1 house',
+		corruption: 1,
+		crime: 1,
 	},
 	Dump: {
 		name: 'Dump',
@@ -217,6 +240,9 @@ export const buildingInfoList: BuildingInfoList = {
 		stability: -1,
 		special:
 			'Increase the value of trade routes (see Trade Edicts) by 5% (maximum 100%)',
+		crime: 1,
+		lore: 1,
+		society: 2,
 	},
 	Foundry: {
 		name: 'Foundry',
@@ -230,6 +256,7 @@ export const buildingInfoList: BuildingInfoList = {
 		limit: 'Adjacent to water district border',
 		special:
 			'Increase the Economy and BP earned per turn by 1 for 1 Mine connected to this settlement by a river or Road',
+		productivity: 1,
 	},
 	Garrison: {
 		name: 'Garrison',
@@ -268,6 +295,8 @@ export const buildingInfoList: BuildingInfoList = {
 		loyalty: 2,
 		discount: ['Pier', 'Stable', 'Trade Shop'],
 		baseValueIncrease: 1000,
+		law: 1,
+		productivity: 2,
 	},
 	Herbalist: {
 		name: 'Herbalist',
@@ -286,6 +315,8 @@ export const buildingInfoList: BuildingInfoList = {
 		stability: 2,
 		loyalty: 1,
 		special: 'Increase Stability by 2 during plague events',
+		lore: 1,
+		productivity: 2,
 	},
 	House: {
 		name: 'House',
@@ -305,6 +336,7 @@ export const buildingInfoList: BuildingInfoList = {
 		loyalty: 1,
 		limit: 'Adjacent to 1 house',
 		baseValueIncrease: 500,
+		society: 1,
 	},
 	Jail: {
 		name: 'Jail',
@@ -315,6 +347,8 @@ export const buildingInfoList: BuildingInfoList = {
 		stability: 2,
 		loyalty: 2,
 		unrest: -2,
+		crime: -1,
+		law: 1,
 	},
 	Library: {
 		name: 'Library',
@@ -324,6 +358,7 @@ export const buildingInfoList: BuildingInfoList = {
 		economy: 1,
 		loyalty: 1,
 		upgradeTo: ['Academy'],
+		lore: 1,
 	},
 	'Luxury Store': {
 		name: 'Luxury Store',
@@ -353,6 +388,9 @@ export const buildingInfoList: BuildingInfoList = {
 		size: 2,
 		economy: 2,
 		discount: ["Caster's Tower", 'Library', 'Magic Shop'],
+		lore: 2,
+		society: 1, // TODO increase Lore bonus by 2 for questions relating to Knowledge (arcana)
+		fame: 1,
 	},
 	'Magical Streetlamps': {
 		name: 'Magical Streetlamps',
@@ -362,6 +400,7 @@ export const buildingInfoList: BuildingInfoList = {
 		limit:
 			'Settlement must have a Cathedral, Magic Shop, Magical Academy, or Temple',
 		special: 'Can share a lot with any building or improvement',
+		crime: -1,
 	},
 	Mansion: {
 		name: 'Mansion',
@@ -370,6 +409,8 @@ export const buildingInfoList: BuildingInfoList = {
 		size: 1,
 		stability: 1,
 		upgradeTo: ['Noble Villa'],
+		law: 1,
+		society: 1,
 	},
 	Market: {
 		name: 'Market',
@@ -391,6 +432,7 @@ export const buildingInfoList: BuildingInfoList = {
 		economy: 1,
 		special:
 			'Increase Loyalty by 1/4 the CR of the highest-CR creature in the Menagerie',
+		fame: 1,
 	},
 	'Military Academy': {
 		name: 'Military Academy',
@@ -404,6 +446,9 @@ export const buildingInfoList: BuildingInfoList = {
 		limit: '1 per settlement',
 		special:
 			'Armies and commanders recruited at the settlement gain one bonus tactic (see Army Tactics)',
+		law: 1,
+		lore: 1,
+		fame: 1,
 	},
 	Mill: {
 		name: 'Mill',
@@ -415,6 +460,7 @@ export const buildingInfoList: BuildingInfoList = {
 		limit: 'Adjacent to water district border',
 		special:
 			'With GM approval, you can construct a windmill at the same cost without the water district border requirement',
+		productivity: 1,
 	},
 	Mint: {
 		name: 'Mint',
@@ -425,6 +471,7 @@ export const buildingInfoList: BuildingInfoList = {
 		economy: 3,
 		stability: 1,
 		loyalty: 3,
+		fame: 1,
 	},
 	Moat: {
 		name: 'Moat',
@@ -443,6 +490,8 @@ export const buildingInfoList: BuildingInfoList = {
 		cost: 16,
 		size: 2,
 		stability: 1,
+		law: 1,
+		lore: 1,
 	},
 	Monument: {
 		name: 'Monument',
@@ -461,6 +510,9 @@ export const buildingInfoList: BuildingInfoList = {
 		size: 2,
 		economy: 1,
 		loyalty: 1,
+		lore: 2, // TODO increase Lore bonus by 2 for questions relating to Knowledge (history); apply Lore bonus on Appraise checks regarding art objects
+		society: 1,
+		fame: 1, // TODO see description
 	},
 	'Noble Villa': {
 		name: 'Noble Villa',
@@ -472,6 +524,8 @@ export const buildingInfoList: BuildingInfoList = {
 		stability: 1,
 		loyalty: 1,
 		discount: ['Exotic Artisan', 'Luxury Store', 'Mansion'],
+		society: 1,
+		fame: 1,
 	},
 	Observatory: {
 		name: 'Observatory',
@@ -480,6 +534,7 @@ export const buildingInfoList: BuildingInfoList = {
 		cost: 12,
 		size: 1,
 		stability: 1,
+		lore: 2,
 	},
 	Orphanage: {
 		name: 'Orphanage',
@@ -503,6 +558,8 @@ export const buildingInfoList: BuildingInfoList = {
 		baseValueIncrease: 1000,
 		special:
 			'You may make two special edicts per turn, but take a –2 penalty on kingdom checks associated with each special edict',
+		law: 2,
+		fame: 1,
 	},
 	Park: {
 		name: 'Park',
@@ -519,6 +576,7 @@ export const buildingInfoList: BuildingInfoList = {
 		size: 0,
 		economy: 2,
 		stability: 1,
+		productivity: 2,
 	},
 	Pier: {
 		name: 'Pier',
@@ -531,6 +589,7 @@ export const buildingInfoList: BuildingInfoList = {
 		limit: 'Adjacent to water district border',
 		upgradeTo: ['Waterfront'],
 		baseValueIncrease: 1000,
+		crime: 1,
 	},
 	'Sewer System': {
 		name: 'Sewer System',
@@ -541,6 +600,8 @@ export const buildingInfoList: BuildingInfoList = {
 		stability: 2,
 		loyalty: 1,
 		discount: ['Cistern', 'Dump'],
+		crime: 1,
+		productivity: 1,
 	},
 	Shop: {
 		name: 'Shop',
@@ -551,6 +612,7 @@ export const buildingInfoList: BuildingInfoList = {
 		limit: 'Adjacent to 1 House or Mansion',
 		upgradeTo: ['Luxury Store', 'Market'],
 		baseValueIncrease: 500,
+		productivity: 1,
 	},
 	Shrine: {
 		name: 'Shrine',
@@ -592,6 +654,7 @@ export const buildingInfoList: BuildingInfoList = {
 		discount: ['Stable', 'Tannery'],
 		special:
 			'Farms in this hex or adjacent hexes reduce Consumption by 3 instead of 2',
+		productivity: 1,
 	},
 	Tannery: {
 		name: 'Tannery',
@@ -601,6 +664,7 @@ export const buildingInfoList: BuildingInfoList = {
 		economy: 1,
 		stability: 1,
 		limit: 'Cannot be adjacent to House, Mansion, Noble Villa, or Tenement',
+		society: -1,
 	},
 	Tavern: {
 		name: 'Tavern',
@@ -611,6 +675,7 @@ export const buildingInfoList: BuildingInfoList = {
 		loyalty: 1,
 		limit: 'Adjacent to 1 House or Mansion',
 		baseValueIncrease: 500,
+		corruption: 1,
 	},
 	Temple: {
 		name: 'Temple',
@@ -652,6 +717,7 @@ export const buildingInfoList: BuildingInfoList = {
 		stability: 1,
 		loyalty: 1,
 		discount: ['Barracks', 'Cistern', 'Dump', 'Jail', 'Watchtower'],
+		law: 1,
 	},
 	'Trade Shop': {
 		name: 'Trade Shop',
@@ -664,6 +730,7 @@ export const buildingInfoList: BuildingInfoList = {
 		limit: 'Adjacent to 1 House',
 		upgradeTo: ['Guildhall'],
 		baseValueIncrease: 500,
+		productivity: 1,
 	},
 	University: {
 		name: 'University',
@@ -681,6 +748,9 @@ export const buildingInfoList: BuildingInfoList = {
 			'Military Academy',
 			'Museum',
 		],
+		lore: 4, // TODO increase Lore bonus by 4 for questions relating to one Knowledge or Profession skill
+		society: 3,
+		fame: 1,
 	},
 	Watchtower: {
 		name: 'Watchtower',
@@ -702,6 +772,7 @@ export const buildingInfoList: BuildingInfoList = {
 		limit: 'Adjacent to water district border, 1 per settlement',
 		baseValueIncrease: 4000,
 		special: 'Halves Loyalty penalty for Taxation edicts',
+		productivity: 2,
 	},
 	Waterway: {
 		name: 'Waterway',

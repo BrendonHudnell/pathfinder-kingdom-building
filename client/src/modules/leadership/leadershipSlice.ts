@@ -17,6 +17,7 @@ export interface Role {
 	leadership: boolean;
 	benefit: string;
 	vacant: boolean;
+	skillBonus: number;
 }
 
 const leadershipAdapter = createEntityAdapter<Role>();
@@ -46,6 +47,7 @@ export const viceroyAdded = createAsyncThunk(
 			leadership: false,
 			benefit: 'Economy',
 			vacant: true,
+			skillBonus: 0,
 		};
 
 		return viceroy;
@@ -110,6 +112,16 @@ export const leadershipSlice = createSlice({
 				role.benefit = benefit;
 			}
 		},
+		skillBonusUpdated: (
+			state,
+			action: PayloadAction<{ id: EntityId; skillBonus: number }>
+		) => {
+			const { id, skillBonus } = action.payload;
+			const role = state.entities[id];
+			if (role) {
+				role.skillBonus = skillBonus;
+			}
+		},
 		secondRulerToggled: leadershipAdapter.updateOne,
 		viceroyDeleted: leadershipAdapter.removeOne,
 	},
@@ -138,6 +150,7 @@ export const {
 	benefitUpdated,
 	secondRulerToggled,
 	viceroyDeleted,
+	skillBonusUpdated,
 } = leadershipSlice.actions;
 
 export const { selectAll: selectAllRoles } =

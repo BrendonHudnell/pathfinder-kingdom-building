@@ -11,6 +11,7 @@ import { BuildingDisplayType } from '../district';
 import {
 	createEmptySettlementBuildings,
 	SettlementBuildingList,
+	SettlementGovernment,
 } from './settlementUtils';
 
 export interface Settlement {
@@ -19,6 +20,7 @@ export interface Settlement {
 	hexId: EntityId;
 	districts: EntityId[];
 	buildings: SettlementBuildingList;
+	government: SettlementGovernment;
 }
 
 const settlementAdapter = createEntityAdapter<Settlement>();
@@ -44,6 +46,7 @@ export const addNewSettlement = createAsyncThunk(
 			hexId,
 			districts: [],
 			buildings: createEmptySettlementBuildings(),
+			government: SettlementGovernment.AUTOCRACY,
 		};
 
 		return newSettlement;
@@ -96,6 +99,21 @@ export const settlementSlice = createSlice({
 				settlement.buildings[building]--;
 			}
 		},
+		governmentUpdated: (
+			state,
+			action: PayloadAction<{
+				settlementId: EntityId;
+				government: SettlementGovernment;
+			}>
+		) => {
+			const { settlementId, government } = action.payload;
+
+			const settlement = state.entities[settlementId];
+
+			if (settlement) {
+				settlement.government = government;
+			}
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(
@@ -113,8 +131,12 @@ export const settlementSlice = createSlice({
 	},
 });
 
-export const { nameUpdated, buildingAdded, buildingRemoved } =
-	settlementSlice.actions;
+export const {
+	nameUpdated,
+	buildingAdded,
+	buildingRemoved,
+	governmentUpdated,
+} = settlementSlice.actions;
 
 export const {
 	selectAll: selectAllSettlements,

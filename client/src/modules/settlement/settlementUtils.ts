@@ -1,4 +1,4 @@
-import { numberReducer } from '../../components/arrayNumberReducer';
+import { objectAdditionReducer } from '../../components/objectAdditionReducer';
 import { useAppSelector } from '../../components/store';
 import {
 	BuildingDisplayType,
@@ -19,9 +19,61 @@ export type SettlementStat =
 	| 'stability'
 	| 'loyalty'
 	| 'baseValueIncrease'
-	| 'defense';
+	| 'defense'
+	| 'corruption'
+	| 'crime'
+	| 'law'
+	| 'lore'
+	| 'productivity'
+	| 'society'
+	| 'fame';
 
 export type SettlementBuildingList = Record<BuildingDisplayType, number>;
+
+export enum SettlementGovernment {
+	AUTOCRACY = 'Autocracy',
+	COUNCIL = 'Council',
+	MAGICAL = 'Magical',
+	OVERLORD = 'Overlord',
+	SECRET_SYNDICATE = 'Secret Syndicate',
+}
+
+export interface SettlementGovernmentMenuItem {
+	title: string;
+	value: SettlementGovernment;
+}
+
+export const settlementGovernmentMenuItems: SettlementGovernmentMenuItem[] = [
+	{
+		title: 'No bonuses',
+		value: SettlementGovernment.AUTOCRACY,
+	},
+	{
+		title: '+4 Society, -2 Law, -2 Lore',
+		value: SettlementGovernment.COUNCIL,
+	},
+	{
+		title: '+2 Lore, -2 Corruption, -2 Society, spellcasting +1 lvl',
+		value: SettlementGovernment.MAGICAL,
+	},
+	{
+		title: '+2 Corruption, +2 Law, -2 Crime, -2 Society',
+		value: SettlementGovernment.OVERLORD,
+	},
+	{
+		title: '+2 Corruption, +2 Crime, +2 Productivity, -6 Law',
+		value: SettlementGovernment.SECRET_SYNDICATE,
+	},
+];
+
+export interface GovernmentBonusObject {
+	corruption: number;
+	crime: number;
+	law: number;
+	lore: number;
+	productivity: number;
+	society: number;
+}
 
 export function useSettlementPopulation(settlement: Settlement): number {
 	let numLots = 0;
@@ -76,30 +128,6 @@ export function useSettlementBaseValue(settlement: Settlement): number {
 	return baseValue + buildingBonus;
 }
 
-export function useSettlementDefense(settlement: Settlement): number {
-	const districts = useAppSelector((state) =>
-		selectDistrictsBySettlementId(state, settlement.id)
-	);
-	const fortificationBonus = districts
-		.map((district) => {
-			let districtFortificationBonus = 0;
-			district.north.wall ? districtFortificationBonus++ : '';
-			district.north.moat ? districtFortificationBonus++ : '';
-			district.south.wall ? districtFortificationBonus++ : '';
-			district.south.moat ? districtFortificationBonus++ : '';
-			district.east.wall ? districtFortificationBonus++ : '';
-			district.east.moat ? districtFortificationBonus++ : '';
-			district.west.wall ? districtFortificationBonus++ : '';
-			district.west.moat ? districtFortificationBonus++ : '';
-			return districtFortificationBonus;
-		})
-		.reduce(numberReducer, 0);
-
-	const buildingBonus = useSettlementBonusByType(settlement, 'defense');
-
-	return fortificationBonus + buildingBonus;
-}
-
 export function useSettlementBonusByType(
 	settlement: Settlement,
 	type: SettlementStat
@@ -130,6 +158,75 @@ export function useAllSettlementsBonusByType(type: SettlementStat): number {
 	);
 
 	return total;
+}
+
+export function getSettlementGovernmentBonuses(
+	settlement: Settlement
+): GovernmentBonusObject {
+	switch (settlement.government) {
+		case SettlementGovernment.AUTOCRACY:
+			return {
+				corruption: 0,
+				crime: 0,
+				law: 0,
+				lore: 0,
+				productivity: 0,
+				society: 0,
+			};
+		case SettlementGovernment.COUNCIL:
+			return {
+				corruption: 0,
+				crime: 0,
+				law: -2,
+				lore: -2,
+				productivity: 0,
+				society: 4,
+			};
+		case SettlementGovernment.MAGICAL:
+			return {
+				corruption: -2,
+				crime: 0,
+				law: 0,
+				lore: 2,
+				productivity: 0,
+				society: -2,
+			};
+		case SettlementGovernment.OVERLORD:
+			return {
+				corruption: 2,
+				crime: -2,
+				law: 2,
+				lore: 0,
+				productivity: 0,
+				society: -2,
+			};
+		case SettlementGovernment.SECRET_SYNDICATE:
+			return {
+				corruption: 2,
+				crime: 2,
+				law: -6,
+				lore: 0,
+				productivity: 2,
+				society: 0,
+			};
+	}
+}
+
+export function useAllSettlementsGovernmentBonuses(): GovernmentBonusObject {
+	const bonuses: GovernmentBonusObject = {
+		corruption: 0,
+		crime: 0,
+		law: 0,
+		lore: 0,
+		productivity: 0,
+		society: 0,
+	};
+
+	const settlements = useAppSelector((state) => selectAllSettlements(state));
+
+	return settlements
+		.map((settlement) => getSettlementGovernmentBonuses(settlement))
+		.reduce(objectAdditionReducer, bonuses);
 }
 
 export function createEmptySettlementBuildings(): SettlementBuildingList {

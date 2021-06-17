@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 
 import { useAppDispatch } from '../../components/store';
+import { buildingAdded, buildingRemoved } from '../settlement';
 import {
 	District,
 	nameUpdated,
@@ -17,6 +18,7 @@ import {
 } from './districtSlice';
 import { DistrictTooltip } from './districtTooltip';
 import { DistrictBorderGrid } from './districtBorderGrid';
+import { BuildingDisplayType } from './buildingTypes';
 
 export interface DistrictDetailsProps {
 	district: District;
@@ -28,6 +30,27 @@ export function DistrictDetails(props: DistrictDetailsProps): ReactElement {
 	const dispatch = useAppDispatch();
 
 	const usedLots = district.lotTypeList.filter((lotType) => lotType).length;
+
+	function toggleChecked(
+		building: BuildingDisplayType,
+		checked: boolean
+	): void {
+		if (building === 'Paved Streets') {
+			dispatch(pavedUpdated({ districtId: district.id, paved: checked }));
+		} else if (building === 'Sewer System') {
+			dispatch(sewersUpdated({ districtId: district.id, sewers: checked }));
+		}
+
+		if (checked) {
+			dispatch(
+				buildingAdded({ settlementId: district.settlementId, building })
+			);
+		} else {
+			dispatch(
+				buildingRemoved({ settlementId: district.settlementId, building })
+			);
+		}
+	}
 
 	return (
 		<Grid container spacing={2} alignItems="center" justify="space-evenly">
@@ -55,12 +78,7 @@ export function DistrictDetails(props: DistrictDetailsProps): ReactElement {
 								<Checkbox
 									checked={district.paved}
 									onChange={(e) =>
-										dispatch(
-											pavedUpdated({
-												districtId: district.id,
-												paved: e.target.checked,
-											})
-										)
+										toggleChecked('Paved Streets', e.target.checked)
 									}
 								/>
 							}
@@ -75,12 +93,7 @@ export function DistrictDetails(props: DistrictDetailsProps): ReactElement {
 								<Checkbox
 									checked={district.sewers}
 									onChange={(e) =>
-										dispatch(
-											sewersUpdated({
-												districtId: district.id,
-												sewers: e.target.checked,
-											})
-										)
+										toggleChecked('Sewer System', e.target.checked)
 									}
 								/>
 							}

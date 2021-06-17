@@ -2,7 +2,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ExtractCssChunksPlugin = require('extract-css-chunks-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const CompressionPlugin = require("compression-webpack-plugin");
+const CompressionPlugin = require('compression-webpack-plugin');
 const path = require('path');
 
 const htmlPlugin = new HtmlWebPackPlugin({
@@ -78,5 +78,11 @@ module.exports = {
 			},
 		],
 	},
-	plugins: [cleanWebpackPlugin, htmlPlugin, extractCssChunksPlugin, copyPlugin, compressionPlugin],
+	plugins: [
+		cleanWebpackPlugin,
+		htmlPlugin,
+		extractCssChunksPlugin,
+		copyPlugin,
+		compressionPlugin,
+	],
 };
