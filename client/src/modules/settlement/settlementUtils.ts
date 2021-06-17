@@ -1,3 +1,4 @@
+import { objectAdditionReducer } from '../../components/objectAdditionReducer';
 import { useAppSelector } from '../../components/store';
 import {
 	BuildingDisplayType,
@@ -209,6 +210,23 @@ export function getSettlementGovernmentBonuses(
 				society: 0,
 			};
 	}
+}
+
+export function useAllSettlementsGovernmentBonuses(): GovernmentBonusObject {
+	const bonuses: GovernmentBonusObject = {
+		corruption: 0,
+		crime: 0,
+		law: 0,
+		lore: 0,
+		productivity: 0,
+		society: 0,
+	};
+
+	const settlements = useAppSelector((state) => selectAllSettlements(state));
+
+	return settlements
+		.map((settlement) => getSettlementGovernmentBonuses(settlement))
+		.reduce(objectAdditionReducer, bonuses);
 }
 
 export function createEmptySettlementBuildings(): SettlementBuildingList {

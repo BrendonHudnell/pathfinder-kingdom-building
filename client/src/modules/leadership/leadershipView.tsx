@@ -32,6 +32,9 @@ export function LeadershipView(): ReactElement {
 	const dispatch = useAppDispatch();
 
 	const roles = useAppSelector((state) => selectAllRoles(state));
+	const skillsEnabled = useAppSelector(
+		(state) => state.kingdom.options.leadershipSkills
+	);
 
 	const consortOrSecondRuler = roles.find(
 		(role) => role.name === 'Consort' || role.name === 'Second Ruler'
@@ -67,8 +70,8 @@ export function LeadershipView(): ReactElement {
 						<TableCell>Attribute</TableCell>
 						<TableCell>Ability Bonus</TableCell>
 						<TableCell>Leadership?</TableCell>
-						<TableCell>Related Skill</TableCell>
-						<TableCell>Skill Bonus</TableCell>
+						{skillsEnabled ? <TableCell>Related Skill</TableCell> : null}
+						{skillsEnabled ? <TableCell>Skill Bonus</TableCell> : null}
 						<TableCell>Benefit</TableCell>
 						<TableCell>
 							<Button
@@ -83,7 +86,7 @@ export function LeadershipView(): ReactElement {
 				</TableHead>
 				<TableBody>
 					{roles.map((role) => (
-						<RoleRow key={role.id} role={role} />
+						<RoleRow key={role.id} role={role} skillsEnabled={skillsEnabled} />
 					))}
 					<TableRow>
 						<TableCell colSpan={8}>

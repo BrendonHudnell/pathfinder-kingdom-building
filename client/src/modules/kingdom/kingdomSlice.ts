@@ -23,6 +23,14 @@ export interface KingdomState {
 	taxationEdict: TaxationEdict;
 	fame: KingdomFame;
 	government: KingdomGovernment;
+	options: {
+		settlementModifiers: boolean;
+		settlementGovernment: boolean;
+		kingdomModifiers: boolean;
+		kingdomGovernment: boolean;
+		kingdomFame: boolean;
+		leadershipSkills: boolean;
+	};
 }
 
 export const fetchKingdomData = createAsyncThunk(
@@ -79,6 +87,24 @@ export const kingdomSlice = createSlice({
 		governmentUpdated: (state, action: PayloadAction<KingdomGovernment>) => {
 			state.government = action.payload;
 		},
+		settlementModifiersUpdated: (state, action: PayloadAction<boolean>) => {
+			state.options.settlementModifiers = action.payload;
+		},
+		settlementGovernmentUpdated: (state, action: PayloadAction<boolean>) => {
+			state.options.settlementGovernment = action.payload;
+		},
+		kingdomModifiersUpdated: (state, action: PayloadAction<boolean>) => {
+			state.options.kingdomModifiers = action.payload;
+		},
+		kingdomGovernmentUpdated: (state, action: PayloadAction<boolean>) => {
+			state.options.kingdomGovernment = action.payload;
+		},
+		kingdomFameUpdated: (state, action: PayloadAction<boolean>) => {
+			state.options.kingdomFame = action.payload;
+		},
+		leadershipSkillsUpdated: (state, action: PayloadAction<boolean>) => {
+			state.options.leadershipSkills = action.payload;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(
@@ -110,6 +136,12 @@ export const {
 	taxationEdictLevelUpdated,
 	fameUpdated,
 	governmentUpdated,
+	settlementGovernmentUpdated,
+	settlementModifiersUpdated,
+	kingdomFameUpdated,
+	kingdomGovernmentUpdated,
+	kingdomModifiersUpdated,
+	leadershipSkillsUpdated,
 } = kingdomSlice.actions;
 
 export const kingdomReducer = kingdomSlice.reducer;

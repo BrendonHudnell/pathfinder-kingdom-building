@@ -51,21 +51,27 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 	const baseValue = useSettlementBaseValue(settlement);
 	const defense = useSettlementBonusByType(settlement, 'defense');
 
+	const options = useAppSelector((state) => state.kingdom.options);
+
 	const governmentBonuses = getSettlementGovernmentBonuses(settlement);
 	const corruption =
 		useSettlementBonusByType(settlement, 'corruption') +
-		governmentBonuses.corruption;
+		(options.settlementGovernment ? governmentBonuses.corruption : 0);
 	const crime =
-		useSettlementBonusByType(settlement, 'crime') + governmentBonuses.crime;
+		useSettlementBonusByType(settlement, 'crime') +
+		(options.settlementGovernment ? governmentBonuses.crime : 0);
 	const law =
-		useSettlementBonusByType(settlement, 'law') + governmentBonuses.law;
+		useSettlementBonusByType(settlement, 'law') +
+		(options.settlementGovernment ? governmentBonuses.law : 0);
 	const lore =
-		useSettlementBonusByType(settlement, 'lore') + governmentBonuses.lore;
+		useSettlementBonusByType(settlement, 'lore') +
+		(options.settlementGovernment ? governmentBonuses.lore : 0);
 	const productivity =
 		useSettlementBonusByType(settlement, 'productivity') +
-		governmentBonuses.productivity;
+		(options.settlementGovernment ? governmentBonuses.productivity : 0);
 	const society =
-		useSettlementBonusByType(settlement, 'society') + governmentBonuses.society;
+		useSettlementBonusByType(settlement, 'society') +
+		(options.settlementGovernment ? governmentBonuses.society : 0);
 
 	const districtList = useAppSelector((state) =>
 		selectDistrictsBySettlementId(state, settlement.id)
@@ -100,31 +106,35 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 				<Grid item>
 					<Typography>Population: {population.toLocaleString()}</Typography>
 				</Grid>
-				<Grid item>
-					<Typography>Government:</Typography>
-				</Grid>
-				<Grid item>
-					<Select
-						style={{ minWidth: '17ch' }}
-						value={settlement.government}
-						onChange={(e) =>
-							dispatch(
-								governmentUpdated({
-									settlementId: settlement.id,
-									government: e.target.value as SettlementGovernment,
-								})
-							)
-						}
-					>
-						{settlementGovernmentMenuItems.map((item) => (
-							<MenuItem key={item.value} value={item.value}>
-								<Tooltip title={<Typography>{item.title}</Typography>}>
-									<Typography>{item.value}</Typography>
-								</Tooltip>
-							</MenuItem>
-						))}
-					</Select>
-				</Grid>
+				{options.settlementGovernment ? (
+					<Grid item>
+						<Typography>Government:</Typography>
+					</Grid>
+				) : null}
+				{options.settlementGovernment ? (
+					<Grid item>
+						<Select
+							style={{ minWidth: '17ch' }}
+							value={settlement.government}
+							onChange={(e) =>
+								dispatch(
+									governmentUpdated({
+										settlementId: settlement.id,
+										government: e.target.value as SettlementGovernment,
+									})
+								)
+							}
+						>
+							{settlementGovernmentMenuItems.map((item) => (
+								<MenuItem key={item.value} value={item.value}>
+									<Tooltip title={<Typography>{item.title}</Typography>}>
+										<Typography>{item.value}</Typography>
+									</Tooltip>
+								</MenuItem>
+							))}
+						</Select>
+					</Grid>
+				) : null}
 				<Grid item>
 					<Typography>Total districts: {totalDistricts}</Typography>
 				</Grid>
@@ -151,26 +161,28 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 				</Grid>
 			</Grid>
 
-			<Grid container item spacing={2} alignItems="center">
-				<Grid item>
-					<Typography>Corruption: {corruption}</Typography>
+			{options.settlementModifiers ? (
+				<Grid container item spacing={2} alignItems="center">
+					<Grid item>
+						<Typography>Corruption: {corruption}</Typography>
+					</Grid>
+					<Grid item>
+						<Typography>Crime: {crime}</Typography>
+					</Grid>
+					<Grid item>
+						<Typography>Law: {law}</Typography>
+					</Grid>
+					<Grid item>
+						<Typography>Lore: {lore}</Typography>
+					</Grid>
+					<Grid item>
+						<Typography>Productivity: {productivity}</Typography>
+					</Grid>
+					<Grid item>
+						<Typography>Society: {society}</Typography>
+					</Grid>
 				</Grid>
-				<Grid item>
-					<Typography>Crime: {crime}</Typography>
-				</Grid>
-				<Grid item>
-					<Typography>Law: {law}</Typography>
-				</Grid>
-				<Grid item>
-					<Typography>Lore: {lore}</Typography>
-				</Grid>
-				<Grid item>
-					<Typography>Productivity: {productivity}</Typography>
-				</Grid>
-				<Grid item>
-					<Typography>Society: {society}</Typography>
-				</Grid>
-			</Grid>
+			) : null}
 		</Grid>
 	);
 }

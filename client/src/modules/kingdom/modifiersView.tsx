@@ -1,51 +1,70 @@
-import React, { ReactElement } from 'react';
+import React, { Fragment, ReactElement } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 
-import { useAllSettlementsBonusByType } from '../settlement';
+import { useAppSelector } from '../../components/store';
+import {
+	useAllSettlementsBonusByType,
+	useAllSettlementsGovernmentBonuses,
+} from '../settlement';
 import {
 	useKingdomGovernmentBonuses,
 	useAlignmentBonuses,
 } from './kingdomUtils';
-import { FameView } from './fameView';
-import { GovernmentView } from './governmentView';
 
 export function ModifiersView(): ReactElement {
-	const settlementCorruption = useAllSettlementsBonusByType('corruption');
-	const settlementCrime = useAllSettlementsBonusByType('crime');
-	const settlementLaw = useAllSettlementsBonusByType('law');
-	const settlementLore = useAllSettlementsBonusByType('lore');
-	const settlementProductivity = useAllSettlementsBonusByType('productivity');
-	const settlementSociety = useAllSettlementsBonusByType('society');
+	const options = useAppSelector((state) => state.kingdom.options);
 
+	const settlementGovernmentBonuses = useAllSettlementsGovernmentBonuses();
 	const alignmentBonuses = useAlignmentBonuses();
 	const kingdomGovernmentBonuses = useKingdomGovernmentBonuses();
+
+	const settlementCorruption =
+		useAllSettlementsBonusByType('corruption') +
+		(options.settlementGovernment ? settlementGovernmentBonuses.corruption : 0);
+	const settlementCrime =
+		useAllSettlementsBonusByType('crime') +
+		(options.settlementGovernment ? settlementGovernmentBonuses.crime : 0);
+	const settlementLaw =
+		useAllSettlementsBonusByType('law') +
+		(options.settlementGovernment ? settlementGovernmentBonuses.law : 0);
+	const settlementLore =
+		useAllSettlementsBonusByType('lore') +
+		(options.settlementGovernment ? settlementGovernmentBonuses.lore : 0);
+	const settlementProductivity =
+		useAllSettlementsBonusByType('productivity') +
+		(options.settlementGovernment
+			? settlementGovernmentBonuses.productivity
+			: 0);
+	const settlementSociety =
+		useAllSettlementsBonusByType('society') +
+		(options.settlementGovernment ? settlementGovernmentBonuses.society : 0);
 
 	const totalCorruption =
 		Math.floor(settlementCorruption / 10) +
 		alignmentBonuses.corruption +
-		kingdomGovernmentBonuses.corruption;
+		(options.kingdomGovernment ? kingdomGovernmentBonuses.corruption : 0);
 	const totalCrime =
 		Math.floor(settlementCrime / 10) +
 		alignmentBonuses.crime +
-		kingdomGovernmentBonuses.crime;
+		(options.kingdomGovernment ? kingdomGovernmentBonuses.crime : 0);
 	const totalLaw =
 		Math.floor(settlementLaw / 10) +
 		alignmentBonuses.law +
-		kingdomGovernmentBonuses.law;
+		(options.kingdomGovernment ? kingdomGovernmentBonuses.law : 0);
 	const totalLore =
 		Math.floor(settlementLore / 10) +
 		alignmentBonuses.lore +
-		kingdomGovernmentBonuses.lore;
+		(options.kingdomGovernment ? kingdomGovernmentBonuses.lore : 0);
 	const totalProductivity =
 		Math.floor(settlementProductivity / 10) +
-		kingdomGovernmentBonuses.productivity;
+		(options.kingdomGovernment ? kingdomGovernmentBonuses.productivity : 0);
 	const totalSociety =
 		Math.floor(settlementSociety / 10) +
 		alignmentBonuses.society +
-		kingdomGovernmentBonuses.society;
+		(options.kingdomGovernment ? kingdomGovernmentBonuses.society : 0);
 
 	return (
-		<Grid container item spacing={2} alignItems="center">
+		<Fragment>
 			<Grid item>
 				<Typography>Corruption: {totalCorruption}</Typography>
 			</Grid>
@@ -65,13 +84,6 @@ export function ModifiersView(): ReactElement {
 				<Typography>Society: {totalSociety}</Typography>
 			</Grid>
 			<Grid item />
-			<FameView
-				settlementCorruption={settlementCorruption}
-				settlementCrime={settlementCrime}
-				settlementLore={settlementLore}
-				settlementSociety={settlementSociety}
-			/>
-			<GovernmentView />
-		</Grid>
+		</Fragment>
 	);
 }

@@ -11,27 +11,18 @@ import {
 } from './kingdomUtils';
 import { FameKingdomSizeChoicesDialog } from './fameKingdomSizeChoicesDialog';
 
-export interface FameViewProps {
-	settlementLore: number;
-	settlementSociety: number;
-	settlementCorruption: number;
-	settlementCrime: number;
-}
-
-export function FameView(props: FameViewProps): ReactElement {
-	const {
-		settlementCorruption,
-		settlementCrime,
-		settlementLore,
-		settlementSociety,
-	} = props;
-
+export function FameView(): ReactElement {
 	const [fameOpen, setFameOpen] = useState(false);
 
 	const fameInfo = useAppSelector((state) => state.kingdom.fame);
 	const kingdomSize = useAppSelector((state) =>
 		selectClaimedHexes(state)
 	).length;
+
+	const settlementCorruption = useAllSettlementsBonusByType('corruption');
+	const settlementCrime = useAllSettlementsBonusByType('crime');
+	const settlementLore = useAllSettlementsBonusByType('lore');
+	const settlementSociety = useAllSettlementsBonusByType('society');
 
 	const kingdomFame = getKingdomFame(fameInfo);
 	const kingdomInfamy = getKingdomInfamy(fameInfo);

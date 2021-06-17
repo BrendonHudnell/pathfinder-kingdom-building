@@ -546,4 +546,12 @@ export const initialKingdomState: KingdomState = {
 		},
 	},
 	government: KingdomGovernment.FEUDAL_MONARCHY,
+	options: {
+		settlementGovernment: false,
+		settlementModifiers: false,
+		kingdomFame: false,
+		kingdomGovernment: false,
+		kingdomModifiers: false,
+		leadershipSkills: false,
+	},
 };

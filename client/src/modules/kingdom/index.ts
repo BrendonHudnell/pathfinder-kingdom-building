@@ -9,5 +9,7 @@ export * from './kingdomSlice';
 export * from './kingdomTooltip';
 export * from './kingdomUtils';
 export * from './linkButtonsView';
+export * from './kingdomOptionsView';
 export * from './modifiersView';
+export * from './optionsDialogButton';
 export * from './statsView';

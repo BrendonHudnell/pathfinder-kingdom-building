@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => {
 
 export interface RoleRowProps {
 	role: Role;
+	skillsEnabled: boolean;
 }
 
 export function RoleRow(props: RoleRowProps): ReactElement {
@@ -124,21 +125,25 @@ export function RoleRow(props: RoleRowProps): ReactElement {
 					onChange={() => dispatch(leadershipToggled(id))}
 				/>
 			</TableCell>
-			<TableCell className={vacant ? classes.disabled : ''}>
-				<Typography>{skillAbility}</Typography>
-			</TableCell>
-			<TableCell>
-				<TextField
-					disabled={vacant}
-					type="number"
-					value={skillBonus}
-					onChange={(e) =>
-						dispatch(
-							skillBonusUpdated({ id, skillBonus: Number(e.target.value) })
-						)
-					}
-				/>
-			</TableCell>
+			{props.skillsEnabled ? (
+				<TableCell className={vacant ? classes.disabled : ''}>
+					<Typography>{skillAbility}</Typography>
+				</TableCell>
+			) : null}
+			{props.skillsEnabled ? (
+				<TableCell>
+					<TextField
+						disabled={vacant}
+						type="number"
+						value={skillBonus}
+						onChange={(e) =>
+							dispatch(
+								skillBonusUpdated({ id, skillBonus: Number(e.target.value) })
+							)
+						}
+					/>
+				</TableCell>
+			) : null}
 			<TableCell colSpan={name === 'Viceroy' ? 1 : 2}>
 				{name === 'Ruler' || name === 'Second Ruler' || name === 'Spymaster' ? (
 					<Select

@@ -148,9 +148,12 @@ export type KingdomStat = 'Economy' | 'Stability' | 'Loyalty';
 
 export function useLeadershipBonusByType(type: KingdomStat): number {
 	const roles = useAppSelector((state) => selectAllRoles(state));
+	const skillsEnabled = useAppSelector(
+		(state) => state.kingdom.options.leadershipSkills
+	);
 
 	return (
-		getLeadershipPositivesByType(roles, type) -
+		getLeadershipPositivesByType(roles, type, skillsEnabled) -
 		getLeadershipNegativesByType(roles, type)
 	);
 }
@@ -170,7 +173,8 @@ export function useLeadershipUnrest(): number {
 
 export function getLeadershipPositivesByType(
 	roles: Role[],
-	bonusType: KingdomStat
+	bonusType: KingdomStat,
+	skillsEnabled: boolean
 ): number {
 	return roles
 		.filter((role) => !role.vacant && role.benefit.includes(bonusType))
@@ -178,10 +182,10 @@ export function getLeadershipPositivesByType(
 			role.name === 'Consort' || role.name === 'Heir'
 				? Math.floor(role.abilityBonus / 2) +
 				  (role.leadership ? 1 : 0) +
-				  Math.floor(role.skillBonus / 5)
+				  (skillsEnabled ? Math.floor(role.skillBonus / 5) : 0)
 				: role.abilityBonus +
 				  (role.leadership ? 1 : 0) +
-				  Math.floor(role.skillBonus / 5)
+				  (skillsEnabled ? Math.floor(role.skillBonus / 5) : 0)
 		)
 		.reduce(numberReducer, 0);
 }

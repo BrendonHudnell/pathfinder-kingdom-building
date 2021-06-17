@@ -3,6 +3,7 @@ import { AppBar, Button, Toolbar, Tooltip } from '@material-ui/core';
 
 import { useAppSelector } from '../../components/store';
 import { HorizontalSpacer } from '../../components/horizontalSpacer';
+import { OptionsDialogButton } from '../kingdom/optionsDialogButton';
 
 export function ShellAppBar(): ReactElement {
 	// TODO remove when server is connected
@@ -44,7 +45,8 @@ export function ShellAppBar(): ReactElement {
 
 				<HorizontalSpacer />
 
-				{/* TODO add login and options */}
+				<OptionsDialogButton />
+				{/* TODO add login */}
 			</Toolbar>
 		</AppBar>
 	);

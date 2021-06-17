@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { Grid, makeStyles, Paper } from '@material-ui/core';
 
-import { ModifiersView } from './modifiersView';
+import { KingdomOptionsView } from './kingdomOptionsView';
 import { EdictsView } from './edictsView';
 import { StatsView } from './statsView';
 import { EconomyView } from './economyView';
@@ -25,7 +25,7 @@ export function KingdomView(): ReactElement {
 				<BasicInfoView />
 				<EconomyView />
 				<StatsView />
-				<ModifiersView />
+				<KingdomOptionsView />
 				<EdictsView />
 				<LinkButtonsView />
 			</Grid>
