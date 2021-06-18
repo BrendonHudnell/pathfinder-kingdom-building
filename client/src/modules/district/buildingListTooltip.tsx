@@ -19,7 +19,7 @@ export function BuildingListTooltip(
 	const bonuses =
 		(economy ? `${signedNumber(economy)} Economy ` : '') +
 		(stability ? `${signedNumber(stability)} Stability ` : '') +
-		(loyalty ? `${signedNumber(loyalty)} Loyalty` : '') +
+		(loyalty ? `${signedNumber(loyalty)} Loyalty ` : '') +
 		(unrest ? `${signedNumber(unrest)} Unrest` : '');
 
 	return (

@@ -9,8 +9,14 @@ import {
 	Tooltip,
 } from '@material-ui/core';
 
-import { useAppDispatch } from '../../components/store';
-import { buildingAdded, buildingRemoved } from '../settlement';
+import { useAppDispatch, useAppSelector } from '../../components/store';
+import { unrestAdded } from '../kingdom';
+import {
+	buildingAdded,
+	buildingRemoved,
+	moatUnrestUsed,
+	wallUnrestUsed,
+} from '../settlement';
 import {
 	District,
 	moatUpdated,
@@ -19,7 +25,7 @@ import {
 } from './districtSlice';
 import { Direction, DistrictTerrainType } from './districtUtils';
 import { DistrictTooltip } from './districtTooltip';
-import { BuildingDisplayType } from './buildingTypes';
+import { BuildingDisplayType, buildingInfoList } from './buildingTypes';
 
 export interface DistrictBorderGridProps {
 	district: District;
@@ -34,15 +40,27 @@ export function DistrictBorderGrid(
 
 	const dispatch = useAppDispatch();
 
+	const settlement = useAppSelector(
+		(state) => state.settlement.entities[district.settlementId]
+	);
+
 	function toggleChecked(
 		building: BuildingDisplayType,
 		checked: boolean
 	): void {
 		if (building === 'City Wall') {
+			if (!settlement?.wallUnrestUsed) {
+				dispatch(wallUnrestUsed(district.settlementId));
+				dispatch(unrestAdded(buildingInfoList['City Wall'].unrest!));
+			}
 			dispatch(
 				wallUpdated({ districtId: district.id, direction, wall: checked })
 			);
 		} else if (building === 'Moat') {
+			if (!settlement?.moatUnrestUsed) {
+				dispatch(moatUnrestUsed(district.settlementId));
+				dispatch(unrestAdded(buildingInfoList['Moat'].unrest!));
+			}
 			dispatch(
 				moatUpdated({ districtId: district.id, direction, moat: checked })
 			);

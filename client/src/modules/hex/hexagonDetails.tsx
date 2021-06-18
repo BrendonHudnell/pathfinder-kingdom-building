@@ -23,6 +23,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { useAppDispatch } from '../../components/store';
 import { LinkButton } from '../../components/linkButton';
 import { addNewSettlement } from '../settlement';
+import { unrestAdded } from '../kingdom';
 import {
 	ExplorationState,
 	getDefenseValue,
@@ -124,6 +125,12 @@ export function HexagonDetails(props: HexagonDetailsProps): ReactElement {
 		isChecked: boolean
 	): void {
 		if (isChecked) {
+			if (
+				terrainImprovement === TerrainImprovementType.FORT ||
+				terrainImprovement === TerrainImprovementType.WATCHTOWER
+			) {
+				dispatch(unrestAdded(-1));
+			}
 			dispatch(terrainImprovementAdded({ hexId, terrainImprovement }));
 		} else {
 			dispatch(terrainImprovementRemoved({ hexId, terrainImprovement }));

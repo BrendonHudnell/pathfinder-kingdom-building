@@ -3,14 +3,16 @@ import { Box, Container, makeStyles } from '@material-ui/core';
 import { useDrop } from 'react-dnd';
 
 import { useAppDispatch } from '../../components/store';
+import { unrestAdded } from '../kingdom';
 import {
+	getBuildingDisplayTypeByLotType,
 	getLotOffsetByLotType,
 	getNewLotTypesByLotType,
 	getSizeByLotType,
 } from './buildingUtils';
 import { District, lotUpdated } from './districtSlice';
 import { LotCard } from './lotCard';
-import { BuildingDragItem, LotType } from './buildingTypes';
+import { BuildingDragItem, buildingInfoList, LotType } from './buildingTypes';
 
 const firstRow = [0, 1, 2, 3, 4, 5];
 const lastRow = [30, 31, 32, 33, 34, 35];
@@ -83,6 +85,13 @@ export function Lot(props: LotProps): ReactElement {
 					})
 				)
 			);
+		}
+
+		// handle unrest decrease for building certain buildings
+		const building = getBuildingDisplayTypeByLotType(lotType[0]);
+		const unrest = buildingInfoList[building].unrest;
+		if (unrest) {
+			dispatch(unrestAdded(unrest));
 		}
 	}
 

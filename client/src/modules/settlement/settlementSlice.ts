@@ -20,6 +20,8 @@ export interface Settlement {
 	hexId: EntityId;
 	districts: EntityId[];
 	buildings: SettlementBuildingList;
+	wallUnrestUsed: boolean;
+	moatUnrestUsed: boolean;
 	government: SettlementGovernment;
 }
 
@@ -46,6 +48,8 @@ export const addNewSettlement = createAsyncThunk(
 			hexId,
 			districts: [],
 			buildings: createEmptySettlementBuildings(),
+			wallUnrestUsed: false,
+			moatUnrestUsed: false,
 			government: SettlementGovernment.AUTOCRACY,
 		};
 
@@ -99,6 +103,20 @@ export const settlementSlice = createSlice({
 				settlement.buildings[building]--;
 			}
 		},
+		wallUnrestUsed: (state, action: PayloadAction<EntityId>) => {
+			const settlement = state.entities[action.payload];
+
+			if (settlement) {
+				settlement.wallUnrestUsed = true;
+			}
+		},
+		moatUnrestUsed: (state, action: PayloadAction<EntityId>) => {
+			const settlement = state.entities[action.payload];
+
+			if (settlement) {
+				settlement.moatUnrestUsed = true;
+			}
+		},
 		governmentUpdated: (
 			state,
 			action: PayloadAction<{
@@ -135,6 +153,8 @@ export const {
 	nameUpdated,
 	buildingAdded,
 	buildingRemoved,
+	wallUnrestUsed,
+	moatUnrestUsed,
 	governmentUpdated,
 } = settlementSlice.actions;
 

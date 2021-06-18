@@ -60,6 +60,12 @@ export const kingdomSlice = createSlice({
 		unrestUpdated: (state, action: PayloadAction<number>) => {
 			state.unrest = action.payload;
 		},
+		unrestAdded: (state, action: PayloadAction<number>) => {
+			state.unrest += action.payload;
+			if (state.unrest < 0) {
+				state.unrest = 0;
+			}
+		},
 		holidayEdictLevelUpdated: (state, action: PayloadAction<HolidayEdict>) => {
 			state.holidayEdict = action.payload;
 		},
@@ -131,6 +137,7 @@ export const {
 	incrementMonth,
 	treasuryUpdated,
 	unrestUpdated,
+	unrestAdded,
 	holidayEdictLevelUpdated,
 	promotionEdictLevelUpdated,
 	taxationEdictLevelUpdated,
