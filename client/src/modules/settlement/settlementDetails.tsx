@@ -106,12 +106,12 @@ export function SettlementDetails(props: SettlementDetailsProps): ReactElement {
 				<Grid item>
 					<Typography>Population: {population.toLocaleString()}</Typography>
 				</Grid>
-				{options.settlementGovernment ? (
+				{options.settlementModifiers && options.settlementGovernment ? (
 					<Grid item>
 						<Typography>Government:</Typography>
 					</Grid>
 				) : null}
-				{options.settlementGovernment ? (
+				{options.settlementModifiers && options.settlementGovernment ? (
 					<Grid item>
 						<Select
 							style={{ minWidth: '17ch' }}

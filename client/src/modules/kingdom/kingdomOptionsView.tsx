@@ -11,11 +11,15 @@ export function KingdomOptionsView(): ReactElement {
 
 	return (
 		<Grid container item spacing={2} alignItems="center">
-			{options.kingdomModifiers ? <ModifiersView /> : null}
-			{options.kingdomFame ? <FameView /> : null}
-			{options.kingdomModifiers && options.kingdomGovernment ? (
+			{options.settlementModifiers && options.kingdomModifiers ? (
+				<ModifiersView />
+			) : null}
+			{options.settlementModifiers &&
+			options.kingdomModifiers &&
+			options.kingdomGovernment ? (
 				<GovernmentView />
 			) : null}
+			{options.settlementModifiers && options.kingdomFame ? <FameView /> : null}
 		</Grid>
 	);
 }
