@@ -54,6 +54,9 @@ export function EconomyView(): ReactElement {
 					</Typography>
 				</KingdomTooltip>
 			</Grid>
+			<Grid item>
+				<Typography>True Consumption: {totalConsumption}</Typography>
+			</Grid>
 			<Grid item />
 			<Grid item>
 				<Typography>Terrain Income: {terrainIncome}</Typography>
