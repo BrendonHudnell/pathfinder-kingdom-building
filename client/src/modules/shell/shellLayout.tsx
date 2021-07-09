@@ -12,6 +12,7 @@ import { KingdomView } from '../kingdom';
 import { LeadershipView } from '../leadership';
 import { SettlementView, SettlementListView } from '../settlement';
 import { HexGridView } from '../hex';
+import { EventListView } from '../events';
 import { ShellAppBar } from './shellAppBar';
 
 const useStyles = makeStyles({
@@ -45,8 +46,8 @@ export function ShellLayout(): ReactElement {
 				<Switch>
 					<Route exact path="/" component={HexGridView} />
 					<Route exact path="/leadership" component={LeadershipView} />
-					{/* <Route exact path="/army" component={ArmyView} />
-						<Route exact path="/events" component={EventsView} /> */}
+					<Route exact path="/events" component={EventListView} />
+					{/* <Route exact path="/army" component={ArmyView} /> TODO add back in */}
 					<Route
 						exact
 						path="/settlements/:settlementId"

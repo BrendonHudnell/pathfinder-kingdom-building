@@ -15,11 +15,11 @@ export function LinkButtonsView(): ReactElement {
 			<Grid item>
 				<LinkButton title="Leadership" to="/leadership" />
 			</Grid>
+			<Grid item>
+				<LinkButton title="Events" to="/events" />
+			</Grid>
 			{/* <Grid item> TODO remove
 						<LinkButton title="Army" to="/army" />
-					</Grid>
-					<Grid item>
-						<LinkButton title="Events" to="/events" />
 					</Grid> */}
 		</Grid>
 	);

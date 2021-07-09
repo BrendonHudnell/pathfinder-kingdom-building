@@ -1,6 +1,7 @@
 import { configureStore, ThunkAction, AnyAction } from '@reduxjs/toolkit';
 
 import { districtReducer } from '../../modules/district';
+import { eventsReducer } from '../../modules/events';
 import { hexReducer } from '../../modules/hex';
 import { kingdomReducer } from '../../modules/kingdom';
 import { leadershipReducer } from '../../modules/leadership';
@@ -13,6 +14,7 @@ export const store = configureStore({
 		settlement: settlementReducer,
 		district: districtReducer,
 		hex: hexReducer,
+		events: eventsReducer,
 	},
 });
 
