@@ -1,7 +1,8 @@
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import path from 'path';
-import { createUserRouter } from '../modules/user';
+
+import { createKingdomRouter } from '../modules/kingdom';
 
 export function createApp(): Express {
 	const app = express();
@@ -12,7 +13,7 @@ export function createApp(): Express {
 		express.static(path.join(__dirname, '..', '..', '..', 'client', 'build'))
 	);
 
-	app.use('/api/user', createUserRouter());
+	app.use('/api/kingdom', createKingdomRouter());
 
 	app.get('/api', (req: Request, res: Response): void => {
 		res.status(200).send('You have reached the API');

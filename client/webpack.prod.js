@@ -3,6 +3,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ExtractCssChunksPlugin = require('extract-css-chunks-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const path = require('path');
 
 const htmlPlugin = new HtmlWebPackPlugin({
@@ -29,6 +30,8 @@ const copyPlugin = new CopyPlugin({
 const compressionPlugin = new CompressionPlugin({
 	test: /\.js(\?.*)?$/i,
 });
+
+// const bundleAnalyzerPlugin = new BundleAnalyzerPlugin();
 
 module.exports = {
 	mode: 'production',
@@ -84,5 +87,6 @@ module.exports = {
 		extractCssChunksPlugin,
 		copyPlugin,
 		compressionPlugin,
+		// bundleAnalyzerPlugin
 	],
 };

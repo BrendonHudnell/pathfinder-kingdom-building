@@ -1,0 +1,24 @@
+import { Request, Response, Router } from 'express';
+
+import { kingdomService } from './kingdomService';
+import { kingdomValidator } from './kingdomValidator';
+
+export function createKingdomRouter(): Router {
+	const router = Router();
+
+	router.get('/', kingdomValidator, getKingdom);
+
+	return router;
+}
+
+export async function getKingdom(req: Request, res: Response): Promise<void> {
+	const id = Number(req.query.id);
+
+	const kingdom = await kingdomService.getKingdom(id);
+
+	if (kingdom) {
+		res.status(200).json(kingdom);
+	} else {
+		res.sendStatus(404);
+	}
+}
