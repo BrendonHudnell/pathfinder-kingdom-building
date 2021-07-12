@@ -1,6 +1,6 @@
 import { requestValidator } from '../../validator';
 
-export const kingdomValidator = requestValidator(
+export const getKingdomValidator = requestValidator(
 	{
 		query: {
 			type: 'object',
@@ -10,6 +10,7 @@ export const kingdomValidator = requestValidator(
 					type: 'number',
 				},
 			},
+			required: ['id'],
 		},
 	},
 	true

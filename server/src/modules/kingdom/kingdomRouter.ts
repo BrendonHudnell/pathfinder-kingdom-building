@@ -1,12 +1,12 @@
 import { Request, Response, Router } from 'express';
 
 import { kingdomService } from './kingdomService';
-import { kingdomValidator } from './kingdomValidator';
+import { getKingdomValidator } from './kingdomValidator';
 
 export function createKingdomRouter(): Router {
 	const router = Router();
 
-	router.get('/', kingdomValidator, getKingdom);
+	router.get('/', getKingdomValidator, getKingdom);
 
 	return router;
 }
