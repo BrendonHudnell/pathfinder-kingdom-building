@@ -1,6 +1,6 @@
 import { requestValidator } from '../../validator';
 
-export const getAllHexesValidator = requestValidator(
+export const getAllLeadershipRolesValidator = requestValidator(
 	{
 		query: {
 			type: 'object',

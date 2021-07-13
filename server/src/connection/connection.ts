@@ -7,6 +7,7 @@ import { HexEntity } from '../modules/hex';
 import { DistrictEntity } from '../modules/district';
 import { SettlementEntity } from '../modules/settlement';
 import { LotEntity } from '../modules/lot';
+import { LeadershipEntity } from '../modules/leadership';
 
 export const connection = {
 	async create() {
@@ -22,6 +23,7 @@ export const connection = {
 				DistrictEntity,
 				HexEntity,
 				KingdomEntity,
+				LeadershipEntity,
 				LotEntity,
 				SettlementEntity,
 			],

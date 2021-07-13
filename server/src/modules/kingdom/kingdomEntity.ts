@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { DistrictEntity } from '../district';
 import { HexEntity } from '../hex';
+import { LeadershipEntity } from '../leadership';
 import { SettlementEntity } from '../settlement';
 
 @Entity('kingdom')
@@ -98,4 +99,7 @@ export class KingdomEntity {
 
 	@OneToMany(() => DistrictEntity, (district) => district.kingdom)
 	districts!: DistrictEntity[];
+
+	@OneToMany(() => LeadershipEntity, (leadershipRole) => leadershipRole.kingdom)
+	leadershipRoles!: LeadershipEntity[];
 }

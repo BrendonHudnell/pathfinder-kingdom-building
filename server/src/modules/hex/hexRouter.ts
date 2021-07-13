@@ -1,23 +1,23 @@
 import { Request, Response, Router } from 'express';
 
 import { hexService } from './hexService';
-import { getHexValidator } from './hexValidator';
+import { getAllHexesValidator } from './hexValidator';
 
 export function createHexRouter(): Router {
 	const router = Router();
 
-	router.get('/', getHexValidator, getHex);
+	router.get('/', getAllHexesValidator, getAllHexes);
 
 	return router;
 }
 
-export async function getHex(req: Request, res: Response): Promise<void> {
+export async function getAllHexes(req: Request, res: Response): Promise<void> {
 	const kingdomId = Number(req.query.kingdomId);
 
-	const hex = await hexService.getAllHexes(kingdomId);
+	const hexes = await hexService.getAllHexes(kingdomId);
 
-	if (hex) {
-		res.status(200).json(hex);
+	if (hexes) {
+		res.status(200).json(hexes);
 	} else {
 		res.sendStatus(404);
 	}
