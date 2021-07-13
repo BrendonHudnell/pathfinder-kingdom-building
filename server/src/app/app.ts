@@ -3,6 +3,7 @@ import cors from 'cors';
 import path from 'path';
 
 import { createKingdomRouter } from '../modules/kingdom';
+import { createHexRouter } from '../modules/hex';
 
 export function createApp(): Express {
 	const app = express();
@@ -14,6 +15,7 @@ export function createApp(): Express {
 	);
 
 	app.use('/api/kingdom', createKingdomRouter());
+	app.use('/api/hex', createHexRouter());
 
 	app.get('/api', (req: Request, res: Response): void => {
 		res.status(200).send('You have reached the API');

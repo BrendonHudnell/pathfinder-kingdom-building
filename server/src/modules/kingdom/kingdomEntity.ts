@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { HexEntity } from '../hex';
 
 @Entity('kingdom')
 export class KingdomEntity {
@@ -85,4 +86,7 @@ export class KingdomEntity {
 
 	@Column()
 	leadershipSkills!: boolean;
+
+	@OneToMany(() => HexEntity, (hex) => hex.kingdom)
+	hexes!: HexEntity[];
 }
