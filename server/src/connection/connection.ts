@@ -6,6 +6,7 @@ import { KingdomEntity } from '../modules/kingdom';
 import { HexEntity } from '../modules/hex';
 import { DistrictEntity } from '../modules/district';
 import { SettlementEntity } from '../modules/settlement';
+import { LotEntity } from '../modules/lot';
 
 export const connection = {
 	async create() {
@@ -17,7 +18,13 @@ export const connection = {
 			database: env.dbDatabase,
 			port: env.dbPort,
 			synchronize: false,
-			entities: [DistrictEntity, HexEntity, KingdomEntity, SettlementEntity],
+			entities: [
+				DistrictEntity,
+				HexEntity,
+				KingdomEntity,
+				LotEntity,
+				SettlementEntity,
+			],
 		});
 	},
 
