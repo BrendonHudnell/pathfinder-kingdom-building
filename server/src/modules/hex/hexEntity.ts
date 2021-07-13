@@ -1,5 +1,13 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+	Column,
+	Entity,
+	JoinColumn,
+	ManyToOne,
+	OneToOne,
+	PrimaryGeneratedColumn,
+} from 'typeorm';
 import { KingdomEntity } from '../kingdom';
+import { SettlementEntity } from '../settlement';
 
 @Entity('hex')
 export class HexEntity {
@@ -8,6 +16,10 @@ export class HexEntity {
 
 	@ManyToOne(() => KingdomEntity, (kingdom) => kingdom.hexes)
 	kingdom!: KingdomEntity;
+
+	@OneToOne(() => SettlementEntity, (settlement) => settlement.hex)
+	@JoinColumn()
+	settlement!: SettlementEntity;
 
 	@Column({ length: 255 })
 	name!: string;

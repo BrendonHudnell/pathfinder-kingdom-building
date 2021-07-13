@@ -4,6 +4,8 @@ import 'reflect-metadata';
 import { env } from '../env';
 import { KingdomEntity } from '../modules/kingdom';
 import { HexEntity } from '../modules/hex';
+import { DistrictEntity } from '../modules/district';
+import { SettlementEntity } from '../modules/settlement';
 
 export const connection = {
 	async create() {
@@ -15,7 +17,7 @@ export const connection = {
 			database: env.dbDatabase,
 			port: env.dbPort,
 			synchronize: false,
-			entities: [HexEntity, KingdomEntity],
+			entities: [DistrictEntity, HexEntity, KingdomEntity, SettlementEntity],
 		});
 	},
 

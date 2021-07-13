@@ -4,6 +4,7 @@ import path from 'path';
 
 import { createKingdomRouter } from '../modules/kingdom';
 import { createHexRouter } from '../modules/hex';
+import { createSettlementRouter } from '../modules/settlement';
 
 export function createApp(): Express {
 	const app = express();
@@ -16,6 +17,7 @@ export function createApp(): Express {
 
 	app.use('/api/kingdom', createKingdomRouter());
 	app.use('/api/hex', createHexRouter());
+	app.use('/api/settlement', createSettlementRouter());
 
 	app.get('/api', (req: Request, res: Response): void => {
 		res.status(200).send('You have reached the API');

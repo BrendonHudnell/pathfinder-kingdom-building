@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 import { KingdomEntity } from './kingdomEntity';
 
 export interface Kingdom {
+	id: number;
 	name: string;
 	alignment: string;
 	month: number;
@@ -58,6 +59,7 @@ async function getKingdom(kingdomId: number): Promise<Kingdom | undefined> {
 
 	if (kingdom) {
 		return {
+			id: kingdom.id,
 			name: kingdom.name,
 			alignment: kingdom.alignment,
 			month: kingdom.month,

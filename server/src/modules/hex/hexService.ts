@@ -3,6 +3,7 @@ import { HexEntity } from './hexEntity';
 
 export interface Hex {
 	id: number;
+	settlementId: number;
 	name: string;
 	terrain: string;
 	specialTerrain: string[];
@@ -19,7 +20,12 @@ export const hexService = {
 async function getAllHexes(kingdomId: number): Promise<Hex[] | undefined> {
 	const hexRepository = getRepository(HexEntity);
 
-	const hexes = await hexRepository.find({ where: [{ kingdom: kingdomId }] });
+	const hexes = await hexRepository
+		.createQueryBuilder('hex')
+		.where({ kingdom: kingdomId })
+		.select(['hex', 'settlement.id'])
+		.leftJoin('hex.settlement', 'settlement')
+		.getMany();
 
 	if (hexes) {
 		return hexes.map((hex) => {
@@ -93,6 +99,7 @@ async function getAllHexes(kingdomId: number): Promise<Hex[] | undefined> {
 
 			return {
 				id: hex.id,
+				settlementId: hex.settlement?.id,
 				name: hex.name,
 				terrain: hex.terrain,
 				specialTerrain,
