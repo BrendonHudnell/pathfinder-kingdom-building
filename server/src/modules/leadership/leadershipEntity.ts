@@ -12,7 +12,7 @@ export class LeadershipEntity {
 	@Column({ length: 14 })
 	name!: string;
 
-	@Column({ length: 255 })
+	@Column()
 	heldBy!: string;
 
 	@Column({ length: 12 })

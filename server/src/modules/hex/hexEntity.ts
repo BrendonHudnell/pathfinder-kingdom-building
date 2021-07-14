@@ -21,7 +21,7 @@ export class HexEntity {
 	@JoinColumn()
 	settlement!: SettlementEntity;
 
-	@Column({ length: 255 })
+	@Column()
 	name!: string;
 
 	@Column({ length: 9 })

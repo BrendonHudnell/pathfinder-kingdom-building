@@ -20,7 +20,7 @@ export class DistrictEntity {
 	@ManyToOne(() => SettlementEntity, (settlement) => settlement.districts)
 	settlement!: SettlementEntity;
 
-	@Column({ length: 255 })
+	@Column()
 	name!: string;
 
 	@Column()

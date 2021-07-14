@@ -10,7 +10,7 @@ export class KingdomEntity {
 	@PrimaryGeneratedColumn()
 	id!: number;
 
-	@Column({ length: 255 })
+	@Column()
 	name!: string;
 
 	@Column({ length: 15 })

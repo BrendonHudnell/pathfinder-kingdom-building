@@ -24,7 +24,7 @@ export class SettlementEntity {
 	@OneToMany(() => DistrictEntity, (district) => district.settlement)
 	districts!: DistrictEntity[];
 
-	@Column({ length: 255 })
+	@Column()
 	name!: string;
 
 	@Column()
