@@ -1,4 +1,5 @@
 import { getRepository } from 'typeorm';
+
 import { DistrictEntity } from './districtEntity';
 
 export interface District {

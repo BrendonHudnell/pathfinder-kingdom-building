@@ -6,6 +6,7 @@ import {
 	OneToOne,
 	PrimaryGeneratedColumn,
 } from 'typeorm';
+
 import { DistrictEntity } from '../district';
 import { HexEntity } from '../hex';
 import { KingdomEntity } from '../kingdom';

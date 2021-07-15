@@ -1,4 +1,5 @@
 import { getRepository } from 'typeorm';
+
 import { KingdomEntity } from './kingdomEntity';
 
 export interface Kingdom {

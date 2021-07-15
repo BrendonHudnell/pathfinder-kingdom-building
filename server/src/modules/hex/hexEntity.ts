@@ -6,6 +6,7 @@ import {
 	OneToOne,
 	PrimaryGeneratedColumn,
 } from 'typeorm';
+
 import { KingdomEntity } from '../kingdom';
 import { SettlementEntity } from '../settlement';
 

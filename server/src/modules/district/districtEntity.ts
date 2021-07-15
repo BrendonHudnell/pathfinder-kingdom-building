@@ -5,6 +5,7 @@ import {
 	OneToMany,
 	PrimaryGeneratedColumn,
 } from 'typeorm';
+
 import { KingdomEntity } from '../kingdom';
 import { LotEntity } from '../lot';
 import { SettlementEntity } from '../settlement';

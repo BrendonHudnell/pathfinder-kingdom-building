@@ -1,4 +1,5 @@
 import { getRepository } from 'typeorm';
+
 import { HexEntity } from './hexEntity';
 
 export interface Hex {

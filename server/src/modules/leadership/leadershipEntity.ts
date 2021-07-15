@@ -1,4 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
 import { KingdomEntity } from '../kingdom';
 
 @Entity('leadership')

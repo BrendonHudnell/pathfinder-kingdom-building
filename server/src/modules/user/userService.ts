@@ -1,8 +1,9 @@
 import { getRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { UserEntity } from './userEntity';
+
 import { env } from '../../env';
+import { UserEntity } from './userEntity';
 
 export const userService = {
 	register,

@@ -1,4 +1,5 @@
 import { getRepository } from 'typeorm';
+
 import { SettlementEntity } from './settlementEntity';
 
 export interface Settlement {

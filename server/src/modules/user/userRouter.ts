@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
-import { withAuth } from '../../middleware';
 
+import { withAuth } from '../../middleware';
 import { userService } from './userService';
 import { loginValidator, registerValidator } from './userValidator';
 

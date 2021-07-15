@@ -1,4 +1,5 @@
 import { getRepository } from 'typeorm';
+
 import { LeadershipEntity } from './leadershipEntity';
 
 export interface LeadershipRole {
