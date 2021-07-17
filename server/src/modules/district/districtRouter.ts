@@ -19,7 +19,7 @@ export async function getAllDistricts(
 
 	const districts = await districtService.getAllDistricts(kingdomId);
 
-	if (districts) {
+	if (districts.length > 0) {
 		res.status(200).json(districts);
 	} else {
 		res.sendStatus(404);

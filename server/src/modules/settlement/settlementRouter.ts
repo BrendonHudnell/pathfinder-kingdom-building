@@ -19,7 +19,7 @@ export async function getAllSettlements(
 
 	const settlements = await settlementService.getAllSettlements(kingdomId);
 
-	if (settlements) {
+	if (settlements.length > 0) {
 		res.status(200).json(settlements);
 	} else {
 		res.sendStatus(404);

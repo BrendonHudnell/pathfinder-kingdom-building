@@ -16,7 +16,7 @@ export async function getAllHexes(req: Request, res: Response): Promise<void> {
 
 	const hexes = await hexService.getAllHexes(kingdomId);
 
-	if (hexes) {
+	if (hexes.length > 0) {
 		res.status(200).json(hexes);
 	} else {
 		res.sendStatus(404);

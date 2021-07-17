@@ -35,9 +35,7 @@ export const districtService = {
 	getAllDistricts,
 };
 
-async function getAllDistricts(
-	kingdomId: number
-): Promise<District[] | undefined> {
+async function getAllDistricts(kingdomId: number): Promise<District[]> {
 	const districtRepository = getRepository(DistrictEntity);
 
 	const districts = await districtRepository
@@ -47,41 +45,36 @@ async function getAllDistricts(
 		.where({ kingdom: kingdomId })
 		.getMany();
 
-	if (districts) {
-		return districts.map((district) => {
-			const lotTypeList =
-				district.lots?.map((lot) => lot.lotType ?? null) ?? [];
+	return districts.map((district) => {
+		const lotTypeList = district.lots?.map((lot) => lot.lotType ?? null) ?? [];
 
-			return {
-				id: district.id,
-				settlementId: district.settlement.id,
-				name: district.name,
-				paved: district.paved,
-				sewers: district.sewers,
-				north: {
-					terrain: district.terrainNorth,
-					wall: district.wallNorth,
-					moat: district.moatNorth,
-				},
-				south: {
-					terrain: district.terrainSouth,
-					wall: district.wallSouth,
-					moat: district.moatSouth,
-				},
-				east: {
-					terrain: district.terrainEast,
-					wall: district.wallEast,
-					moat: district.moatEast,
-				},
-				west: {
-					terrain: district.terrainWest,
-					wall: district.wallWest,
-					moat: district.moatWest,
-				},
-				lotTypeList,
-			};
-		});
-	}
-
-	return undefined;
+		return {
+			id: district.id,
+			settlementId: district.settlement.id,
+			name: district.name,
+			paved: district.paved,
+			sewers: district.sewers,
+			north: {
+				terrain: district.terrainNorth,
+				wall: district.wallNorth,
+				moat: district.moatNorth,
+			},
+			south: {
+				terrain: district.terrainSouth,
+				wall: district.wallSouth,
+				moat: district.moatSouth,
+			},
+			east: {
+				terrain: district.terrainEast,
+				wall: district.wallEast,
+				moat: district.moatEast,
+			},
+			west: {
+				terrain: district.terrainWest,
+				wall: district.wallWest,
+				moat: district.moatWest,
+			},
+			lotTypeList,
+		};
+	});
 }

@@ -19,13 +19,12 @@ async function register(username: string, password: string): Promise<boolean> {
 		return false;
 	}
 
-	const newUser = new UserEntity();
-	newUser.username = username;
-
 	const hash = await bcrypt.hash(password, env.saltRounds);
 
+	const newUser = new UserEntity();
+	newUser.username = username;
 	newUser.password = hash;
-	userRepository.save(newUser);
+	await userRepository.save(newUser);
 
 	return true;
 }

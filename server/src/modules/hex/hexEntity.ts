@@ -1,7 +1,6 @@
 import {
 	Column,
 	Entity,
-	JoinColumn,
 	ManyToOne,
 	OneToOne,
 	PrimaryGeneratedColumn,
@@ -19,7 +18,6 @@ export class HexEntity {
 	kingdom!: KingdomEntity;
 
 	@OneToOne(() => SettlementEntity, (settlement) => settlement.hex)
-	@JoinColumn()
 	settlement!: SettlementEntity;
 
 	@Column()
