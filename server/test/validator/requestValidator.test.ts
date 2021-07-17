@@ -1,5 +1,6 @@
 import request from 'supertest';
 import express, { Express, Request, Response } from 'express';
+
 import { requestValidator } from '../../src/validator';
 
 describe('requestValidator', () => {

@@ -1,6 +1,12 @@
 import { createApp } from './app';
+import { connection } from './connection';
 
-const app = createApp();
+connection
+	.create()
+	.then(async () => {
+		const app = createApp();
 
-const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`Server listening on port ${port}`));
+		const port = process.env.PORT || 5000;
+		app.listen(port, () => console.log(`Server listening on port ${port}`));
+	})
+	.catch((error) => console.log('TypeORM connection error: ', error));
