@@ -3,47 +3,21 @@ import sinon from 'sinon';
 import { Express } from 'express';
 
 import { createApp } from '../../../src/app';
-import { District, districtService } from '../../../src/modules/district';
+import { districtService } from '../../../src/modules/district';
+import { testDistrict1, testDistrict2 } from '../../testUtils';
 
 describe('districtRouter', () => {
 	let app: Express;
 	const sandbox = sinon.createSandbox();
-
-	const testDistrict: District = {
-		id: 1,
-		settlementId: 1,
-		name: 'District 1',
-		paved: false,
-		sewers: false,
-		north: {
-			terrain: 'Land',
-			wall: false,
-			moat: false,
-		},
-		south: {
-			terrain: 'Land',
-			wall: false,
-			moat: false,
-		},
-		east: {
-			terrain: 'Land',
-			wall: false,
-			moat: false,
-		},
-		west: {
-			terrain: 'Land',
-			wall: false,
-			moat: false,
-		},
-		lotTypeList: [],
-	};
 
 	beforeAll(() => (app = createApp()));
 	afterEach(() => sandbox.restore());
 
 	describe('GET /', () => {
 		it('should return 200 and a list of districts with an existing kingdomId', (done) => {
-			sandbox.stub(districtService, 'getAllDistricts').resolves([testDistrict]);
+			sandbox
+				.stub(districtService, 'getAllDistricts')
+				.resolves([testDistrict1, testDistrict2]);
 
 			request(app)
 				.get('/api/district?kingdomId=1')
@@ -51,7 +25,9 @@ describe('districtRouter', () => {
 				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
-					expect(res.body.length).toEqual(1);
+					expect(res.body.length).toEqual(2);
+					expect(res.body[0]).toMatchObject(testDistrict1);
+					expect(res.body[1]).toMatchObject(testDistrict2);
 					done();
 				});
 		});

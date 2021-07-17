@@ -1,4 +1,4 @@
-import { createConnection, getConnection, getRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
 
 import { env } from '../../src/env';
@@ -9,31 +9,6 @@ import { LeadershipEntity } from '../../src/modules/leadership';
 import { LotEntity } from '../../src/modules/lot';
 import { SettlementEntity } from '../../src/modules/settlement';
 import { UserEntity } from '../../src/modules/user';
-
-export const connection = {
-	async create() {
-		await createConnection({
-			type: 'sqlite',
-			database: ':memory:',
-			dropSchema: true,
-			entities: [
-				DistrictEntity,
-				HexEntity,
-				KingdomEntity,
-				LeadershipEntity,
-				LotEntity,
-				SettlementEntity,
-				UserEntity,
-			],
-			synchronize: true,
-			logging: false,
-		});
-	},
-
-	async close() {
-		await getConnection().close();
-	},
-};
 
 export async function populateDatabase(): Promise<void> {
 	// add kingdom
@@ -356,7 +331,7 @@ export async function populateDatabase(): Promise<void> {
 	role.kingdom = kingdom;
 	role.name = 'Ruler';
 	role.heldBy = 'Ruler';
-	role.attribute = 'Dexterity';
+	role.attribute = 'Charisma';
 	role.abilityBonus = 0;
 	role.leadership = false;
 	role.benefit = 'Economy';

@@ -1,4 +1,4 @@
-import { connection, populateDatabase } from '../testUtils';
+import { connection, populateDatabase } from '../../testUtils';
 import { leadershipService } from '../../../src/modules/leadership';
 
 describe('leadershipService', () => {

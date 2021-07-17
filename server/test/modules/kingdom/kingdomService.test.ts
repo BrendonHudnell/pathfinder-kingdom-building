@@ -1,4 +1,4 @@
-import { connection, populateDatabase } from '../testUtils';
+import { connection, populateDatabase } from '../../testUtils';
 import { kingdomService } from '../../../src/modules/kingdom';
 
 describe('kingdomService', () => {

@@ -3,30 +3,19 @@ import sinon from 'sinon';
 import { Express } from 'express';
 
 import { createApp } from '../../../src/app';
-import { Hex, hexService } from '../../../src/modules/hex';
+import { hexService } from '../../../src/modules/hex';
+import { testHex1, testHex2 } from '../../testUtils';
 
 describe('hexRouter', () => {
 	let app: Express;
 	const sandbox = sinon.createSandbox();
-
-	const testHex: Hex = {
-		id: 1,
-		settlementId: 1,
-		name: 'Hex 1',
-		terrain: 'Plains',
-		specialTerrain: [],
-		explorationState: 'Unexplored',
-		terrainImprovements: [],
-		pointsOfInterest: '',
-		notes: '',
-	};
 
 	beforeAll(() => (app = createApp()));
 	afterEach(() => sandbox.restore());
 
 	describe('GET /', () => {
 		it('should return 200 and a list of hexes with an existing kingdomId', (done) => {
-			sandbox.stub(hexService, 'getAllHexes').resolves([testHex]);
+			sandbox.stub(hexService, 'getAllHexes').resolves([testHex1, testHex2]);
 
 			request(app)
 				.get('/api/hex?kingdomId=1')
@@ -34,7 +23,9 @@ describe('hexRouter', () => {
 				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
-					expect(res.body.length).toEqual(1);
+					expect(res.body.length).toEqual(2);
+					expect(res.body[0]).toMatchObject(testHex1);
+					expect(res.body[1]).toMatchObject(testHex2);
 					done();
 				});
 		});

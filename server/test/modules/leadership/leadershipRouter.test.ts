@@ -3,26 +3,12 @@ import sinon from 'sinon';
 import { Express } from 'express';
 
 import { createApp } from '../../../src/app';
-import {
-	LeadershipRole,
-	leadershipService,
-} from '../../../src/modules/leadership';
+import { leadershipService } from '../../../src/modules/leadership';
+import { testRole } from '../../testUtils';
 
 describe('leadershipRouter', () => {
 	let app: Express;
 	const sandbox = sinon.createSandbox();
-
-	const testRole: LeadershipRole = {
-		id: 1,
-		name: 'Ruler',
-		heldBy: 'Ruler',
-		attribute: 'Charisma',
-		abilityBonus: 0,
-		leadership: false,
-		benefit: 'Economy',
-		vacant: false,
-		skillBonus: 0,
-	};
 
 	beforeAll(() => (app = createApp()));
 	afterEach(() => sandbox.restore());
@@ -40,6 +26,7 @@ describe('leadershipRouter', () => {
 				.end((err, res) => {
 					if (err) return done(err);
 					expect(res.body.length).toBe(1);
+					expect(res.body[0]).toMatchObject(testRole);
 					done();
 				});
 		});

@@ -3,58 +3,12 @@ import sinon from 'sinon';
 import { Express } from 'express';
 
 import { createApp } from '../../../src/app';
-import { Kingdom, kingdomService } from '../../../src/modules/kingdom';
+import { kingdomService } from '../../../src/modules/kingdom';
+import { testKingdom } from '../../testUtils';
 
 describe('kingdomRouter', () => {
 	let app: Express;
 	const sandbox = sinon.createSandbox();
-
-	const testKingdom: Kingdom = {
-		id: 1,
-		name: 'Kingdom 1',
-		alignment: 'Neutral',
-		month: 1,
-		treasury: 0,
-		unrest: 0,
-		holidayEdict: 'None',
-		promotionEdict: 'None',
-		taxationEdict: 'None',
-		fame: {
-			1: {
-				set: false,
-				value: 'none',
-			},
-			11: {
-				set: false,
-				value: 'none',
-			},
-			26: {
-				set: false,
-				value: 'none',
-			},
-			51: {
-				set: false,
-				value: 'none',
-			},
-			101: {
-				set: false,
-				value: 'none',
-			},
-			201: {
-				set: false,
-				value: 'none',
-			},
-		},
-		government: 'Feudal Monarchy',
-		options: {
-			settlementModifiers: false,
-			settlementGovernment: false,
-			kingdomModifiers: false,
-			kingdomGovernment: false,
-			kingdomFame: false,
-			leadershipSkills: false,
-		},
-	};
 
 	beforeAll(() => (app = createApp()));
 	afterEach(() => sandbox.restore());

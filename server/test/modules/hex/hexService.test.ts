@@ -1,4 +1,4 @@
-import { connection, populateDatabase } from '../testUtils';
+import { connection, populateDatabase } from '../../testUtils';
 import { hexService } from '../../../src/modules/hex';
 
 describe('districtService', () => {

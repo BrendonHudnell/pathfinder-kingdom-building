@@ -1,4 +1,4 @@
-import { connection, populateDatabase } from '../testUtils';
+import { connection, populateDatabase } from '../../testUtils';
 import { userService } from '../../../src/modules/user';
 
 describe('userService', () => {

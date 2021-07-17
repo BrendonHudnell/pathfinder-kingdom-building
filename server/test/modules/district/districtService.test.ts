@@ -1,4 +1,4 @@
-import { connection, populateDatabase } from '../testUtils';
+import { connection, populateDatabase } from '../../testUtils';
 import { districtService } from '../../../src/modules/district';
 
 describe('districtService', () => {
