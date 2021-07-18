@@ -1,3 +1,4 @@
+export * from './settlementApi';
 export * from './settlementDetails';
 export * from './settlementListRow';
 export * from './settlementListView';

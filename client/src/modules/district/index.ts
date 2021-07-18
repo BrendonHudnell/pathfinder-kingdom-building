@@ -3,6 +3,7 @@ export * from './buildingList';
 export * from './buildingListCard';
 export * from './buildingListTooltip';
 export * from './buildingUtils';
+export * from './districtApi';
 export * from './districtBorderGrid';
 export * from './districtDetails';
 export * from './districtSlice';

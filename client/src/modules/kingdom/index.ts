@@ -4,6 +4,7 @@ export * from './edictsView';
 export * from './fameKingdomSizeChoicesDialog';
 export * from './fameView';
 export * from './governmentView';
+export * from './kingdomApi';
 export * from './kindomView';
 export * from './kingdomSlice';
 export * from './kingdomTooltip';
