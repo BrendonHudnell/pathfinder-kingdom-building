@@ -511,6 +511,7 @@ export function useKingdomGovernmentBonuses(): GovernmentBonusObject {
 
 // TODO remove once hooked up to server to fetch initial state
 export const initialKingdomState: KingdomState = {
+	id: 1,
 	name: 'Untitled',
 	alignment: Alignment.N,
 	month: 1,

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { kingdomApi } from './kingdomApi';
 import {
 	Alignment,
 	FameKingdomLevel,
@@ -35,9 +36,9 @@ export interface KingdomState {
 }
 
 export const fetchKingdomData = createAsyncThunk(
-	// TODO fix when server is hooked up
 	'kingdom/fetchKingdomData',
-	async (kingdomState: KingdomState) => {
+	async (id: number) => {
+		const kingdomState = kingdomApi.getKingdom(id);
 		return kingdomState;
 	}
 );

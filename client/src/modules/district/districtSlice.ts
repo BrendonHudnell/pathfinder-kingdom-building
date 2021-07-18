@@ -8,6 +8,7 @@ import {
 
 import { RootState } from '../../components/store';
 import { LotType } from './buildingTypes';
+import { districtApi } from './districtApi';
 import {
 	createEmptyLotArray,
 	Direction,
@@ -51,14 +52,16 @@ export interface District {
 	lotTypeList: (LotType | null)[];
 }
 
-const districtAdapter = createEntityAdapter<District>();
+const districtAdapter = createEntityAdapter<District>({
+	sortComparer: (a, b) => (a.id < b.id ? -1 : a.id === b.id ? 0 : 1),
+});
 
 const initialState = districtAdapter.getInitialState();
 
 export const fetchDistricts = createAsyncThunk(
-	// TODO fix when server is hooked up
 	'district/fetchDistricts',
-	async (districts: District[]) => {
+	async (kingdomId: number) => {
+		const districts = districtApi.getAllDistricts(kingdomId);
 		return districts;
 	}
 );

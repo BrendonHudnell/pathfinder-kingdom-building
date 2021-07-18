@@ -7,12 +7,8 @@ import { DistrictTabsView } from '../district';
 import { selectSettlementById } from './settlementSlice';
 import { SettlementDetails } from './settlementDetails';
 
-export interface SettlementProps {
-	settlementId: string;
-}
-
 export function SettlementView(): ReactElement {
-	const { settlementId } = useParams<SettlementProps>();
+	const { settlementId } = useParams<{ settlementId: string }>();
 
 	const settlement = useAppSelector((state) =>
 		selectSettlementById(state, settlementId)
@@ -23,7 +19,7 @@ export function SettlementView(): ReactElement {
 			{settlement ? (
 				<Paper>
 					<SettlementDetails settlement={settlement} />
-					<DistrictTabsView settlementId={settlementId} />
+					<DistrictTabsView settlementId={Number(settlementId)} />
 				</Paper>
 			) : null}
 		</Fragment>

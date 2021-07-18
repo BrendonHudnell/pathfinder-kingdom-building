@@ -378,26 +378,3 @@ export function getDefenseValue(hexData: HexData): number {
 
 	return total;
 }
-
-// TODO remove after hooking up DB
-function generateHexes(): HexData[] {
-	const hexes: HexData[] = [];
-
-	for (let i = 0; i < 96; i++) {
-		hexes.push({
-			id: i,
-			name: `Hex Name`,
-			terrain: TerrainType.PLAINS,
-			specialTerrain: [],
-			explorationState: ExplorationState.UNEXPLORED,
-			settlementId: -1,
-			terrainImprovements: [],
-			pointsOfInterest: '',
-			notes: '',
-		});
-	}
-
-	return hexes;
-}
-
-export const initialHexes: HexData[] = generateHexes();

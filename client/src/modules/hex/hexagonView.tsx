@@ -2,9 +2,8 @@ import React, { Fragment, ReactElement, useState } from 'react';
 import { makeStyles, Tooltip } from '@material-ui/core';
 import { Hex, Hexagon, Text } from 'react-hexgrid';
 
-import { useAppSelector } from '../../components/store';
 import { HexagonDetails } from './hexagonDetails';
-import { selectHexById } from './hexSlice';
+import { HexData } from './hexSlice';
 import {
 	ExplorationState,
 	mapExplorationStateToBorderColor,
@@ -24,18 +23,16 @@ const useStyles = makeStyles({
 
 export interface HexagonViewProps {
 	hex: Hex;
-	hexId: number;
+	hexData: HexData;
 }
 
 export function HexagonView(props: HexagonViewProps): ReactElement {
-	const { hex, hexId } = props;
+	const { hex, hexData } = props;
 
 	const classes = useStyles();
 
 	const [open, setOpen] = useState(false);
 	const [over, setOver] = useState(false);
-
-	const hexData = useAppSelector((state) => selectHexById(state, hexId));
 
 	function handleClose(): void {
 		setOpen(false);

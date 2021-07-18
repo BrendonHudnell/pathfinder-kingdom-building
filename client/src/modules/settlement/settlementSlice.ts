@@ -7,6 +7,7 @@ import {
 
 import { RootState } from '../../components/store';
 import { BuildingDisplayType } from '../district';
+import { settlementApi } from './settlementApi';
 import {
 	createEmptySettlementBuildings,
 	SettlementBuildingList,
@@ -24,14 +25,16 @@ export interface Settlement {
 	government: SettlementGovernment;
 }
 
-const settlementAdapter = createEntityAdapter<Settlement>();
+const settlementAdapter = createEntityAdapter<Settlement>({
+	sortComparer: (a, b) => (a.id < b.id ? -1 : a.id === b.id ? 0 : 1),
+});
 
 const initialState = settlementAdapter.getInitialState();
 
 export const fetchSettlements = createAsyncThunk(
-	// TODO fix when server is hooked up
 	'settlement/fetchSettlements',
-	async (settlements: Settlement[]) => {
+	async (kingdomId: number) => {
+		const settlements = settlementApi.getAllSettlements(kingdomId);
 		return settlements;
 	}
 );

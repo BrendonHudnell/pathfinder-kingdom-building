@@ -6,6 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import { RootState } from '../../components/store';
+import { leadershipApi } from './leadershipApi';
 
 export interface Role {
 	id: number;
@@ -19,14 +20,16 @@ export interface Role {
 	skillBonus: number;
 }
 
-const leadershipAdapter = createEntityAdapter<Role>();
+const leadershipAdapter = createEntityAdapter<Role>({
+	sortComparer: (a, b) => (a.id < b.id ? -1 : a.id === b.id ? 0 : 1),
+});
 
 const initialState = leadershipAdapter.getInitialState();
 
 export const fetchLeadershipRoles = createAsyncThunk(
-	// TODO fix when server is hooked up
 	'leadership/fetchLeadershipRoles',
-	async (roles: Role[]) => {
+	async (kingdomId: number) => {
+		const roles = leadershipApi.getAllRoles(kingdomId);
 		return roles;
 	}
 );

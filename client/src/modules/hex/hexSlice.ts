@@ -7,6 +7,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import { RootState } from '../../components/store';
+import { hexApi } from './hexApi';
 import {
 	ExplorationState,
 	SpecialTerrainType,
@@ -26,14 +27,16 @@ export interface HexData {
 	notes: string;
 }
 
-const hexAdapter = createEntityAdapter<HexData>();
+const hexAdapter = createEntityAdapter<HexData>({
+	sortComparer: (a, b) => (a.id < b.id ? -1 : a.id === b.id ? 0 : 1),
+});
 
 const initialState = hexAdapter.getInitialState();
 
 export const fetchHexes = createAsyncThunk(
-	// TODO fix when server is hooked up
 	'hex/fetchHexes',
-	async (hexes: HexData[]) => {
+	async (kingdomId: number) => {
+		const hexes = hexApi.getAllHexes(kingdomId);
 		return hexes;
 	}
 );
