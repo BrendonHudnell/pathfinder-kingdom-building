@@ -13,6 +13,7 @@ import {
 } from './kingdomUtils';
 
 export interface KingdomState {
+	id: number;
 	name: string;
 	alignment: Alignment;
 	month: number;

@@ -2,7 +2,6 @@ import {
 	createAsyncThunk,
 	createEntityAdapter,
 	createSlice,
-	EntityId,
 	PayloadAction,
 } from '@reduxjs/toolkit';
 
@@ -15,10 +14,10 @@ import {
 } from './settlementUtils';
 
 export interface Settlement {
-	id: EntityId;
+	id: number;
 	name: string;
-	hexId: EntityId;
-	districts: EntityId[];
+	hexId: number;
+	districts: number[];
 	buildings: SettlementBuildingList;
 	wallUnrestUsed: boolean;
 	moatUnrestUsed: boolean;
@@ -40,7 +39,7 @@ export const fetchSettlements = createAsyncThunk(
 export const addNewSettlement = createAsyncThunk(
 	// TODO fix when server is hooked up
 	'settlement/addNewSettlement',
-	async (hexId: EntityId) => {
+	async (hexId: number) => {
 		const settlementId = Math.floor(Math.random() * 10000);
 		const newSettlement: Settlement = {
 			id: settlementId,
@@ -63,7 +62,7 @@ export const settlementSlice = createSlice({
 	reducers: {
 		nameUpdated: (
 			state,
-			action: PayloadAction<{ settlementId: EntityId; name: string }>
+			action: PayloadAction<{ settlementId: number; name: string }>
 		) => {
 			const { settlementId, name } = action.payload;
 
@@ -76,7 +75,7 @@ export const settlementSlice = createSlice({
 		buildingAdded: (
 			state,
 			action: PayloadAction<{
-				settlementId: EntityId;
+				settlementId: number;
 				building: BuildingDisplayType;
 			}>
 		) => {
@@ -91,7 +90,7 @@ export const settlementSlice = createSlice({
 		buildingRemoved: (
 			state,
 			action: PayloadAction<{
-				settlementId: EntityId;
+				settlementId: number;
 				building: BuildingDisplayType;
 			}>
 		) => {
@@ -103,14 +102,14 @@ export const settlementSlice = createSlice({
 				settlement.buildings[building]--;
 			}
 		},
-		wallUnrestUsed: (state, action: PayloadAction<EntityId>) => {
+		wallUnrestUsed: (state, action: PayloadAction<number>) => {
 			const settlement = state.entities[action.payload];
 
 			if (settlement) {
 				settlement.wallUnrestUsed = true;
 			}
 		},
-		moatUnrestUsed: (state, action: PayloadAction<EntityId>) => {
+		moatUnrestUsed: (state, action: PayloadAction<number>) => {
 			const settlement = state.entities[action.payload];
 
 			if (settlement) {
@@ -120,7 +119,7 @@ export const settlementSlice = createSlice({
 		governmentUpdated: (
 			state,
 			action: PayloadAction<{
-				settlementId: EntityId;
+				settlementId: number;
 				government: SettlementGovernment;
 			}>
 		) => {

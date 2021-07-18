@@ -3,7 +3,6 @@ import {
 	createEntityAdapter,
 	createSelector,
 	createSlice,
-	EntityId,
 	PayloadAction,
 } from '@reduxjs/toolkit';
 
@@ -16,12 +15,12 @@ import {
 } from './hexUtils';
 
 export interface HexData {
-	id: EntityId;
+	id: number;
 	name: string;
 	terrain: TerrainType;
 	specialTerrain: SpecialTerrainType[];
 	explorationState: ExplorationState;
-	settlementId: EntityId;
+	settlementId: number;
 	terrainImprovements: TerrainImprovementType[];
 	pointsOfInterest: string;
 	notes: string;
@@ -45,7 +44,7 @@ export const hexSlice = createSlice({
 	reducers: {
 		terrainUpdated: (
 			state,
-			action: PayloadAction<{ hexId: EntityId; terrain: TerrainType }>
+			action: PayloadAction<{ hexId: number; terrain: TerrainType }>
 		) => {
 			const { hexId, terrain } = action.payload;
 
@@ -55,7 +54,7 @@ export const hexSlice = createSlice({
 		},
 		nameUpdated: (
 			state,
-			action: PayloadAction<{ hexId: EntityId; name: string }>
+			action: PayloadAction<{ hexId: number; name: string }>
 		) => {
 			const { hexId, name } = action.payload;
 
@@ -66,7 +65,7 @@ export const hexSlice = createSlice({
 		explorationStateUpdated: (
 			state,
 			action: PayloadAction<{
-				hexId: EntityId;
+				hexId: number;
 				explorationState: ExplorationState;
 			}>
 		) => {
@@ -79,7 +78,7 @@ export const hexSlice = createSlice({
 		terrainImprovementAdded: (
 			state,
 			action: PayloadAction<{
-				hexId: EntityId;
+				hexId: number;
 				terrainImprovement: TerrainImprovementType;
 			}>
 		) => {
@@ -95,7 +94,7 @@ export const hexSlice = createSlice({
 		terrainImprovementRemoved: (
 			state,
 			action: PayloadAction<{
-				hexId: EntityId;
+				hexId: number;
 				terrainImprovement: TerrainImprovementType;
 			}>
 		) => {
@@ -114,7 +113,7 @@ export const hexSlice = createSlice({
 		specialTerrainAdded: (
 			state,
 			action: PayloadAction<{
-				hexId: EntityId;
+				hexId: number;
 				specialTerrain: SpecialTerrainType;
 			}>
 		) => {
@@ -130,7 +129,7 @@ export const hexSlice = createSlice({
 		specialTerrainRemoved: (
 			state,
 			action: PayloadAction<{
-				hexId: EntityId;
+				hexId: number;
 				specialTerrain: SpecialTerrainType;
 			}>
 		) => {
@@ -146,7 +145,7 @@ export const hexSlice = createSlice({
 		},
 		settlementIdUpdated: (
 			state,
-			action: PayloadAction<{ hexId: EntityId; settlementId: EntityId }>
+			action: PayloadAction<{ hexId: number; settlementId: number }>
 		) => {
 			const { hexId, settlementId } = action.payload;
 
@@ -156,7 +155,7 @@ export const hexSlice = createSlice({
 		},
 		pointsOfInterestUpdated: (
 			state,
-			action: PayloadAction<{ hexId: EntityId; pointsOfInterest: string }>
+			action: PayloadAction<{ hexId: number; pointsOfInterest: string }>
 		) => {
 			const { hexId, pointsOfInterest } = action.payload;
 
@@ -166,7 +165,7 @@ export const hexSlice = createSlice({
 		},
 		notesUpdated: (
 			state,
-			action: PayloadAction<{ hexId: EntityId; notes: string }>
+			action: PayloadAction<{ hexId: number; notes: string }>
 		) => {
 			const { hexId, notes } = action.payload;
 

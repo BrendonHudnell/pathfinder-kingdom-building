@@ -1,6 +1,5 @@
 import React, { Fragment, ReactElement, useState } from 'react';
 import { makeStyles, Tooltip } from '@material-ui/core';
-import { EntityId } from '@reduxjs/toolkit';
 import { Hex, Hexagon, Text } from 'react-hexgrid';
 
 import { useAppSelector } from '../../components/store';
@@ -25,7 +24,7 @@ const useStyles = makeStyles({
 
 export interface HexagonViewProps {
 	hex: Hex;
-	hexId: EntityId;
+	hexId: number;
 }
 
 export function HexagonView(props: HexagonViewProps): ReactElement {

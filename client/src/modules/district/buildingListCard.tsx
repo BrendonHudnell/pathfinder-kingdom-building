@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import { Grid, Tooltip, Typography } from '@material-ui/core';
 import { DragPreviewImage, DragSourceMonitor, useDrag } from 'react-dnd';
-import { EntityId } from '@reduxjs/toolkit';
 
 import { useAppDispatch } from '../../components/store';
 import { buildingAdded } from '../settlement';
@@ -20,7 +19,7 @@ import {
 import { getBuildingDisplayTypeByListType } from './buildingUtils';
 
 export interface BuildingListCardProps {
-	settlementId: EntityId;
+	settlementId: number;
 	buildingListType: BuildingListType;
 }
 

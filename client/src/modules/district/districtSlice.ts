@@ -3,7 +3,6 @@ import {
 	createEntityAdapter,
 	createSelector,
 	createSlice,
-	EntityId,
 	PayloadAction,
 } from '@reduxjs/toolkit';
 
@@ -24,8 +23,8 @@ import {
 // }
 
 export interface District {
-	id: EntityId;
-	settlementId: EntityId;
+	id: number;
+	settlementId: number;
 	name: string;
 	paved: boolean;
 	sewers: boolean;
@@ -67,7 +66,7 @@ export const fetchDistricts = createAsyncThunk(
 export const addNewDistrict = createAsyncThunk(
 	// TODO fix when server is hooked up
 	'district/addNewDistrict',
-	async (settlementId: EntityId) => {
+	async (settlementId: number) => {
 		const districtId = Math.floor(Math.random() * 10000);
 		const newDistrict: District = {
 			id: districtId,
@@ -108,7 +107,7 @@ export const districtSlice = createSlice({
 	reducers: {
 		nameUpdated: (
 			state,
-			action: PayloadAction<{ districtId: EntityId; name: string }>
+			action: PayloadAction<{ districtId: number; name: string }>
 		) => {
 			const { districtId, name } = action.payload;
 
@@ -118,7 +117,7 @@ export const districtSlice = createSlice({
 		},
 		pavedUpdated: (
 			state,
-			action: PayloadAction<{ districtId: EntityId; paved: boolean }>
+			action: PayloadAction<{ districtId: number; paved: boolean }>
 		) => {
 			const { districtId, paved } = action.payload;
 
@@ -128,7 +127,7 @@ export const districtSlice = createSlice({
 		},
 		sewersUpdated: (
 			state,
-			action: PayloadAction<{ districtId: EntityId; sewers: boolean }>
+			action: PayloadAction<{ districtId: number; sewers: boolean }>
 		) => {
 			const { districtId, sewers } = action.payload;
 
@@ -139,7 +138,7 @@ export const districtSlice = createSlice({
 		terrainUpdated: (
 			state,
 			action: PayloadAction<{
-				districtId: EntityId;
+				districtId: number;
 				direction: Direction;
 				terrain: DistrictTerrainType;
 			}>
@@ -157,7 +156,7 @@ export const districtSlice = createSlice({
 		wallUpdated: (
 			state,
 			action: PayloadAction<{
-				districtId: EntityId;
+				districtId: number;
 				direction: Direction;
 				wall: boolean;
 			}>
@@ -171,7 +170,7 @@ export const districtSlice = createSlice({
 		moatUpdated: (
 			state,
 			action: PayloadAction<{
-				districtId: EntityId;
+				districtId: number;
 				direction: Direction;
 				moat: boolean;
 			}>
@@ -185,7 +184,7 @@ export const districtSlice = createSlice({
 		lotUpdated: (
 			state,
 			action: PayloadAction<{
-				districtId: EntityId;
+				districtId: number;
 				newLotNumber: number;
 				oldLotNumber: number;
 				lotType: LotType;
@@ -203,7 +202,7 @@ export const districtSlice = createSlice({
 		},
 		lotCleared: (
 			state,
-			action: PayloadAction<{ districtId?: EntityId; oldLotNumber: number }>
+			action: PayloadAction<{ districtId?: number; oldLotNumber: number }>
 		) => {
 			const { districtId, oldLotNumber } = action.payload;
 
@@ -249,7 +248,7 @@ export const { selectAll: selectAllDistricts, selectById: selectDistrictById } =
 export const selectDistrictsBySettlementId = createSelector(
 	[
 		selectAllDistricts,
-		(state: RootState, settlementId: EntityId) => settlementId,
+		(state: RootState, settlementId: number) => settlementId,
 	],
 	(districts, settlementId) =>
 		districts.filter((district) => district.settlementId == settlementId)

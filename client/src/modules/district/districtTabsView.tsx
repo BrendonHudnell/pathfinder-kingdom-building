@@ -1,6 +1,5 @@
 import React, { ReactElement, useState } from 'react';
 import { AppBar, makeStyles, Paper, Tab, Tabs } from '@material-ui/core';
-import { EntityId } from '@reduxjs/toolkit';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -21,7 +20,7 @@ const useStyles = makeStyles({
 });
 
 export interface DistrictTabsViewProps {
-	settlementId: EntityId;
+	settlementId: number;
 }
 
 export function DistrictTabsView(props: DistrictTabsViewProps): ReactElement {

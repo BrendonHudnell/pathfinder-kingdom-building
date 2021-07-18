@@ -9,7 +9,6 @@ import {
 	makeStyles,
 	TextField,
 } from '@material-ui/core';
-import { EntityId } from '@reduxjs/toolkit';
 
 import { BuildingListCard } from './buildingListCard';
 import { BuildingListType } from './buildingTypes';
@@ -21,7 +20,7 @@ const useStyles = makeStyles({
 });
 
 export interface BuildingListProps {
-	settlementId: EntityId;
+	settlementId: number;
 }
 
 export function BuildingList(props: BuildingListProps): ReactElement {

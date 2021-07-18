@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Chip, makeStyles } from '@material-ui/core';
 import { useDrop } from 'react-dnd';
-import { EntityId } from '@reduxjs/toolkit';
 
 import { useAppDispatch } from '../../components/store';
 import { buildingRemoved } from '../settlement';
@@ -34,8 +33,8 @@ const useStyles = makeStyles({
 });
 
 export interface TrashcanProps {
-	settlementId: EntityId;
-	districtId: EntityId;
+	settlementId: number;
+	districtId: number;
 }
 
 export function Trashcan(props: TrashcanProps): ReactElement {
