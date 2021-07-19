@@ -2,14 +2,23 @@ import ky from 'ky';
 
 import { District } from './districtSlice';
 
+export interface DistrictResponse {
+	status: number;
+	data?: District[];
+}
+
 export const districtApi = {
 	getAllDistricts,
 };
 
 async function getAllDistricts(kingdomId: number): Promise<District[]> {
-	const response = await ky
+	const response: DistrictResponse = await ky
 		.get('/api/district', { searchParams: { kingdomId } })
 		.json();
 
-	return response as District[];
+	if (response.status !== 200) {
+		return [];
+	}
+
+	return response.data ?? [];
 }

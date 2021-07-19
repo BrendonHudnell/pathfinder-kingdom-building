@@ -20,8 +20,13 @@ export async function getAllSettlements(
 	const settlements = await settlementService.getAllSettlements(kingdomId);
 
 	if (settlements.length > 0) {
-		res.status(200).json(settlements);
+		res.status(200).json({
+			status: 200,
+			data: settlements,
+		});
 	} else {
-		res.sendStatus(404);
+		res.status(200).json({
+			status: 404,
+		});
 	}
 }

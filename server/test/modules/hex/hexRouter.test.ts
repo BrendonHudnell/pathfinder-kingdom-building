@@ -23,9 +23,10 @@ describe('hexRouter', () => {
 				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
-					expect(res.body.length).toEqual(2);
-					expect(res.body[0]).toMatchObject(testHex1);
-					expect(res.body[1]).toMatchObject(testHex2);
+					expect(res.body).toMatchObject({
+						status: 200,
+						data: [testHex1, testHex2],
+					});
 					done();
 				});
 		});
@@ -35,11 +36,11 @@ describe('hexRouter', () => {
 
 			request(app)
 				.get('/api/hex?kingdomId=0')
-				.expect('Content-Type', /text\/plain/)
-				.expect(404)
+				.expect('Content-Type', /json/)
+				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
-					expect(res.text).toEqual('Not Found');
+					expect(res.body).toMatchObject({ status: 404 });
 					done();
 				});
 		});

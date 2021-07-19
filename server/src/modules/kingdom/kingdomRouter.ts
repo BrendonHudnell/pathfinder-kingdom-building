@@ -17,8 +17,13 @@ export async function getKingdom(req: Request, res: Response): Promise<void> {
 	const kingdom = await kingdomService.getKingdom(id);
 
 	if (kingdom) {
-		res.status(200).json(kingdom);
+		res.status(200).json({
+			status: 200,
+			data: kingdom,
+		});
 	} else {
-		res.sendStatus(404);
+		res.status(200).json({
+			status: 404,
+		});
 	}
 }

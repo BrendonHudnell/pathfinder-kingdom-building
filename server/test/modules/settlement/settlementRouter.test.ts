@@ -25,9 +25,10 @@ describe('settlementRouter', () => {
 				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
-					expect(res.body.length).toEqual(2);
-					expect(res.body[0]).toMatchObject(testSettlement1);
-					expect(res.body[1]).toMatchObject(testSettlement2);
+					expect(res.body).toMatchObject({
+						status: 200,
+						data: [testSettlement1, testSettlement2],
+					});
 					done();
 				});
 		});
@@ -37,11 +38,11 @@ describe('settlementRouter', () => {
 
 			request(app)
 				.get('/api/settlement?kingdomId=0')
-				.expect('Content-Type', /text\/plain/)
-				.expect(404)
+				.expect('Content-Type', /json/)
+				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
-					expect(res.text).toEqual('Not Found');
+					expect(res.body).toMatchObject({ status: 404 });
 					done();
 				});
 		});

@@ -20,8 +20,13 @@ export async function getAllLeadershipRoles(
 	const roles = await leadershipService.getAllLeadershipRoles(kingdomId);
 
 	if (roles.length > 0) {
-		res.status(200).json(roles);
+		res.status(200).json({
+			status: 200,
+			data: roles,
+		});
 	} else {
-		res.sendStatus(404);
+		res.status(200).json({
+			status: 404,
+		});
 	}
 }

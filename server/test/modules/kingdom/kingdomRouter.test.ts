@@ -23,7 +23,7 @@ describe('kingdomRouter', () => {
 				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
-					expect(res.body).toMatchObject(testKingdom);
+					expect(res.body).toMatchObject({ status: 200, data: testKingdom });
 					done();
 				});
 		});
@@ -33,11 +33,11 @@ describe('kingdomRouter', () => {
 
 			request(app)
 				.get('/api/kingdom?id=0')
-				.expect('Content-Type', /text\/plain/)
-				.expect(404)
+				.expect('Content-Type', /json/)
+				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
-					expect(res.text).toEqual('Not Found');
+					expect(res.body).toMatchObject({ status: 404 });
 					done();
 				});
 		});

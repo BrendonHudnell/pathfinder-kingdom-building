@@ -25,9 +25,10 @@ describe('districtRouter', () => {
 				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
-					expect(res.body.length).toEqual(2);
-					expect(res.body[0]).toMatchObject(testDistrict1);
-					expect(res.body[1]).toMatchObject(testDistrict2);
+					expect(res.body).toMatchObject({
+						status: 200,
+						data: [testDistrict1, testDistrict2],
+					});
 					done();
 				});
 		});
@@ -37,11 +38,11 @@ describe('districtRouter', () => {
 
 			request(app)
 				.get('/api/district?kingdomId=0')
-				.expect('Content-Type', /text\/plain/)
-				.expect(404)
+				.expect('Content-Type', /json/)
+				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
-					expect(res.text).toEqual('Not Found');
+					expect(res.body).toMatchObject({ status: 404 });
 					done();
 				});
 		});

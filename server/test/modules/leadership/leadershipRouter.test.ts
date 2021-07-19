@@ -25,8 +25,7 @@ describe('leadershipRouter', () => {
 				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
-					expect(res.body.length).toBe(1);
-					expect(res.body[0]).toMatchObject(testRole);
+					expect(res.body).toMatchObject({ status: 200, data: [testRole] });
 					done();
 				});
 		});
@@ -36,11 +35,11 @@ describe('leadershipRouter', () => {
 
 			request(app)
 				.get('/api/leadership?kingdomId=0')
-				.expect('Content-Type', /text\/plain/)
-				.expect(404)
+				.expect('Content-Type', /json/)
+				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
-					expect(res.text).toEqual('Not Found');
+					expect(res.body).toMatchObject({ status: 404 });
 					done();
 				});
 		});
