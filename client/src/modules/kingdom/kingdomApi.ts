@@ -1,7 +1,7 @@
 import ky from 'ky';
 
 import { KingdomState } from './kingdomSlice';
-import { initialKingdomState } from './kingdomUtils';
+import { defaultKingdomState } from './kingdomUtils';
 
 export interface KingdomResponse {
 	status: number;
@@ -18,8 +18,8 @@ async function getKingdom(id: number): Promise<KingdomState> {
 		.json();
 
 	if (response.status !== 200) {
-		return initialKingdomState;
+		return defaultKingdomState;
 	}
 
-	return response.data ?? initialKingdomState;
+	return response.data ?? defaultKingdomState;
 }

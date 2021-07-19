@@ -6,7 +6,7 @@ import {
 	FameKingdomLevel,
 	FameValue,
 	HolidayEdict,
-	initialKingdomState,
+	defaultKingdomState,
 	KingdomFame,
 	KingdomGovernment,
 	PromotionEdict,
@@ -45,7 +45,7 @@ export const fetchKingdomData = createAsyncThunk(
 
 export const kingdomSlice = createSlice({
 	name: 'kingdom',
-	initialState: initialKingdomState,
+	initialState: defaultKingdomState,
 	reducers: {
 		nameUpdated: (state, action: PayloadAction<string>) => {
 			state.name = action.payload;
