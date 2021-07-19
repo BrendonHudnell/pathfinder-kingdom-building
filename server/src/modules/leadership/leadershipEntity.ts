@@ -16,7 +16,7 @@ export class LeadershipEntity {
 	@Column()
 	heldBy!: string;
 
-	@Column({ length: 12 })
+	@Column({ length: 14 })
 	attribute!: string;
 
 	@Column()

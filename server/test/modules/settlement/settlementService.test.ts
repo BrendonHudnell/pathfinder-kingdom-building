@@ -21,4 +21,26 @@ describe('settlementService', () => {
 			expect(settlements.length).toBe(0);
 		});
 	});
+
+	describe('addSettlement', () => {
+		it('should return a newly created Settlement when an existing kingdomId and hexId is passed in', async () => {
+			const settlement = await settlementService.addSettlement(1, 3);
+
+			expect(settlement).not.toBeUndefined();
+			expect(settlement!.name).toBe('New Settlement');
+			expect(settlement!.government).toBe('Autocracy');
+		});
+
+		it('should return undefined when a nonexistent kingdomId is passed in', async () => {
+			const settlement = await settlementService.addSettlement(-1, 3);
+
+			expect(settlement).toBeUndefined();
+		});
+
+		it('should return undefined when a nonexistent hexId is passed in', async () => {
+			const settlement = await settlementService.addSettlement(1, -1);
+
+			expect(settlement).toBeUndefined();
+		});
+	});
 });

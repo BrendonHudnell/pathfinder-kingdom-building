@@ -15,3 +15,22 @@ export const getAllSettlementsValidator = requestValidator(
 	},
 	true
 );
+
+export const addSettlementValidator = requestValidator(
+	{
+		body: {
+			type: 'object',
+			additionalProperties: false,
+			properties: {
+				kingdomId: {
+					type: 'number',
+				},
+				hexId: {
+					type: 'number',
+				},
+			},
+			required: ['kingdomId', 'hexId'],
+		},
+	},
+	true
+);

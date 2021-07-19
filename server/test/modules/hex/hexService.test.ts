@@ -12,7 +12,7 @@ describe('districtService', () => {
 		it('should return an array of Hexes when an existing kingdomId is passed in', async () => {
 			const hexes = await hexService.getAllHexes(1);
 
-			expect(hexes.length).toBe(2);
+			expect(hexes.length).toBe(3);
 		});
 
 		it('should return an empty array when a nonexistent kingdomId is passed in', async () => {

@@ -15,3 +15,19 @@ export const getAllLeadershipRolesValidator = requestValidator(
 	},
 	true
 );
+
+export const addViceroyValidator = requestValidator(
+	{
+		body: {
+			type: 'object',
+			additionalProperties: false,
+			properties: {
+				kingdomId: {
+					type: 'number',
+				},
+			},
+			required: ['kingdomId'],
+		},
+	},
+	true
+);

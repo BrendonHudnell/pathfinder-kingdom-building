@@ -23,4 +23,31 @@ describe('districtService', () => {
 			expect(districts.length).toBe(0);
 		});
 	});
+
+	describe('addDistrict', () => {
+		it('should return a newly created District when an existing kingdomId and settlementId is passed in', async () => {
+			const district = await districtService.addDistrict(1, 1);
+
+			expect(district).not.toBeUndefined();
+			expect(district!.name).toBe('New District');
+			expect(district!.north).toMatchObject({
+				terrain: 'Land',
+				wall: false,
+				moat: false,
+			});
+			expect(district!.lotTypeList.length).toBe(16);
+		});
+
+		it('should return undefined when a nonexistent kingdomId is passed in', async () => {
+			const district = await districtService.addDistrict(-1, 1);
+
+			expect(district).toBeUndefined();
+		});
+
+		it('should return undefined when a nonexistent settlementId is passed in', async () => {
+			const district = await districtService.addDistrict(1, -1);
+
+			expect(district).toBeUndefined();
+		});
+	});
 });

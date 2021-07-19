@@ -6,7 +6,7 @@ import { Settlement } from '../../src/modules/settlement';
 
 export const testKingdom: Kingdom = {
 	id: 1,
-	name: 'Kingdom 1',
+	name: 'Untitled',
 	alignment: 'Neutral',
 	month: 1,
 	treasury: 0,
@@ -54,7 +54,7 @@ export const testKingdom: Kingdom = {
 export const testHex1: Hex = {
 	id: 1,
 	settlementId: 1,
-	name: 'Hex 1',
+	name: 'Hex Name',
 	terrain: 'Plains',
 	specialTerrain: [],
 	explorationState: 'Settled',
@@ -66,7 +66,7 @@ export const testHex1: Hex = {
 export const testHex2: Hex = {
 	id: 2,
 	settlementId: 2,
-	name: 'Hex 2',
+	name: 'Hex Name',
 	terrain: 'Plains',
 	specialTerrain: [
 		'Bridge',
@@ -78,7 +78,7 @@ export const testHex2: Hex = {
 		'River',
 		'Ruin',
 	],
-	explorationState: 'Unexplored',
+	explorationState: 'Settled',
 	terrainImprovements: [
 		'Aqueduct',
 		'Bridge',
@@ -100,7 +100,7 @@ export const testHex2: Hex = {
 
 export const testSettlement1: Settlement = {
 	id: 1,
-	name: 'Settlement 1',
+	name: 'New Settlement',
 	hexId: 1,
 	districts: [1, 2],
 	buildings: {
@@ -181,7 +181,7 @@ export const testSettlement1: Settlement = {
 
 export const testSettlement2: Settlement = {
 	id: 1,
-	name: 'Settlement 2',
+	name: 'New Settlement',
 	hexId: 2,
 	districts: [],
 	buildings: {
@@ -263,7 +263,7 @@ export const testSettlement2: Settlement = {
 export const testDistrict1: District = {
 	id: 1,
 	settlementId: 1,
-	name: 'District 1',
+	name: 'New District',
 	paved: false,
 	sewers: false,
 	north: {
@@ -292,7 +292,7 @@ export const testDistrict1: District = {
 export const testDistrict2: District = {
 	id: 1,
 	settlementId: 1,
-	name: 'District 2',
+	name: 'New District',
 	paved: false,
 	sewers: false,
 	north: {
@@ -321,11 +321,23 @@ export const testDistrict2: District = {
 export const testRole: LeadershipRole = {
 	id: 1,
 	name: 'Ruler',
-	heldBy: 'Ruler',
+	heldBy: '',
 	attribute: 'Charisma',
 	abilityBonus: 0,
 	leadership: false,
 	benefit: 'Economy',
-	vacant: false,
+	vacant: true,
+	skillBonus: 0,
+};
+
+export const testViceroy: LeadershipRole = {
+	id: 1,
+	name: 'Viceroy',
+	heldBy: '',
+	attribute: 'Intelligence/2',
+	abilityBonus: 0,
+	leadership: false,
+	benefit: 'Economy',
+	vacant: true,
 	skillBonus: 0,
 };

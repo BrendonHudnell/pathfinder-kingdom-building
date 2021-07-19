@@ -15,7 +15,7 @@ export async function populateDatabase(): Promise<void> {
 	const kingdomRepo = getRepository(KingdomEntity);
 
 	const kingdom = new KingdomEntity();
-	kingdom.name = 'Kingdom 1';
+	kingdom.name = 'Untitled';
 	kingdom.alignment = 'Neutral';
 	kingdom.month = 1;
 	kingdom.treasury = 0;
@@ -50,7 +50,7 @@ export async function populateDatabase(): Promise<void> {
 
 	const hex1 = new HexEntity();
 	hex1.kingdom = kingdom;
-	hex1.name = 'Hex 1';
+	hex1.name = 'Hex Name';
 	hex1.terrain = 'Plains';
 	hex1.bridgeSpecialTerrain = false;
 	hex1.building = false;
@@ -77,7 +77,7 @@ export async function populateDatabase(): Promise<void> {
 
 	const hex2 = new HexEntity();
 	hex2.kingdom = kingdom;
-	hex2.name = 'Hex 2';
+	hex2.name = 'Hex Name';
 	hex2.terrain = 'Plains';
 	hex2.bridgeSpecialTerrain = true;
 	hex2.building = true;
@@ -87,7 +87,7 @@ export async function populateDatabase(): Promise<void> {
 	hex2.resource = true;
 	hex2.river = true;
 	hex2.ruin = true;
-	hex2.explorationState = 'Unexplored';
+	hex2.explorationState = 'Settled';
 	hex2.aqueduct = true;
 	hex2.bridgeImprovement = true;
 	hex2.canal = true;
@@ -104,8 +104,38 @@ export async function populateDatabase(): Promise<void> {
 	hex2.pointsOfInterest = 'Some string';
 	hex2.notes = 'Some other string';
 
+	const hex3 = new HexEntity();
+	hex3.kingdom = kingdom;
+	hex3.name = 'Hex Name';
+	hex3.terrain = 'Plains';
+	hex3.bridgeSpecialTerrain = true;
+	hex3.building = true;
+	hex3.freeCity = true;
+	hex3.lair = true;
+	hex3.landmark = true;
+	hex3.resource = true;
+	hex3.river = true;
+	hex3.ruin = true;
+	hex3.explorationState = 'Claimed';
+	hex3.aqueduct = true;
+	hex3.bridgeImprovement = true;
+	hex3.canal = true;
+	hex3.farm = true;
+	hex3.fishery = true;
+	hex3.fort = true;
+	hex3.highway = true;
+	hex3.mine = true;
+	hex3.quarry = true;
+	hex3.road = true;
+	hex3.sawmill = true;
+	hex3.vineyard = true;
+	hex3.watchtower = true;
+	hex3.pointsOfInterest = 'Some string';
+	hex3.notes = 'Some other string';
+
 	await hexRepo.save(hex1);
 	await hexRepo.save(hex2);
+	await hexRepo.save(hex3);
 
 	// add settlements
 	const settlementRepo = getRepository(SettlementEntity);
@@ -113,7 +143,7 @@ export async function populateDatabase(): Promise<void> {
 	const settlement1 = new SettlementEntity();
 	settlement1.hex = hex1;
 	settlement1.kingdom = kingdom;
-	settlement1.name = 'Settlement 1';
+	settlement1.name = 'New Settlement';
 	settlement1.academy = 0;
 	settlement1.alchemist = 0;
 	settlement1.arena = 0;
@@ -190,7 +220,7 @@ export async function populateDatabase(): Promise<void> {
 	const settlement2 = new SettlementEntity();
 	settlement2.hex = hex2;
 	settlement2.kingdom = kingdom;
-	settlement2.name = 'Settlement 2';
+	settlement2.name = 'New Settlement';
 	settlement2.academy = 0;
 	settlement2.alchemist = 0;
 	settlement2.arena = 0;
@@ -273,7 +303,7 @@ export async function populateDatabase(): Promise<void> {
 	const district1 = new DistrictEntity();
 	district1.kingdom = kingdom;
 	district1.settlement = settlement1;
-	district1.name = 'District 1';
+	district1.name = 'New District';
 	district1.paved = false;
 	district1.sewers = false;
 	district1.terrainNorth = 'Land';
@@ -292,7 +322,7 @@ export async function populateDatabase(): Promise<void> {
 	const district2 = new DistrictEntity();
 	district2.kingdom = kingdom;
 	district2.settlement = settlement1;
-	district2.name = 'District 2';
+	district2.name = 'New District';
 	district2.paved = false;
 	district2.sewers = false;
 	district2.terrainNorth = 'Land';
@@ -330,7 +360,7 @@ export async function populateDatabase(): Promise<void> {
 	const role = new LeadershipEntity();
 	role.kingdom = kingdom;
 	role.name = 'Ruler';
-	role.heldBy = 'Ruler';
+	role.heldBy = '';
 	role.attribute = 'Charisma';
 	role.abilityBonus = 0;
 	role.leadership = false;

@@ -1,4 +1,4 @@
-import { connection, populateDatabase } from '../../testUtils';
+import { connection, populateDatabase, testKingdom } from '../../testUtils';
 import { kingdomService } from '../../../src/modules/kingdom';
 
 describe('kingdomService', () => {
@@ -12,17 +12,7 @@ describe('kingdomService', () => {
 		it('should return a Kingdom when an existing id is passed in', async () => {
 			const kingdom = await kingdomService.getKingdom(1);
 
-			expect(kingdom).not.toBeUndefined();
-			expect(kingdom!.name).toBe('Kingdom 1');
-			expect(kingdom!.holidayEdict).toBe('None');
-			expect(kingdom!.options).toMatchObject({
-				settlementModifiers: false,
-				settlementGovernment: false,
-				kingdomModifiers: false,
-				kingdomGovernment: false,
-				kingdomFame: false,
-				leadershipSkills: false,
-			});
+			expect(kingdom).toMatchObject(testKingdom);
 		});
 
 		it('should return undefined when a nonexistent id is passed in', async () => {
