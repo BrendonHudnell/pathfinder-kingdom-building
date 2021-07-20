@@ -19,7 +19,8 @@ export const connection = {
 			password: env.dbPassword,
 			database: env.dbDatabase,
 			port: env.dbPort,
-			synchronize: false,
+			dropSchema: env.dbDropSchema,
+			synchronize: env.dbSynchronize,
 			entities: [
 				DistrictEntity,
 				HexEntity,
