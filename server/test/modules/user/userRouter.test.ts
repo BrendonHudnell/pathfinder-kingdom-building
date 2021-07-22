@@ -1,8 +1,10 @@
 import request from 'supertest';
 import sinon from 'sinon';
 import { Express } from 'express';
+import jwt from 'jsonwebtoken';
 
 import { createApp } from '../../../src/app';
+import { env } from '../../../src/env';
 import { userService } from '../../../src/modules/user';
 
 describe('userRouter', () => {
@@ -115,7 +117,7 @@ describe('userRouter', () => {
 			request(app)
 				.post('/api/login')
 				.send({ username: 'test', password: 'password1' })
-				.expect('Set-Cookie', `token=${tokenString}; Path=/; HttpOnly`)
+				.expect('Set-Cookie', `token=${tokenString}; Path=/; HttpOnly; Secure`)
 				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
@@ -206,11 +208,11 @@ describe('userRouter', () => {
 
 	describe('GET /checkToken', () => {
 		it('should return 200 and return a token cookie when login is success', (done) => {
+			const token = jwt.sign('userName', env.secretKey);
+
 			request(app)
 				.get('/api/checkToken')
-				.set('Cookie', [
-					'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE2MjYzNjcwOTAsImV4cCI6MTYyNjk3MTg5MH0.Hfk2TSD1G8JDl0a13Oi1bTHARxzkfLH9WAqwIawmhDU; Path=/; HttpOnly; Domain=localhost',
-				])
+				.set('Cookie', [`token=${token}`])
 				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);

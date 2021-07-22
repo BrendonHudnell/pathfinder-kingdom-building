@@ -34,7 +34,9 @@ export async function login(req: Request, res: Response): Promise<void> {
 	const token = await userService.login(username, password);
 
 	if (token) {
-		res.cookie('token', token, { httpOnly: true }).sendStatus(200);
+		res
+			.cookie('token', token, { secure: true, httpOnly: true })
+			.sendStatus(200);
 	} else {
 		res
 			.status(401)
