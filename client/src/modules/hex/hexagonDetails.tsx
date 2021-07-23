@@ -45,6 +45,7 @@ import {
 	terrainImprovementRemoved,
 	terrainUpdated,
 } from './hexSlice';
+import { addDistrict } from '../district';
 
 const useStyles = makeStyles({
 	borderlessLeft: {
@@ -77,16 +78,21 @@ export function HexagonDetails(props: HexagonDetailsProps): ReactElement {
 	const defense = getDefenseValue(hexData);
 
 	async function addSettlement(): Promise<void> {
-		const resultAction = await dispatch(addNewSettlement(hexId));
-		const newSettlement = unwrapResult(resultAction);
-		dispatch(settlementIdUpdated({ hexId, settlementId: newSettlement.id }));
-
-		dispatch(
-			explorationStateUpdated({
-				hexId,
-				explorationState: ExplorationState.SETTLED,
-			})
+		const resultAction = await dispatch(
+			addNewSettlement({ kingdomId: 1, hexId })
 		);
+		const newSettlement = unwrapResult(resultAction);
+		if (newSettlement) {
+			dispatch(settlementIdUpdated({ hexId, settlementId: newSettlement.id }));
+			dispatch(addDistrict({ kingdomId: 1, settlementId: newSettlement.id }));
+
+			dispatch(
+				explorationStateUpdated({
+					hexId,
+					explorationState: ExplorationState.SETTLED,
+				})
+			);
+		}
 	}
 
 	function terrainImprovementDisabled(

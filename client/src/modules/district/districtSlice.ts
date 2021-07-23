@@ -9,11 +9,7 @@ import {
 import { RootState } from '../../components/store';
 import { LotType } from './buildingTypes';
 import { districtApi } from './districtApi';
-import {
-	createEmptyLotArray,
-	Direction,
-	DistrictTerrainType,
-} from './districtUtils';
+import { Direction, DistrictTerrainType } from './districtUtils';
 
 // {
 // 	name: 'Watergate',
@@ -66,39 +62,13 @@ export const fetchDistricts = createAsyncThunk(
 	}
 );
 
-export const addNewDistrict = createAsyncThunk(
-	// TODO fix when server is hooked up
+export const addDistrict = createAsyncThunk(
 	'district/addNewDistrict',
-	async (settlementId: number) => {
-		const districtId = Math.floor(Math.random() * 10000);
-		const newDistrict: District = {
-			id: districtId,
-			settlementId,
-			name: 'New District',
-			paved: false,
-			sewers: false,
-			north: {
-				terrain: DistrictTerrainType.LAND,
-				wall: false,
-				moat: false,
-			},
-			south: {
-				terrain: DistrictTerrainType.LAND,
-				wall: false,
-				moat: false,
-			},
-			east: {
-				terrain: DistrictTerrainType.LAND,
-				wall: false,
-				moat: false,
-			},
-			west: {
-				terrain: DistrictTerrainType.LAND,
-				wall: false,
-				moat: false,
-			},
-			lotTypeList: createEmptyLotArray(),
-		};
+	async (ids: { kingdomId: number; settlementId: number }) => {
+		const newDistrict = await districtApi.addDistrict(
+			ids.kingdomId,
+			ids.settlementId
+		);
 
 		return newDistrict;
 	}
@@ -226,9 +196,11 @@ export const districtSlice = createSlice({
 			}
 		),
 			builder.addCase(
-				addNewDistrict.fulfilled,
-				(state, action: PayloadAction<District>) => {
-					districtAdapter.addOne(state, action.payload);
+				addDistrict.fulfilled,
+				(state, action: PayloadAction<District | undefined>) => {
+					if (action.payload) {
+						districtAdapter.addOne(state, action.payload);
+					}
 				}
 			);
 	},

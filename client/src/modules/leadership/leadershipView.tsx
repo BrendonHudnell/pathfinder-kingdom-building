@@ -93,7 +93,7 @@ export function LeadershipView(): ReactElement {
 							<Button
 								variant="contained"
 								color="primary"
-								onClick={() => dispatch(viceroyAdded())}
+								onClick={() => dispatch(viceroyAdded(1))}
 							>
 								Add Viceroy
 							</Button>

@@ -9,7 +9,6 @@ import { RootState } from '../../components/store';
 import { BuildingDisplayType } from '../district';
 import { settlementApi } from './settlementApi';
 import {
-	createEmptySettlementBuildings,
 	SettlementBuildingList,
 	SettlementGovernment,
 } from './settlementUtils';
@@ -40,20 +39,12 @@ export const fetchSettlements = createAsyncThunk(
 );
 
 export const addNewSettlement = createAsyncThunk(
-	// TODO fix when server is hooked up
 	'settlement/addNewSettlement',
-	async (hexId: number) => {
-		const settlementId = Math.floor(Math.random() * 10000);
-		const newSettlement: Settlement = {
-			id: settlementId,
-			name: `Settlement ${settlementId}`,
-			hexId,
-			districts: [],
-			buildings: createEmptySettlementBuildings(),
-			wallUnrestUsed: false,
-			moatUnrestUsed: false,
-			government: SettlementGovernment.AUTOCRACY,
-		};
+	async (ids: { kingdomId: number; hexId: number }) => {
+		const newSettlement = await settlementApi.addSettlement(
+			ids.kingdomId,
+			ids.hexId
+		);
 
 		return newSettlement;
 	}
@@ -144,8 +135,10 @@ export const settlementSlice = createSlice({
 		),
 			builder.addCase(
 				addNewSettlement.fulfilled,
-				(state, action: PayloadAction<Settlement>) => {
-					settlementAdapter.addOne(state, action.payload);
+				(state, action: PayloadAction<Settlement | undefined>) => {
+					if (action.payload) {
+						settlementAdapter.addOne(state, action.payload);
+					}
 				}
 			);
 	},

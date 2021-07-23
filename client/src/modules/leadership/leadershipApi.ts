@@ -2,17 +2,23 @@ import ky from 'ky';
 
 import { Role } from './leadershipSlice';
 
-export interface LeadershipResponse {
+export interface GetAllRolesResponse {
 	status: number;
 	data?: Role[];
 }
 
+export interface AddViceroyResponse {
+	status: number;
+	data?: Role;
+}
+
 export const leadershipApi = {
 	getAllRoles,
+	addViceroy,
 };
 
 async function getAllRoles(kingdomId: number): Promise<Role[]> {
-	const response: LeadershipResponse = await ky
+	const response: GetAllRolesResponse = await ky
 		.get('/api/leadership', { searchParams: { kingdomId } })
 		.json();
 
@@ -21,4 +27,16 @@ async function getAllRoles(kingdomId: number): Promise<Role[]> {
 	}
 
 	return response.data ?? [];
+}
+
+async function addViceroy(kingdomId: number): Promise<Role | undefined> {
+	const response: AddViceroyResponse = await ky
+		.get('/api/leadership/addViceroy', { json: { kingdomId } })
+		.json();
+
+	if (response.status !== 200) {
+		return;
+	}
+
+	return response.data ?? undefined;
 }

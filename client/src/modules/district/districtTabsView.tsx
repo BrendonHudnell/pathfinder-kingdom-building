@@ -4,7 +4,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import { useAppDispatch, useAppSelector } from '../../components/store';
-import { addNewDistrict, selectDistrictsBySettlementId } from './districtSlice';
+import { addDistrict, selectDistrictsBySettlementId } from './districtSlice';
 import { TabPanel } from './districtTabPanel';
 import { DistrictDetails } from './districtDetails';
 import { LotsView } from './lotsView';
@@ -54,7 +54,9 @@ export function DistrictTabsView(props: DistrictTabsViewProps): ReactElement {
 					))}
 					<Tab
 						className={classes.rightAlign}
-						onClick={() => dispatch(addNewDistrict(settlementId))}
+						onClick={() =>
+							dispatch(addDistrict({ kingdomId: 1, settlementId }))
+						}
 						label="Add District"
 					/>
 				</Tabs>
