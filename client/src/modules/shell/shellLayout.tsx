@@ -8,10 +8,16 @@ import {
 } from '@material-ui/core';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-import { KingdomView } from '../kingdom';
-import { LeadershipView } from '../leadership';
-import { SettlementView, SettlementListView } from '../settlement';
-import { HexGridView } from '../hex';
+import { useAppDispatch } from '../../components/store';
+import { fetchDistricts } from '../district';
+import { fetchKingdomData, KingdomView } from '../kingdom';
+import { fetchLeadershipRoles, LeadershipView } from '../leadership';
+import {
+	SettlementView,
+	SettlementListView,
+	fetchSettlements,
+} from '../settlement';
+import { fetchHexes, HexGridView } from '../hex';
 import { ShellAppBar } from './shellAppBar';
 
 const useStyles = makeStyles({
@@ -36,6 +42,14 @@ const useStyles = makeStyles({
 
 export function ShellLayout(): ReactElement {
 	const classes = useStyles();
+
+	const dispatch = useAppDispatch();
+
+	dispatch(fetchKingdomData(1));
+	dispatch(fetchLeadershipRoles(1));
+	dispatch(fetchSettlements(1));
+	dispatch(fetchDistricts(1));
+	dispatch(fetchHexes(1));
 
 	return (
 		<Container className={classes.layout} maxWidth={false} disableGutters>

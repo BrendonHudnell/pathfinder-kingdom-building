@@ -3,12 +3,7 @@ import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { ShellLayout } from './shellLayout';
-import { useAppDispatch } from '../../components/store';
-import { fetchDistricts } from '../district';
-import { fetchHexes } from '../hex';
-import { fetchKingdomData } from '../kingdom';
-import { fetchLeadershipRoles } from '../leadership';
-import { fetchSettlements } from '../settlement';
+import { UserView } from '../user/userView';
 
 const theme = createMuiTheme({
 	typography: {
@@ -35,20 +30,11 @@ const theme = createMuiTheme({
 });
 
 export function ShellView(): ReactElement {
-	const dispatch = useAppDispatch();
-
-	dispatch(fetchKingdomData(1));
-	dispatch(fetchLeadershipRoles(1));
-	dispatch(fetchSettlements(1));
-	dispatch(fetchDistricts(1));
-	dispatch(fetchHexes(1));
-
+	const loggedIn = false;
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<Router>
-				<ShellLayout />
-			</Router>
+			<Router>{loggedIn ? <ShellLayout /> : <UserView />}</Router>
 		</ThemeProvider>
 	);
 }
