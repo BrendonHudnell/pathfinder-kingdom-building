@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 
-import { withAuth } from '../../middleware';
+import { verifyToken } from '../../middleware';
 import { districtService } from './districtService';
 import {
 	addDistrictValidator,
@@ -10,8 +10,10 @@ import {
 export function createDistrictRouter(): Router {
 	const router = Router();
 
+	router.use(verifyToken);
+
 	router.get('/', getAllDistrictsValidator, getAllDistricts);
-	router.post('/add', withAuth, addDistrictValidator, addDistrict);
+	router.post('/add', addDistrictValidator, addDistrict);
 
 	return router;
 }

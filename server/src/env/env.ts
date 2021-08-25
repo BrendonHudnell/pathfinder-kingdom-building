@@ -17,5 +17,8 @@ export const env = {
 		: true,
 	saltRounds: process.env.SALT_ROUNDS ? parseInt(process.env.SALT_ROUNDS) : 10,
 	secretKey: process.env.SECRET_KEY ?? 'Testing Secret',
-	expiration: process.env.EXPIRATION ?? '1 day',
+	expiration: process.env.EXPIRATION ? parseInt(process.env.EXPIRATION) : 3600, // 1 minute
+	// refreshExpiration: process.env.REFRESH_EXPIRATION
+	// 	? parseInt(process.env.REFRESH_EXPIRATION)
+	// 	: 120, // 5 minutes
 };

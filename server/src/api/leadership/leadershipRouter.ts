@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 
-import { withAuth } from '../../middleware';
+import { verifyToken } from '../../middleware';
 import { leadershipService } from './leadershipService';
 import {
 	addViceroyValidator,
@@ -10,8 +10,10 @@ import {
 export function createLeadershipRouter(): Router {
 	const router = Router();
 
+	router.use(verifyToken);
+
 	router.get('/', getAllLeadershipRolesValidator, getAllLeadershipRoles);
-	router.post('/addViceroy', withAuth, addViceroyValidator, addViceroy);
+	router.post('/addViceroy', addViceroyValidator, addViceroy);
 
 	return router;
 }

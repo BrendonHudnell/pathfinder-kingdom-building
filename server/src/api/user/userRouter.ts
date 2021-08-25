@@ -1,7 +1,6 @@
 import { Request, Response, Router } from 'express';
 
-import { env } from '../../env';
-import { withAuth } from '../../middleware';
+import { verifyToken } from '../../middleware';
 import { userService } from './userService';
 import { loginValidator, registerValidator } from './userValidator';
 
@@ -10,7 +9,8 @@ export function createUserRouter(): Router {
 
 	router.post('/register', registerValidator, register);
 	router.post('/login', loginValidator, login);
-	router.get('/checkToken', withAuth, checkToken);
+	// router.get('/refreshToken', refreshToken);
+	router.post('/logout', verifyToken, logout);
 
 	return router;
 }
@@ -36,8 +36,12 @@ export async function login(req: Request, res: Response): Promise<void> {
 
 	if (token) {
 		res
-			.status(200)
-			.json({ token: 'Bearer ' + token, expiration: env.expiration });
+			.cookie('accessToken', token.accessToken, {
+				httpOnly: true,
+				sameSite: true,
+			})
+			// .cookie('refreshToken', token.refreshToken, { httpOnly: true, sameSite: true })
+			.sendStatus(200);
 	} else {
 		res
 			.status(401)
@@ -45,6 +49,18 @@ export async function login(req: Request, res: Response): Promise<void> {
 	}
 }
 
-export async function checkToken(req: Request, res: Response): Promise<void> {
-	res.sendStatus(200);
+export async function logout(req: Request, res: Response): Promise<void> {
+	const userId = req.userId!;
+
+	await userService.logout(userId);
+
+	res
+		.cookie('accessToken', 'expired', {
+			expires: new Date('January 1, 1970 00:00:00'),
+		})
+		.sendStatus(200);
 }
+
+// export async function refreshToken(req: Request, res: Response): Promise<void> {
+// 	res.sendStatus(200);
+// }

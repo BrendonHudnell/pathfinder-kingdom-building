@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 
-import { withAuth } from '../../middleware';
+import { verifyToken } from '../../middleware';
 import { settlementService } from './settlementService';
 import {
 	addSettlementValidator,
@@ -10,8 +10,10 @@ import {
 export function createSettlementRouter(): Router {
 	const router = Router();
 
+	router.use(verifyToken);
+
 	router.get('/', getAllSettlementsValidator, getAllSettlements);
-	router.post('/add', withAuth, addSettlementValidator, addSettlement);
+	router.post('/add', addSettlementValidator, addSettlement);
 
 	return router;
 }

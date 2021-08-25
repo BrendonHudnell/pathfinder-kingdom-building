@@ -1,10 +1,13 @@
 import { Request, Response, Router } from 'express';
 
+import { verifyToken } from '../../middleware';
 import { hexService } from './hexService';
 import { getAllHexesValidator } from './hexValidator';
 
 export function createHexRouter(): Router {
 	const router = Router();
+
+	router.use(verifyToken);
 
 	router.get('/', getAllHexesValidator, getAllHexes);
 

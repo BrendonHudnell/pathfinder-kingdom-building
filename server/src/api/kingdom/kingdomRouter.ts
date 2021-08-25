@@ -1,10 +1,13 @@
 import { Request, Response, Router } from 'express';
 
+import { verifyToken } from '../../middleware';
 import { kingdomService } from './kingdomService';
 import { getKingdomValidator } from './kingdomValidator';
 
 export function createKingdomRouter(): Router {
 	const router = Router();
+
+	router.use(verifyToken);
 
 	router.get('/', getKingdomValidator, getKingdom);
 
