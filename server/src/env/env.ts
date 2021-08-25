@@ -16,5 +16,6 @@ export const env = {
 		? process.env.DB_SYNCHRONIZE === 'true'
 		: true,
 	saltRounds: process.env.SALT_ROUNDS ? parseInt(process.env.SALT_ROUNDS) : 10,
-	secretKey: process.env.SECRET_KEY ?? 'TestingSecret',
+	secretKey: process.env.SECRET_KEY ?? 'Testing Secret',
+	expiration: process.env.EXPIRATION ?? '1 day',
 };

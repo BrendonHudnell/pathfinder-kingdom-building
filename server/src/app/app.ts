@@ -3,12 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 
-import { createKingdomRouter } from '../modules/kingdom';
-import { createHexRouter } from '../modules/hex';
-import { createSettlementRouter } from '../modules/settlement';
-import { createDistrictRouter } from '../modules/district';
-import { createLeadershipRouter } from '../modules/leadership';
-import { createUserRouter } from '../modules/user';
+import { createApiRouter } from '../api';
 
 export function createApp(): Express {
 	const app = express();
@@ -25,23 +20,10 @@ export function createApp(): Express {
 		express.static(path.join(__dirname, '..', '..', '..', 'client', 'build'))
 	);
 
-	app.use('/api/kingdom', createKingdomRouter());
-	app.use('/api/hex', createHexRouter());
-	app.use('/api/settlement', createSettlementRouter());
-	app.use('/api/district', createDistrictRouter());
-	app.use('/api/leadership', createLeadershipRouter());
-	app.use('/api', createUserRouter());
-
-	app.get('/api', (req: Request, res: Response): void => {
-		res.status(200).send('You have reached the API');
-	});
-
-	app.get('/api/*', (req: Request, res: Response): void => {
-		res.sendStatus(404);
-	});
+	app.use('/api', createApiRouter());
 
 	/* istanbul ignore next */
-	app.get('*', (req: Request, res: Response): void => {
+	app.get('/*', (req: Request, res: Response): void => {
 		res
 			.status(200)
 			.sendFile(

@@ -2,13 +2,15 @@ import { createConnection, getConnection } from 'typeorm';
 import 'reflect-metadata';
 
 import { env } from '../env';
-import { KingdomEntity } from '../modules/kingdom';
-import { HexEntity } from '../modules/hex';
-import { DistrictEntity } from '../modules/district';
-import { SettlementEntity } from '../modules/settlement';
-import { LotEntity } from '../modules/lot';
-import { LeadershipEntity } from '../modules/leadership';
-import { UserEntity } from '../modules/user';
+import {
+	DistrictEntity,
+	HexEntity,
+	KingdomEntity,
+	LeadershipEntity,
+	LotEntity,
+	SettlementEntity,
+	UserEntity,
+} from '../api';
 
 export const connection = {
 	async create() {

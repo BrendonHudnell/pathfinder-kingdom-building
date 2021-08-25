@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 
+import { env } from '../../env';
 import { withAuth } from '../../middleware';
 import { userService } from './userService';
 import { loginValidator, registerValidator } from './userValidator';
@@ -35,8 +36,8 @@ export async function login(req: Request, res: Response): Promise<void> {
 
 	if (token) {
 		res
-			.cookie('token', token, { secure: true, httpOnly: true })
-			.sendStatus(200);
+			.status(200)
+			.json({ token: 'Bearer ' + token, expiration: env.expiration });
 	} else {
 		res
 			.status(401)

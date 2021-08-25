@@ -41,15 +41,16 @@ async function login(
 		return;
 	}
 
-	const match = await bcrypt.compare(password, user.password);
+	const isValid = await bcrypt.compare(password, user.password);
 
-	if (!match) {
+	if (!isValid) {
 		return;
 	}
 
 	const payload = {
-		username,
+		sub: user.id,
+		iat: Date.now(),
 	};
 
-	return jwt.sign(payload, env.secretKey, { expiresIn: '7 days' });
+	return jwt.sign(payload, env.secretKey, { expiresIn: env.expiration });
 }
