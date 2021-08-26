@@ -39,8 +39,9 @@ export async function login(req: Request, res: Response): Promise<void> {
 			.cookie('accessToken', token.accessToken, {
 				httpOnly: true,
 				sameSite: true,
+				expires: token.accessTokenExpiration,
 			})
-			// .cookie('refreshToken', token.refreshToken, { httpOnly: true, sameSite: true })
+			// .cookie('refreshToken', token.refreshToken, { httpOnly: true, sameSite: true, expires: token.refreshTokenExpiration })
 			.sendStatus(200);
 	} else {
 		res

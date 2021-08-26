@@ -8,6 +8,7 @@ import { UserEntity } from './userEntity';
 
 export interface UserToken {
 	accessToken: string;
+	accessTokenExpiration: Date;
 	// refreshToken: string;
 }
 
@@ -58,6 +59,7 @@ async function login(
 		userId: user.id,
 	};
 
+	const accessTokenExpiration = new Date(Date.now() + env.expiration * 1000);
 	const accessToken = jwt.sign(payload, env.secretKey, {
 		expiresIn: env.expiration,
 	});
@@ -68,6 +70,7 @@ async function login(
 
 	return {
 		accessToken,
+		accessTokenExpiration,
 		// refreshToken
 	};
 }
