@@ -1,9 +1,11 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import { checkLoginCookie } from '../../components/cookies';
+import { useAppDispatch, useAppSelector } from '../../components/store';
+import { login, UserView } from '../user';
 import { ShellLayout } from './shellLayout';
-import { UserView } from '../user/userView';
 
 const theme = createMuiTheme({
 	typography: {
@@ -30,7 +32,16 @@ const theme = createMuiTheme({
 });
 
 export function ShellView(): ReactElement {
-	const loggedIn = false;
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		if (checkLoginCookie()) {
+			dispatch(login());
+		}
+	}, []);
+
+	const loggedIn = useAppSelector((state) => state.user.loggedIn);
+
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />

@@ -4,7 +4,7 @@ import jwt, { VerifyErrors, TokenExpiredError } from 'jsonwebtoken';
 import { env } from '../env';
 
 export interface AccessTokenPayload {
-	userId: number;
+	sub: number;
 }
 
 export async function verifyToken(
@@ -13,7 +13,6 @@ export async function verifyToken(
 	next: NextFunction
 ): Promise<any> {
 	const accessToken = req.cookies.accessToken;
-	console.log('got here 2');
 
 	if (!accessToken) {
 		res.status(401).send('Unauthorized: No token provided.');
@@ -33,7 +32,7 @@ export async function verifyToken(
 							.send({ message: 'Unauthorized: Invalid access token.' });
 					}
 				} else {
-					req.userId = (decoded as AccessTokenPayload).userId;
+					req.userId = (decoded as AccessTokenPayload).sub;
 					next();
 				}
 			}

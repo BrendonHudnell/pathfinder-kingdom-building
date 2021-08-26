@@ -56,7 +56,7 @@ async function login(
 	}
 
 	const payload = {
-		userId: user.id,
+		sub: user.id,
 	};
 
 	const accessTokenExpiration = new Date(Date.now() + env.expiration * 1000);

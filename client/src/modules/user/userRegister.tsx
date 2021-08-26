@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import {
 	Button,
 	Card,
@@ -8,6 +8,8 @@ import {
 	Typography,
 } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
+import ky from 'ky';
+import { useHistory } from 'react-router-dom';
 
 import { UserData } from './userLogin';
 
@@ -22,12 +24,26 @@ const useStyles = makeStyles((theme) => {
 export function UserRegister(): ReactElement {
 	const classes = useStyles();
 
+	const history = useHistory();
+
+	const [errorMessage, setErrorMessage] = useState<string>();
+
 	const { register, handleSubmit, formState, getValues } = useForm({
 		mode: 'onChange',
 	});
 
-	function onSubmit(data: UserData): void {
-		console.log(data);
+	async function onSubmit(data: UserData): Promise<void> {
+		const response = await ky.post('api/user/register', {
+			json: { username: data.username, password: data.password },
+			throwHttpErrors: false,
+		});
+
+		if (response.status === 201) {
+			history.push('/');
+		} else {
+			const body = await response.json();
+			setErrorMessage(body.message);
+		}
 	}
 
 	return (
@@ -39,6 +55,11 @@ export function UserRegister(): ReactElement {
 							Register
 						</Typography>
 					</Grid>
+					{errorMessage ? (
+						<Grid item>
+							<Typography color="error">{errorMessage}</Typography>
+						</Grid>
+					) : null}
 					<Grid item>
 						<TextField
 							required
@@ -82,7 +103,7 @@ export function UserRegister(): ReactElement {
 							variant="outlined"
 							size="small"
 							label="Confirm Password"
-							type="confirmPassword"
+							type="password"
 							error={formState.errors.confirmPassword ? true : false}
 							helperText={
 								formState.errors.confirmPassword

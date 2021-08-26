@@ -42,7 +42,8 @@ export async function login(req: Request, res: Response): Promise<void> {
 				expires: token.accessTokenExpiration,
 			})
 			// .cookie('refreshToken', token.refreshToken, { httpOnly: true, sameSite: true, expires: token.refreshTokenExpiration })
-			.sendStatus(200);
+			.status(200)
+			.json({ expires: token.accessTokenExpiration.toUTCString() });
 	} else {
 		res
 			.status(401)

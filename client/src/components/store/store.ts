@@ -5,6 +5,7 @@ import { hexReducer } from '../../modules/hex';
 import { kingdomReducer } from '../../modules/kingdom';
 import { leadershipReducer } from '../../modules/leadership';
 import { settlementReducer } from '../../modules/settlement';
+import { userReducer } from '../../modules/user';
 
 export const store = configureStore({
 	reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
 		settlement: settlementReducer,
 		district: districtReducer,
 		hex: hexReducer,
+		user: userReducer,
 	},
 });
 

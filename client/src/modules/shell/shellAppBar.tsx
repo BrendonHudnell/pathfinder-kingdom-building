@@ -2,7 +2,8 @@ import React, { ReactElement } from 'react';
 import { AppBar, Toolbar } from '@material-ui/core';
 
 import { HorizontalSpacer } from '../../components/horizontalSpacer';
-import { OptionsDialogButton } from '../kingdom/optionsDialogButton';
+import { OptionsDialogButton } from '../kingdom';
+import { UserLogoutButton } from '../user';
 
 export function ShellAppBar(): ReactElement {
 	return (
@@ -10,7 +11,7 @@ export function ShellAppBar(): ReactElement {
 			<Toolbar variant="dense">
 				<HorizontalSpacer />
 				<OptionsDialogButton />
-				{/* TODO add login */}
+				<UserLogoutButton />
 			</Toolbar>
 		</AppBar>
 	);
