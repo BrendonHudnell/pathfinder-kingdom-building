@@ -40,7 +40,6 @@ export async function updateHex(req: Request, res: Response): Promise<void> {
 	if (hex) {
 		res.status(200).json({
 			status: 200,
-			data: hex,
 		});
 	} else {
 		res.status(200).json({

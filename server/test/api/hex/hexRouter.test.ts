@@ -150,8 +150,8 @@ describe('hexRouter', () => {
 	});
 
 	describe('PATCH /:id', () => {
-		it('should return 200 and the updated hex with an existing hex id', (done) => {
-			sandbox.stub(hexService, 'updateHex').resolves(testHex1);
+		it('should return 200 with an existing hex id', (done) => {
+			sandbox.stub(hexService, 'updateHex').resolves(true);
 
 			request(app)
 				.patch('/api/hex/1')
@@ -162,7 +162,6 @@ describe('hexRouter', () => {
 					if (err) return done(err);
 					expect(res.body).toMatchObject({
 						status: 200,
-						data: testHex1,
 					});
 					done();
 				});
