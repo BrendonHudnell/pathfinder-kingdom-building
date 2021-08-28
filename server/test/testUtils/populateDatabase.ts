@@ -13,10 +13,20 @@ import {
 } from '../../src/api';
 
 export async function populateDatabase(): Promise<void> {
+	// add test user
+	const userRepo = getRepository(UserEntity);
+
+	const user = new UserEntity();
+	user.username = 'testName';
+	user.password = await bcrypt.hash('password', env.saltRounds);
+
+	await userRepo.save(user);
+
 	// add kingdom
 	const kingdomRepo = getRepository(KingdomEntity);
 
 	const kingdom = new KingdomEntity();
+	kingdom.user = user;
 	kingdom.name = 'Untitled';
 	kingdom.alignment = 'Neutral';
 	kingdom.month = 1;
@@ -76,6 +86,8 @@ export async function populateDatabase(): Promise<void> {
 	hex1.sawmill = false;
 	hex1.vineyard = false;
 	hex1.watchtower = false;
+	hex1.pointsOfInterest = '';
+	hex1.notes = '';
 
 	const hex2 = new HexEntity();
 	hex2.kingdom = kingdom;
@@ -371,13 +383,4 @@ export async function populateDatabase(): Promise<void> {
 	role.skillBonus = 0;
 
 	await leadershipRepo.save(role);
-
-	// add test user
-	const userRepo = getRepository(UserEntity);
-
-	const user = new UserEntity();
-	user.username = 'testName';
-	user.password = await bcrypt.hash('password', env.saltRounds);
-
-	await userRepo.save(user);
 }

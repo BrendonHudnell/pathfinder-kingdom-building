@@ -26,7 +26,7 @@ describe('userService', () => {
 		it('should return a token when login is successful', async () => {
 			const token = await userService.login('testName', 'password');
 
-			expect(typeof token).toBe('string');
+			expect(typeof token).toBe('object');
 		});
 
 		it('should return undefined when the username is incorrect', async () => {

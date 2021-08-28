@@ -1,16 +1,22 @@
 import request from 'supertest';
 import sinon from 'sinon';
 import { Express } from 'express';
+import jwt from 'jsonwebtoken';
 
 import { createApp } from '../../../src/app';
+import { env } from '../../../src/env';
 import { kingdomService } from '../../../src/api';
 import { testKingdom } from '../../testUtils';
 
 describe('kingdomRouter', () => {
 	let app: Express;
+	let token: string;
 	const sandbox = sinon.createSandbox();
 
-	beforeAll(() => (app = createApp()));
+	beforeAll(() => {
+		app = createApp();
+		token = jwt.sign('userName', env.secretKey);
+	});
 	afterEach(() => sandbox.restore());
 
 	describe('GET /', () => {
@@ -19,6 +25,7 @@ describe('kingdomRouter', () => {
 
 			request(app)
 				.get('/api/kingdom?id=1')
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(200)
 				.end((err, res) => {
@@ -33,6 +40,7 @@ describe('kingdomRouter', () => {
 
 			request(app)
 				.get('/api/kingdom?id=0')
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(200)
 				.end((err, res) => {
@@ -40,6 +48,14 @@ describe('kingdomRouter', () => {
 					expect(res.body).toMatchObject({ status: 404 });
 					done();
 				});
+		});
+
+		it('should return 401 when missing auth token', (done) => {
+			request(app)
+				.get('/api/kingdom?id=0')
+				.expect('Content-Type', /text\/plain/)
+				.expect(401)
+				.end(() => done());
 		});
 
 		it('should return 400 for missing id', (done) => {
@@ -61,6 +77,7 @@ describe('kingdomRouter', () => {
 
 			request(app)
 				.get('/api/kingdom')
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -89,6 +106,7 @@ describe('kingdomRouter', () => {
 
 			request(app)
 				.get('/api/kingdom?id=string')
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -117,6 +135,7 @@ describe('kingdomRouter', () => {
 
 			request(app)
 				.get('/api/kingdom?id=1&illegalParameter=true')
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {

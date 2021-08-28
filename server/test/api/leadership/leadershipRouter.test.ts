@@ -10,9 +10,13 @@ import { testRole, testViceroy } from '../../testUtils';
 
 describe('leadershipRouter', () => {
 	let app: Express;
+	let token: string;
 	const sandbox = sinon.createSandbox();
 
-	beforeAll(() => (app = createApp()));
+	beforeAll(() => {
+		app = createApp();
+		token = jwt.sign('userName', env.secretKey);
+	});
 	afterEach(() => sandbox.restore());
 
 	describe('GET /', () => {
@@ -23,6 +27,7 @@ describe('leadershipRouter', () => {
 
 			request(app)
 				.get('/api/leadership?kingdomId=1')
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(200)
 				.end((err, res) => {
@@ -37,6 +42,7 @@ describe('leadershipRouter', () => {
 
 			request(app)
 				.get('/api/leadership?kingdomId=0')
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(200)
 				.end((err, res) => {
@@ -44,6 +50,14 @@ describe('leadershipRouter', () => {
 					expect(res.body).toMatchObject({ status: 404 });
 					done();
 				});
+		});
+
+		it('should return 401 when missing auth token', (done) => {
+			request(app)
+				.get('/api/leadership?kingdomId=0')
+				.expect('Content-Type', /text\/plain/)
+				.expect(401)
+				.end(() => done());
 		});
 
 		it('should return 400 for missing kingdomId', (done) => {
@@ -65,6 +79,7 @@ describe('leadershipRouter', () => {
 
 			request(app)
 				.get('/api/leadership')
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -93,6 +108,7 @@ describe('leadershipRouter', () => {
 
 			request(app)
 				.get('/api/leadership?kingdomId=string')
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -121,6 +137,7 @@ describe('leadershipRouter', () => {
 
 			request(app)
 				.get('/api/leadership?kingdomId=1&illegalParameter=true')
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -132,15 +149,12 @@ describe('leadershipRouter', () => {
 	});
 
 	describe('POST /addViceroy', () => {
-		let token: string;
-		beforeAll(() => (token = jwt.sign('userName', env.secretKey)));
-
 		it('should return 200 and the created LeadershipRole with an existing kingdomId', (done) => {
 			sandbox.stub(leadershipService, 'addViceroy').resolves(testViceroy);
 
 			request(app)
 				.post('/api/leadership/addViceroy')
-				.set('Cookie', `token=${token}`)
+				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1 })
 				.expect('Content-Type', /json/)
 				.expect(200)
@@ -159,7 +173,7 @@ describe('leadershipRouter', () => {
 
 			request(app)
 				.post('/api/leadership/addViceroy')
-				.set('Cookie', `token=${token}`)
+				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: -1 })
 				.expect('Content-Type', /json/)
 				.expect(200)
@@ -198,7 +212,7 @@ describe('leadershipRouter', () => {
 
 			request(app)
 				.post('/api/leadership/addViceroy')
-				.set('Cookie', `token=${token}`)
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -227,7 +241,7 @@ describe('leadershipRouter', () => {
 
 			request(app)
 				.post('/api/leadership/addViceroy')
-				.set('Cookie', `token=${token}`)
+				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 'string' })
 				.expect('Content-Type', /json/)
 				.expect(400)
@@ -257,7 +271,7 @@ describe('leadershipRouter', () => {
 
 			request(app)
 				.post('/api/leadership/addViceroy')
-				.set('Cookie', `token=${token}`)
+				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1, illegalParameter: true })
 				.expect('Content-Type', /json/)
 				.expect(400)

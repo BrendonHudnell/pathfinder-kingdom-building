@@ -10,9 +10,13 @@ import { testDistrict1, testDistrict2 } from '../../testUtils';
 
 describe('districtRouter', () => {
 	let app: Express;
+	let token: string;
 	const sandbox = sinon.createSandbox();
 
-	beforeAll(() => (app = createApp()));
+	beforeAll(() => {
+		app = createApp();
+		token = jwt.sign('userName', env.secretKey);
+	});
 	afterEach(() => sandbox.restore());
 
 	describe('GET /', () => {
@@ -23,6 +27,7 @@ describe('districtRouter', () => {
 
 			request(app)
 				.get('/api/district?kingdomId=1')
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(200)
 				.end((err, res) => {
@@ -40,6 +45,7 @@ describe('districtRouter', () => {
 
 			request(app)
 				.get('/api/district?kingdomId=0')
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(200)
 				.end((err, res) => {
@@ -47,6 +53,14 @@ describe('districtRouter', () => {
 					expect(res.body).toMatchObject({ status: 404 });
 					done();
 				});
+		});
+
+		it('should return 401 when missing auth token', (done) => {
+			request(app)
+				.get('/api/district?kingdomId=0')
+				.expect('Content-Type', /text\/plain/)
+				.expect(401)
+				.end(() => done());
 		});
 
 		it('should return 400 for missing kingdomId', (done) => {
@@ -68,6 +82,7 @@ describe('districtRouter', () => {
 
 			request(app)
 				.get('/api/district')
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -96,6 +111,7 @@ describe('districtRouter', () => {
 
 			request(app)
 				.get('/api/district?kingdomId=string')
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -124,6 +140,7 @@ describe('districtRouter', () => {
 
 			request(app)
 				.get('/api/district?kingdomId=1&illegalParameter=true')
+				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -135,15 +152,12 @@ describe('districtRouter', () => {
 	});
 
 	describe('POST /add', () => {
-		let token: string;
-		beforeAll(() => (token = jwt.sign('userName', env.secretKey)));
-
 		it('should return 200 and the created district with an existing kingdomId and settlementId', (done) => {
 			sandbox.stub(districtService, 'addDistrict').resolves(testDistrict1);
 
 			request(app)
 				.post('/api/district/add')
-				.set('Cookie', `token=${token}`)
+				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1, settlementId: 1 })
 				.expect('Content-Type', /json/)
 				.expect(200)
@@ -162,7 +176,7 @@ describe('districtRouter', () => {
 
 			request(app)
 				.post('/api/district/add')
-				.set('Cookie', `token=${token}`)
+				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: -1, settlementId: 1 })
 				.expect('Content-Type', /json/)
 				.expect(200)
@@ -178,7 +192,7 @@ describe('districtRouter', () => {
 
 			request(app)
 				.post('/api/district/add')
-				.set('Cookie', `token=${token}`)
+				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1, settlementId: -1 })
 				.expect('Content-Type', /json/)
 				.expect(200)
@@ -217,7 +231,7 @@ describe('districtRouter', () => {
 
 			request(app)
 				.post('/api/district/add')
-				.set('Cookie', `token=${token}`)
+				.set('Cookie', `accessToken=${token}`)
 				.send({ settlementId: 1 })
 				.expect('Content-Type', /json/)
 				.expect(400)
@@ -247,7 +261,7 @@ describe('districtRouter', () => {
 
 			request(app)
 				.post('/api/district/add')
-				.set('Cookie', `token=${token}`)
+				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1 })
 				.expect('Content-Type', /json/)
 				.expect(400)
@@ -277,7 +291,7 @@ describe('districtRouter', () => {
 
 			request(app)
 				.post('/api/district/add')
-				.set('Cookie', `token=${token}`)
+				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 'string', settlementId: 1 })
 				.expect('Content-Type', /json/)
 				.expect(400)
@@ -307,7 +321,7 @@ describe('districtRouter', () => {
 
 			request(app)
 				.post('/api/district/add')
-				.set('Cookie', `token=${token}`)
+				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1, settlementId: 'string' })
 				.expect('Content-Type', /json/)
 				.expect(400)
@@ -337,7 +351,7 @@ describe('districtRouter', () => {
 
 			request(app)
 				.post('/api/district/add')
-				.set('Cookie', `token=${token}`)
+				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1, settlementId: 1, illegalParameter: true })
 				.expect('Content-Type', /json/)
 				.expect(400)

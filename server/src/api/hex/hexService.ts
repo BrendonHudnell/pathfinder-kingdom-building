@@ -147,6 +147,8 @@ async function createHexBoard(kingdom: KingdomEntity): Promise<HexEntity[]> {
 		hex.sawmill = false;
 		hex.vineyard = false;
 		hex.watchtower = false;
+		hex.pointsOfInterest = '';
+		hex.notes = '';
 
 		return hex;
 	});
