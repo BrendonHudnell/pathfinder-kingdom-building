@@ -4,6 +4,9 @@ import jwt from 'jsonwebtoken';
 // import crypto from 'crypto';
 
 import { env } from '../../env';
+import { kingdomService } from '../kingdom';
+import { hexService } from '../hex';
+import { leadershipService } from '../leadership';
 import { UserEntity } from './userEntity';
 
 export interface UserToken {
@@ -32,7 +35,11 @@ async function register(username: string, password: string): Promise<boolean> {
 	const newUser = new UserEntity();
 	newUser.username = username;
 	newUser.password = hash;
-	await userRepository.save(newUser);
+	const createdUser = await userRepository.save(newUser);
+
+	const kingdom = await kingdomService.generateKingdom(createdUser);
+	await hexService.generateHexBoard(kingdom);
+	await leadershipService.generateLeadershipRoles(kingdom);
 
 	return true;
 }

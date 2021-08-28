@@ -1,5 +1,6 @@
 import { getRepository } from 'typeorm';
 
+import { KingdomEntity } from '../kingdom';
 import { HexEntity } from './hexEntity';
 
 export interface Hex {
@@ -16,6 +17,7 @@ export interface Hex {
 
 export const hexService = {
 	getAllHexes,
+	generateHexBoard,
 };
 
 async function getAllHexes(kingdomId: number): Promise<Hex[]> {
@@ -109,4 +111,43 @@ async function getAllHexes(kingdomId: number): Promise<Hex[]> {
 			notes: hex.notes ?? '',
 		};
 	});
+}
+
+async function generateHexBoard(kingdom: KingdomEntity): Promise<HexEntity[]> {
+	const hexRepository = getRepository(HexEntity);
+
+	const hexes = Array.from({ length: 90 }, () => {
+		const hex = new HexEntity();
+		hex.kingdom = kingdom;
+		hex.name = 'Hex Name';
+		hex.terrain = 'Plains';
+		hex.bridgeSpecialTerrain = false;
+		hex.building = false;
+		hex.freeCity = false;
+		hex.lair = false;
+		hex.landmark = false;
+		hex.resource = false;
+		hex.river = false;
+		hex.ruin = false;
+		hex.explorationState = 'Unexplored';
+		hex.aqueduct = false;
+		hex.bridgeImprovement = false;
+		hex.canal = false;
+		hex.farm = false;
+		hex.fishery = false;
+		hex.fort = false;
+		hex.highway = false;
+		hex.mine = false;
+		hex.quarry = false;
+		hex.road = false;
+		hex.sawmill = false;
+		hex.vineyard = false;
+		hex.watchtower = false;
+
+		return hex;
+	});
+
+	await hexRepository.save(hexes);
+
+	return hexes;
 }

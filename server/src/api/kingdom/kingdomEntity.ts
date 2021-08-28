@@ -1,14 +1,24 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+	Column,
+	Entity,
+	ManyToOne,
+	OneToMany,
+	PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { DistrictEntity } from '../district';
 import { HexEntity } from '../hex';
 import { LeadershipEntity } from '../leadership';
 import { SettlementEntity } from '../settlement';
+import { UserEntity } from '../user';
 
 @Entity('kingdom')
 export class KingdomEntity {
 	@PrimaryGeneratedColumn()
 	id!: number;
+
+	@ManyToOne(() => UserEntity, (user) => user.kingdoms)
+	user!: UserEntity;
 
 	@Column()
 	name!: string;

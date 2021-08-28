@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+import { KingdomEntity } from '../kingdom';
 
 @Entity('user')
 export class UserEntity {
@@ -13,4 +15,7 @@ export class UserEntity {
 
 	// @Column()
 	// refreshToken!: string;
+
+	@OneToMany(() => KingdomEntity, (kingdom) => kingdom.user)
+	kingdoms!: KingdomEntity[];
 }

@@ -1,5 +1,6 @@
 import { getRepository } from 'typeorm';
 
+import { UserEntity } from '../user';
 import { KingdomEntity } from './kingdomEntity';
 
 export interface Kingdom {
@@ -51,6 +52,7 @@ export interface Kingdom {
 
 export const kingdomService = {
 	getKingdom,
+	generateKingdom,
 };
 
 async function getKingdom(kingdomId: number): Promise<Kingdom | undefined> {
@@ -108,4 +110,42 @@ async function getKingdom(kingdomId: number): Promise<Kingdom | undefined> {
 	}
 
 	return undefined;
+}
+
+async function generateKingdom(user: UserEntity): Promise<KingdomEntity> {
+	const kingdomRepository = getRepository(KingdomEntity);
+
+	const newKingdom = new KingdomEntity();
+	newKingdom.user = user;
+	newKingdom.name = 'Untitled';
+	newKingdom.alignment = 'Neutral';
+	newKingdom.month = 1;
+	newKingdom.treasury = 0;
+	newKingdom.unrest = 0;
+	newKingdom.holidayEdict = 'None';
+	newKingdom.promotionEdict = 'None';
+	newKingdom.taxationEdict = 'None';
+	newKingdom.fame1Set = false;
+	newKingdom.fame1Value = 'none';
+	newKingdom.fame11Set = false;
+	newKingdom.fame11Value = 'none';
+	newKingdom.fame26Set = false;
+	newKingdom.fame26Value = 'none';
+	newKingdom.fame51Set = false;
+	newKingdom.fame51Value = 'none';
+	newKingdom.fame101Set = false;
+	newKingdom.fame101Value = 'none';
+	newKingdom.fame201Set = false;
+	newKingdom.fame201Value = 'none';
+	newKingdom.government = 'Feudal Monarchy';
+	newKingdom.settlementModifiers = false;
+	newKingdom.settlementGovernment = false;
+	newKingdom.kingdomModifiers = false;
+	newKingdom.kingdomGovernment = false;
+	newKingdom.kingdomFame = false;
+	newKingdom.leadershipSkills = false;
+
+	const kingdom = await kingdomRepository.save(newKingdom);
+
+	return kingdom;
 }
