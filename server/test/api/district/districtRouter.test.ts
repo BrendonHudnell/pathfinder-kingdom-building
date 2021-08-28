@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 import { createApp } from '../../../src/app';
 import { env } from '../../../src/env';
-import { districtService } from '../../../src/modules/district';
+import { districtService } from '../../../src/api';
 import { testDistrict1, testDistrict2 } from '../../testUtils';
 
 describe('districtRouter', () => {

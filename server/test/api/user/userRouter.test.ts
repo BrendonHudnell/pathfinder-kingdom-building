@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 
 import { createApp } from '../../../src/app';
 import { env } from '../../../src/env';
-import { userService } from '../../../src/modules/user';
+import { userService } from '../../../src/api';
 
 describe('userRouter', () => {
 	let app: Express;

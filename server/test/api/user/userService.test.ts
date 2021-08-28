@@ -1,5 +1,5 @@
 import { connection, populateDatabase } from '../../testUtils';
-import { userService } from '../../../src/modules/user';
+import { userService } from '../../../src/api';
 
 describe('userService', () => {
 	beforeEach(async () => {

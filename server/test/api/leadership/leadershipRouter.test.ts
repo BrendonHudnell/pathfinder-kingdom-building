@@ -3,12 +3,12 @@ import sinon from 'sinon';
 import { Express } from 'express';
 import jwt from 'jsonwebtoken';
 
-import { env } from '../../../src/env';
 import { createApp } from '../../../src/app';
-import { settlementService } from '../../../src/modules/settlement';
-import { testSettlement1, testSettlement2 } from '../../testUtils';
+import { env } from '../../../src/env';
+import { leadershipService } from '../../../src/api';
+import { testRole, testViceroy } from '../../testUtils';
 
-describe('settlementRouter', () => {
+describe('leadershipRouter', () => {
 	let app: Express;
 	const sandbox = sinon.createSandbox();
 
@@ -16,30 +16,27 @@ describe('settlementRouter', () => {
 	afterEach(() => sandbox.restore());
 
 	describe('GET /', () => {
-		it('should return 200 and a list of settlements with an existing kingdomId', (done) => {
+		it('should return 200 and a leadershipRole array with an existing kingdomId', (done) => {
 			sandbox
-				.stub(settlementService, 'getAllSettlements')
-				.resolves([testSettlement1, testSettlement2]);
+				.stub(leadershipService, 'getAllLeadershipRoles')
+				.resolves([testRole]);
 
 			request(app)
-				.get('/api/settlement?kingdomId=1')
+				.get('/api/leadership?kingdomId=1')
 				.expect('Content-Type', /json/)
 				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
-					expect(res.body).toMatchObject({
-						status: 200,
-						data: [testSettlement1, testSettlement2],
-					});
+					expect(res.body).toMatchObject({ status: 200, data: [testRole] });
 					done();
 				});
 		});
 
 		it('should return 404 when the kingdomId doesnt exist in the db', (done) => {
-			sandbox.stub(settlementService, 'getAllSettlements').resolves([]);
+			sandbox.stub(leadershipService, 'getAllLeadershipRoles').resolves([]);
 
 			request(app)
-				.get('/api/settlement?kingdomId=0')
+				.get('/api/leadership?kingdomId=0')
 				.expect('Content-Type', /json/)
 				.expect(200)
 				.end((err, res) => {
@@ -67,7 +64,7 @@ describe('settlementRouter', () => {
 			};
 
 			request(app)
-				.get('/api/settlement')
+				.get('/api/leadership')
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -95,7 +92,7 @@ describe('settlementRouter', () => {
 			};
 
 			request(app)
-				.get('/api/settlement?kingdomId=string')
+				.get('/api/leadership?kingdomId=string')
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -123,7 +120,7 @@ describe('settlementRouter', () => {
 			};
 
 			request(app)
-				.get('/api/settlement?kingdomId=1&illegalParameter=true')
+				.get('/api/leadership?kingdomId=1&illegalParameter=true')
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -134,54 +131,36 @@ describe('settlementRouter', () => {
 		});
 	});
 
-	describe('POST /add', () => {
+	describe('POST /addViceroy', () => {
 		let token: string;
 		beforeAll(() => (token = jwt.sign('userName', env.secretKey)));
 
-		it('should return 200 and the created settlement with an existing kingdomId and hexId', (done) => {
-			sandbox
-				.stub(settlementService, 'addSettlement')
-				.resolves(testSettlement1);
+		it('should return 200 and the created LeadershipRole with an existing kingdomId', (done) => {
+			sandbox.stub(leadershipService, 'addViceroy').resolves(testViceroy);
 
 			request(app)
-				.post('/api/settlement/add')
+				.post('/api/leadership/addViceroy')
 				.set('Cookie', `token=${token}`)
-				.send({ kingdomId: 1, hexId: 1 })
+				.send({ kingdomId: 1 })
 				.expect('Content-Type', /json/)
 				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
 					expect(res.body).toMatchObject({
 						status: 200,
-						data: testSettlement1,
+						data: testViceroy,
 					});
 					done();
 				});
 		});
 
 		it('should return 404 when the kingdomId doesnt exist in the db', (done) => {
-			sandbox.stub(settlementService, 'addSettlement').resolves(undefined);
+			sandbox.stub(leadershipService, 'addViceroy').resolves(undefined);
 
 			request(app)
-				.post('/api/settlement/add')
+				.post('/api/leadership/addViceroy')
 				.set('Cookie', `token=${token}`)
-				.send({ kingdomId: -1, hexId: 1 })
-				.expect('Content-Type', /json/)
-				.expect(200)
-				.end((err, res) => {
-					if (err) return done(err);
-					expect(res.body).toMatchObject({ status: 404 });
-					done();
-				});
-		});
-
-		it('should return 404 when the hexId doesnt exist in the db', (done) => {
-			sandbox.stub(settlementService, 'addSettlement').resolves();
-
-			request(app)
-				.post('/api/settlement/add')
-				.set('Cookie', `token=${token}`)
-				.send({ kingdomId: 1, hexId: -1 })
+				.send({ kingdomId: -1 })
 				.expect('Content-Type', /json/)
 				.expect(200)
 				.end((err, res) => {
@@ -193,8 +172,8 @@ describe('settlementRouter', () => {
 
 		it('should return 401 when missing auth token', (done) => {
 			request(app)
-				.post('/api/settlement/add')
-				.send({ kingdomId: 1, hexId: 1 })
+				.post('/api/leadership/addViceroy')
+				.send({ kingdomId: 1 })
 				.expect('Content-Type', /text\/plain/)
 				.expect(401)
 				.end(() => done());
@@ -218,39 +197,8 @@ describe('settlementRouter', () => {
 			};
 
 			request(app)
-				.post('/api/settlement/add')
+				.post('/api/leadership/addViceroy')
 				.set('Cookie', `token=${token}`)
-				.send({ hexId: 1 })
-				.expect('Content-Type', /json/)
-				.expect(400)
-				.end((err, res) => {
-					if (err) return done(err);
-					expect(res.body).toMatchObject(expectedResBody);
-					done();
-				});
-		});
-
-		it('should return 400 for missing hexId', (done) => {
-			const expectedResBody = {
-				ok: false,
-				status: 400,
-				error: [
-					{
-						keyword: 'required',
-						instancePath: '/body',
-						schemaPath: '#/properties/body/required',
-						params: {
-							missingProperty: 'hexId',
-						},
-						message: "must have required property 'hexId'",
-					},
-				],
-			};
-
-			request(app)
-				.post('/api/settlement/add')
-				.set('Cookie', `token=${token}`)
-				.send({ kingdomId: 1 })
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -278,39 +226,9 @@ describe('settlementRouter', () => {
 			};
 
 			request(app)
-				.post('/api/settlement/add')
+				.post('/api/leadership/addViceroy')
 				.set('Cookie', `token=${token}`)
-				.send({ kingdomId: 'string', hexId: 1 })
-				.expect('Content-Type', /json/)
-				.expect(400)
-				.end((err, res) => {
-					if (err) return done(err);
-					expect(res.body).toMatchObject(expectedResBody);
-					done();
-				});
-		});
-
-		it('should return 400 for a non-number hexId', (done) => {
-			const expectedResBody = {
-				ok: false,
-				status: 400,
-				error: [
-					{
-						keyword: 'type',
-						instancePath: '/body/hexId',
-						schemaPath: '#/properties/body/properties/hexId/type',
-						params: {
-							type: 'number',
-						},
-						message: 'must be number',
-					},
-				],
-			};
-
-			request(app)
-				.post('/api/settlement/add')
-				.set('Cookie', `token=${token}`)
-				.send({ kingdomId: 1, hexId: 'string' })
+				.send({ kingdomId: 'string' })
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -338,9 +256,9 @@ describe('settlementRouter', () => {
 			};
 
 			request(app)
-				.post('/api/settlement/add')
+				.post('/api/leadership/addViceroy')
 				.set('Cookie', `token=${token}`)
-				.send({ kingdomId: 1, hexId: 1, illegalParameter: true })
+				.send({ kingdomId: 1, illegalParameter: true })
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {

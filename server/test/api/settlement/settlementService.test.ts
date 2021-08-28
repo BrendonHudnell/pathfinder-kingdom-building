@@ -1,5 +1,5 @@
 import { connection, populateDatabase } from '../../testUtils';
-import { settlementService } from '../../../src/modules/settlement';
+import { settlementService } from '../../../src/api';
 
 describe('settlementService', () => {
 	beforeEach(async () => {

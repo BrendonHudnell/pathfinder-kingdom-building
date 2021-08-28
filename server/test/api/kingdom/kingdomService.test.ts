@@ -1,5 +1,5 @@
 import { connection, populateDatabase, testKingdom } from '../../testUtils';
-import { kingdomService } from '../../../src/modules/kingdom';
+import { kingdomService } from '../../../src/api';
 
 describe('kingdomService', () => {
 	beforeEach(async () => {

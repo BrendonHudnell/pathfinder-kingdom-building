@@ -1,5 +1,5 @@
 import { connection, populateDatabase } from '../../testUtils';
-import { districtService } from '../../../src/modules/district';
+import { districtService } from '../../../src/api';
 
 describe('districtService', () => {
 	beforeEach(async () => {

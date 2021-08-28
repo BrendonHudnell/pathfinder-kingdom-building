@@ -1,8 +1,10 @@
-import { District } from '../../src/modules/district';
-import { Hex } from '../../src/modules/hex';
-import { Kingdom } from '../../src/modules/kingdom';
-import { LeadershipRole } from '../../src/modules/leadership';
-import { Settlement } from '../../src/modules/settlement';
+import {
+	District,
+	Hex,
+	Kingdom,
+	LeadershipRole,
+	Settlement,
+} from '../../src/api';
 
 export const testKingdom: Kingdom = {
 	id: 1,

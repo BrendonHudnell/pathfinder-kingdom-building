@@ -3,10 +3,10 @@ import sinon from 'sinon';
 import { Express } from 'express';
 
 import { createApp } from '../../../src/app';
-import { hexService } from '../../../src/modules/hex';
-import { testHex1, testHex2 } from '../../testUtils';
+import { kingdomService } from '../../../src/api';
+import { testKingdom } from '../../testUtils';
 
-describe('hexRouter', () => {
+describe('kingdomRouter', () => {
 	let app: Express;
 	const sandbox = sinon.createSandbox();
 
@@ -14,28 +14,25 @@ describe('hexRouter', () => {
 	afterEach(() => sandbox.restore());
 
 	describe('GET /', () => {
-		it('should return 200 and a list of hexes with an existing kingdomId', (done) => {
-			sandbox.stub(hexService, 'getAllHexes').resolves([testHex1, testHex2]);
+		it('should return 200 and a kingdom object with an existing id', (done) => {
+			sandbox.stub(kingdomService, 'getKingdom').resolves(testKingdom);
 
 			request(app)
-				.get('/api/hex?kingdomId=1')
+				.get('/api/kingdom?id=1')
 				.expect('Content-Type', /json/)
 				.expect(200)
 				.end((err, res) => {
 					if (err) return done(err);
-					expect(res.body).toMatchObject({
-						status: 200,
-						data: [testHex1, testHex2],
-					});
+					expect(res.body).toMatchObject({ status: 200, data: testKingdom });
 					done();
 				});
 		});
 
-		it('should return 404 when the kingdomId doesnt exist in the db', (done) => {
-			sandbox.stub(hexService, 'getAllHexes').resolves([]);
+		it('should return 404 when the kingdoms id doesnt exist in the db', (done) => {
+			sandbox.stub(kingdomService, 'getKingdom').resolves(undefined);
 
 			request(app)
-				.get('/api/hex?kingdomId=0')
+				.get('/api/kingdom?id=0')
 				.expect('Content-Type', /json/)
 				.expect(200)
 				.end((err, res) => {
@@ -45,7 +42,7 @@ describe('hexRouter', () => {
 				});
 		});
 
-		it('should return 400 for missing kingdomId', (done) => {
+		it('should return 400 for missing id', (done) => {
 			const expectedResBody = {
 				ok: false,
 				status: 400,
@@ -55,15 +52,15 @@ describe('hexRouter', () => {
 						instancePath: '/query',
 						schemaPath: '#/properties/query/required',
 						params: {
-							missingProperty: 'kingdomId',
+							missingProperty: 'id',
 						},
-						message: "must have required property 'kingdomId'",
+						message: "must have required property 'id'",
 					},
 				],
 			};
 
 			request(app)
-				.get('/api/hex')
+				.get('/api/kingdom')
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -73,15 +70,15 @@ describe('hexRouter', () => {
 				});
 		});
 
-		it('should return 400 for a non-number kingdomId', (done) => {
+		it('should return 400 for a non-number id', (done) => {
 			const expectedResBody = {
 				ok: false,
 				status: 400,
 				error: [
 					{
 						keyword: 'type',
-						instancePath: '/query/kingdomId',
-						schemaPath: '#/properties/query/properties/kingdomId/type',
+						instancePath: '/query/id',
+						schemaPath: '#/properties/query/properties/id/type',
 						params: {
 							type: 'number',
 						},
@@ -91,7 +88,7 @@ describe('hexRouter', () => {
 			};
 
 			request(app)
-				.get('/api/hex?kingdomId=string')
+				.get('/api/kingdom?id=string')
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {
@@ -119,7 +116,7 @@ describe('hexRouter', () => {
 			};
 
 			request(app)
-				.get('/api/hex?kingdomId=1&illegalParameter=true')
+				.get('/api/kingdom?id=1&illegalParameter=true')
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {

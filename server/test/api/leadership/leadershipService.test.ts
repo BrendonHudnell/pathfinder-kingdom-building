@@ -1,5 +1,5 @@
 import { connection, populateDatabase } from '../../testUtils';
-import { leadershipService } from '../../../src/modules/leadership';
+import { leadershipService } from '../../../src/api';
 
 describe('leadershipService', () => {
 	beforeEach(async () => {

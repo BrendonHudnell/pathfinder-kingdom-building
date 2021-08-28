@@ -1,5 +1,5 @@
 import { connection, populateDatabase } from '../../testUtils';
-import { hexService } from '../../../src/modules/hex';
+import { hexService } from '../../../src/api';
 
 describe('districtService', () => {
 	beforeEach(async () => {
