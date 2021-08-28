@@ -18,7 +18,7 @@ export class HexEntity {
 	kingdom!: KingdomEntity;
 
 	@OneToOne(() => SettlementEntity, (settlement) => settlement.hex)
-	settlement!: SettlementEntity;
+	settlement?: SettlementEntity;
 
 	@Column()
 	name!: string;
@@ -92,9 +92,9 @@ export class HexEntity {
 	@Column()
 	watchtower!: boolean;
 
-	@Column({ type: 'text', nullable: true })
-	pointsOfInterest?: string;
+	@Column({ type: 'text' })
+	pointsOfInterest!: string;
 
-	@Column({ type: 'text', nullable: true })
-	notes?: string;
+	@Column({ type: 'text' })
+	notes!: string;
 }

@@ -18,7 +18,7 @@ export interface LeadershipRole {
 export const leadershipService = {
 	getAllLeadershipRoles,
 	addViceroy,
-	generateLeadershipRoles,
+	createLeadershipRoles,
 };
 
 async function getAllLeadershipRoles(
@@ -77,7 +77,7 @@ function convertLeadershipEntityToLeadershipRole(
 	};
 }
 
-async function generateLeadershipRoles(kingdom: KingdomEntity): Promise<void> {
+async function createLeadershipRoles(kingdom: KingdomEntity): Promise<void> {
 	const leadershipRepo = getRepository(LeadershipEntity);
 
 	const roles = Array.from({ length: 13 }, (_, i) => {

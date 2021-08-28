@@ -52,7 +52,7 @@ export interface Kingdom {
 
 export const kingdomService = {
 	getKingdom,
-	generateKingdom,
+	createKingdom,
 };
 
 async function getKingdom(kingdomId: number): Promise<Kingdom | undefined> {
@@ -112,7 +112,7 @@ async function getKingdom(kingdomId: number): Promise<Kingdom | undefined> {
 	return undefined;
 }
 
-async function generateKingdom(user: UserEntity): Promise<KingdomEntity> {
+async function createKingdom(user: UserEntity): Promise<KingdomEntity> {
 	const kingdomRepository = getRepository(KingdomEntity);
 
 	const newKingdom = new KingdomEntity();

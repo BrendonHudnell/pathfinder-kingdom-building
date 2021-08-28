@@ -37,9 +37,9 @@ async function register(username: string, password: string): Promise<boolean> {
 	newUser.password = hash;
 	const createdUser = await userRepository.save(newUser);
 
-	const kingdom = await kingdomService.generateKingdom(createdUser);
-	await hexService.generateHexBoard(kingdom);
-	await leadershipService.generateLeadershipRoles(kingdom);
+	const kingdom = await kingdomService.createKingdom(createdUser);
+	await hexService.createHexBoard(kingdom);
+	await leadershipService.createLeadershipRoles(kingdom);
 
 	return true;
 }

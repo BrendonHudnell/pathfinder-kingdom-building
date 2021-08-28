@@ -1,8 +1,8 @@
 import { Request, Response, Router } from 'express';
 
 import { verifyToken } from '../../middleware';
-import { hexService } from './hexService';
-import { getAllHexesValidator } from './hexValidator';
+import { Hex, hexService } from './hexService';
+import { getAllHexesValidator, updateHexValidator } from './hexValidator';
 
 export function createHexRouter(): Router {
 	const router = Router();
@@ -10,6 +10,7 @@ export function createHexRouter(): Router {
 	router.use(verifyToken);
 
 	router.get('/', getAllHexesValidator, getAllHexes);
+	router.post('/update', updateHexValidator, updateHex);
 
 	return router;
 }
@@ -23,6 +24,23 @@ export async function getAllHexes(req: Request, res: Response): Promise<void> {
 		res.status(200).json({
 			status: 200,
 			data: hexes,
+		});
+	} else {
+		res.status(200).json({
+			status: 404,
+		});
+	}
+}
+
+export async function updateHex(req: Request, res: Response): Promise<void> {
+	const id = Number(req.body.id);
+
+	const hex = await hexService.updateHex(id, req.body as Partial<Hex>);
+
+	if (hex) {
+		res.status(200).json({
+			status: 200,
+			data: hex,
 		});
 	} else {
 		res.status(200).json({

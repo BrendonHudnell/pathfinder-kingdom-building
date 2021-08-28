@@ -17,7 +17,9 @@ export interface Hex {
 
 export const hexService = {
 	getAllHexes,
-	generateHexBoard,
+	convertHexEntityToHex,
+	createHexBoard,
+	updateHex,
 };
 
 async function getAllHexes(kingdomId: number): Promise<Hex[]> {
@@ -30,90 +32,92 @@ async function getAllHexes(kingdomId: number): Promise<Hex[]> {
 		.leftJoin('hex.settlement', 'settlement')
 		.getMany();
 
-	return hexes.map((hex) => {
-		const specialTerrain: string[] = [];
-		const terrainImprovements: string[] = [];
-
-		if (hex.bridgeSpecialTerrain) {
-			specialTerrain.push('Bridge');
-		}
-		if (hex.building) {
-			specialTerrain.push('Building');
-		}
-		if (hex.freeCity) {
-			specialTerrain.push('Free City');
-		}
-		if (hex.lair) {
-			specialTerrain.push('Lair');
-		}
-		if (hex.landmark) {
-			specialTerrain.push('Landmark');
-		}
-		if (hex.resource) {
-			specialTerrain.push('Resource');
-		}
-		if (hex.river) {
-			specialTerrain.push('River');
-		}
-		if (hex.ruin) {
-			specialTerrain.push('Ruin');
-		}
-
-		if (hex.aqueduct) {
-			terrainImprovements.push('Aqueduct');
-		}
-		if (hex.bridgeImprovement) {
-			terrainImprovements.push('Bridge');
-		}
-		if (hex.canal) {
-			terrainImprovements.push('Canal');
-		}
-		if (hex.farm) {
-			terrainImprovements.push('Farm');
-		}
-		if (hex.fishery) {
-			terrainImprovements.push('Fishery');
-		}
-		if (hex.fort) {
-			terrainImprovements.push('Fort');
-		}
-		if (hex.highway) {
-			terrainImprovements.push('Highway');
-		}
-		if (hex.mine) {
-			terrainImprovements.push('Mine');
-		}
-		if (hex.quarry) {
-			terrainImprovements.push('Quarry');
-		}
-		if (hex.road) {
-			terrainImprovements.push('Road');
-		}
-		if (hex.sawmill) {
-			terrainImprovements.push('Sawmill');
-		}
-		if (hex.vineyard) {
-			terrainImprovements.push('Vineyard');
-		}
-		if (hex.watchtower) {
-			terrainImprovements.push('Watchtower');
-		}
-
-		return {
-			id: hex.id,
-			settlementId: hex.settlement?.id,
-			name: hex.name,
-			terrain: hex.terrain,
-			specialTerrain,
-			explorationState: hex.explorationState,
-			terrainImprovements,
-			pointsOfInterest: hex.pointsOfInterest ?? '',
-			notes: hex.notes ?? '',
-		};
-	});
+	return hexes.map((hex) => convertHexEntityToHex(hex));
 }
 
-async function generateHexBoard(kingdom: KingdomEntity): Promise<HexEntity[]> {
+function convertHexEntityToHex(hexEntity: HexEntity): Hex {
+	const specialTerrain: string[] = [];
+	const terrainImprovements: string[] = [];
+
+	if (hexEntity.bridgeSpecialTerrain) {
+		specialTerrain.push('Bridge');
+	}
+	if (hexEntity.building) {
+		specialTerrain.push('Building');
+	}
+	if (hexEntity.freeCity) {
+		specialTerrain.push('Free City');
+	}
+	if (hexEntity.lair) {
+		specialTerrain.push('Lair');
+	}
+	if (hexEntity.landmark) {
+		specialTerrain.push('Landmark');
+	}
+	if (hexEntity.resource) {
+		specialTerrain.push('Resource');
+	}
+	if (hexEntity.river) {
+		specialTerrain.push('River');
+	}
+	if (hexEntity.ruin) {
+		specialTerrain.push('Ruin');
+	}
+
+	if (hexEntity.aqueduct) {
+		terrainImprovements.push('Aqueduct');
+	}
+	if (hexEntity.bridgeImprovement) {
+		terrainImprovements.push('Bridge');
+	}
+	if (hexEntity.canal) {
+		terrainImprovements.push('Canal');
+	}
+	if (hexEntity.farm) {
+		terrainImprovements.push('Farm');
+	}
+	if (hexEntity.fishery) {
+		terrainImprovements.push('Fishery');
+	}
+	if (hexEntity.fort) {
+		terrainImprovements.push('Fort');
+	}
+	if (hexEntity.highway) {
+		terrainImprovements.push('Highway');
+	}
+	if (hexEntity.mine) {
+		terrainImprovements.push('Mine');
+	}
+	if (hexEntity.quarry) {
+		terrainImprovements.push('Quarry');
+	}
+	if (hexEntity.road) {
+		terrainImprovements.push('Road');
+	}
+	if (hexEntity.sawmill) {
+		terrainImprovements.push('Sawmill');
+	}
+	if (hexEntity.vineyard) {
+		terrainImprovements.push('Vineyard');
+	}
+	if (hexEntity.watchtower) {
+		terrainImprovements.push('Watchtower');
+	}
+
+	return {
+		id: hexEntity.id,
+		settlementId: hexEntity.settlement?.id ?? -1,
+		name: hexEntity.name,
+		terrain: hexEntity.terrain,
+		specialTerrain,
+		explorationState: hexEntity.explorationState,
+		terrainImprovements,
+		pointsOfInterest: hexEntity.pointsOfInterest,
+		notes: hexEntity.notes,
+	};
+}
+
+async function createHexBoard(kingdom: KingdomEntity): Promise<HexEntity[]> {
 	const hexRepository = getRepository(HexEntity);
 
 	const hexes = Array.from({ length: 90 }, () => {
@@ -150,4 +154,29 @@ async function generateHexBoard(kingdom: KingdomEntity): Promise<HexEntity[]> {
 	await hexRepository.save(hexes);
 
 	return hexes;
+}
+
+async function updateHex(
+	id: number,
+	updates: Partial<Hex>
+): Promise<Hex | undefined> {
+	const hexRepository = getRepository(HexEntity);
+
+	const hex = await hexRepository.findOne(id);
+
+	if (!hex) {
+		return;
+	}
+
+	hex.name = updates.name ?? hex.name;
+	hex.terrain = updates.terrain ?? hex.terrain;
+	// TODO special terrain
+	hex.explorationState = updates.explorationState ?? hex.explorationState;
+	// TODO terrain improvements
+	hex.pointsOfInterest = updates.pointsOfInterest ?? hex.pointsOfInterest;
+	hex.notes = updates.notes ?? hex.notes;
+
+	const updatedHex = await hexRepository.save(hex);
+
+	return convertHexEntityToHex(updatedHex);
 }
