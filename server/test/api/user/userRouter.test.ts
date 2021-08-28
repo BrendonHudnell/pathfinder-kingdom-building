@@ -1,7 +1,9 @@
 import request from 'supertest';
 import sinon from 'sinon';
 import { Express } from 'express';
+import jwt from 'jsonwebtoken';
 
+import { env } from '../../../src/env';
 import { createApp } from '../../../src/app';
 import { userService } from '../../../src/api';
 
@@ -207,6 +209,65 @@ describe('userRouter', () => {
 					expect(res.body).toMatchObject(expectedResBody);
 					done();
 				});
+		});
+
+		it('should return 400 for illegal parameters', (done) => {
+			const expectedResBody = {
+				ok: false,
+				status: 400,
+				error: [
+					{
+						keyword: 'additionalProperties',
+						instancePath: '/body',
+						schemaPath: '#/properties/body/additionalProperties',
+						params: {
+							additionalProperty: 'illegalParameter',
+						},
+						message: 'must NOT have additional properties',
+					},
+				],
+			};
+
+			request(app)
+				.post('/api/user/login')
+				.send({
+					username: 'test',
+					password: 'password1',
+					illegalParameter: true,
+				})
+				.expect('Content-Type', /json/)
+				.expect(400)
+				.end((err, res) => {
+					if (err) return done(err);
+					expect(res.body).toMatchObject(expectedResBody);
+					done();
+				});
+		});
+	});
+
+	describe('POST /logout', () => {
+		it('should return 200 and return an expired cookie when logout is success', (done) => {
+			sandbox.stub(userService, 'logout').resolves(undefined);
+
+			const token = jwt.sign('userName', env.secretKey);
+
+			request(app)
+				.post('/api/user/logout')
+				.set('Cookie', `accessToken=${token}`)
+				.expect(
+					'Set-Cookie',
+					'accessToken=expired; Path=/; Expires=January 1, 1970 00:00:00'
+				)
+				.expect(200)
+				.end(() => done());
+		});
+
+		it('should return 401 when user is already logged out', (done) => {
+			request(app)
+				.post('/api/user/logout')
+				.expect('Content-Type', /json/)
+				.expect(401)
+				.end(() => done());
 		});
 
 		it('should return 400 for illegal parameters', (done) => {

@@ -18,13 +18,20 @@ export const getAllHexesValidator = requestValidator(
 
 export const updateHexValidator = requestValidator(
 	{
-		body: {
+		params: {
 			type: 'object',
 			additionalProperties: false,
 			properties: {
 				id: {
 					type: 'number',
 				},
+			},
+			required: ['id'],
+		},
+		body: {
+			type: 'object',
+			additionalProperties: false,
+			properties: {
 				name: {
 					type: 'string',
 				},
@@ -53,7 +60,6 @@ export const updateHexValidator = requestValidator(
 					type: 'string',
 				},
 			},
-			required: ['id'],
 		},
 	},
 	true

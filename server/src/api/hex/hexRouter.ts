@@ -10,7 +10,7 @@ export function createHexRouter(): Router {
 	router.use(verifyToken);
 
 	router.get('/', getAllHexesValidator, getAllHexes);
-	router.post('/update', updateHexValidator, updateHex);
+	router.patch('/:id', updateHexValidator, updateHex);
 
 	return router;
 }
@@ -33,7 +33,7 @@ export async function getAllHexes(req: Request, res: Response): Promise<void> {
 }
 
 export async function updateHex(req: Request, res: Response): Promise<void> {
-	const id = Number(req.body.id);
+	const id = Number(req.params.id);
 
 	const hex = await hexService.updateHex(id, req.body as Partial<Hex>);
 

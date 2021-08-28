@@ -117,8 +117,17 @@ function convertHexEntityToHex(hexEntity: HexEntity): Hex {
 	};
 }
 
-async function createHexBoard(kingdom: KingdomEntity): Promise<HexEntity[]> {
+async function createHexBoard(
+	kingdomId: number
+): Promise<HexEntity[] | undefined> {
 	const hexRepository = getRepository(HexEntity);
+	const kingdomRepository = getRepository(KingdomEntity);
+
+	const kingdom = await kingdomRepository.findOne(kingdomId);
+
+	if (!kingdom) {
+		return;
+	}
 
 	const hexes = Array.from({ length: 90 }, () => {
 		const hex = new HexEntity();
@@ -158,16 +167,13 @@ async function createHexBoard(kingdom: KingdomEntity): Promise<HexEntity[]> {
 	return hexes;
 }
 
-async function updateHex(
-	id: number,
-	updates: Partial<Hex>
-): Promise<Hex | undefined> {
+async function updateHex(id: number, updates: Partial<Hex>): Promise<boolean> {
 	const hexRepository = getRepository(HexEntity);
 
 	const hex = await hexRepository.findOne(id);
 
 	if (!hex) {
-		return;
+		return false;
 	}
 
 	hex.name = updates.name ?? hex.name;
@@ -178,7 +184,7 @@ async function updateHex(
 	hex.pointsOfInterest = updates.pointsOfInterest ?? hex.pointsOfInterest;
 	hex.notes = updates.notes ?? hex.notes;
 
-	const updatedHex = await hexRepository.save(hex);
+	await hexRepository.save(hex);
 
-	return convertHexEntityToHex(updatedHex);
+	return true;
 }
