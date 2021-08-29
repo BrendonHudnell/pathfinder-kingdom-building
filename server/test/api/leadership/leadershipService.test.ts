@@ -22,9 +22,9 @@ describe('leadershipService', () => {
 		});
 	});
 
-	describe('addViceroy', () => {
+	describe('createViceroy', () => {
 		it('should return a newly created LeadershipRole when an existing kingdomId and settlementId is passed in', async () => {
-			const viceroy = await leadershipService.addViceroy(1);
+			const viceroy = await leadershipService.createViceroy(1);
 
 			expect(viceroy).not.toBeUndefined();
 			expect(viceroy!.name).toBe('Viceroy');
@@ -32,7 +32,7 @@ describe('leadershipService', () => {
 		});
 
 		it('should return undefined when a nonexistent kingdomId is passed in', async () => {
-			const viceroy = await leadershipService.addViceroy(-1);
+			const viceroy = await leadershipService.createViceroy(-1);
 
 			expect(viceroy).toBeUndefined();
 		});

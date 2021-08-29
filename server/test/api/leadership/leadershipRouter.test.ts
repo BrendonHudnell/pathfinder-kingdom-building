@@ -148,12 +148,12 @@ describe('leadershipRouter', () => {
 		});
 	});
 
-	describe('POST /addViceroy', () => {
+	describe('POST /createViceroy', () => {
 		it('should return 200 and the created LeadershipRole with an existing kingdomId', (done) => {
-			sandbox.stub(leadershipService, 'addViceroy').resolves(testViceroy);
+			sandbox.stub(leadershipService, 'createViceroy').resolves(testViceroy);
 
 			request(app)
-				.post('/api/leadership/addViceroy')
+				.post('/api/leadership/createViceroy')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1 })
 				.expect('Content-Type', /json/)
@@ -169,10 +169,10 @@ describe('leadershipRouter', () => {
 		});
 
 		it('should return 404 when the kingdomId doesnt exist in the db', (done) => {
-			sandbox.stub(leadershipService, 'addViceroy').resolves(undefined);
+			sandbox.stub(leadershipService, 'createViceroy').resolves(undefined);
 
 			request(app)
-				.post('/api/leadership/addViceroy')
+				.post('/api/leadership/createViceroy')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: -1 })
 				.expect('Content-Type', /json/)
@@ -186,7 +186,7 @@ describe('leadershipRouter', () => {
 
 		it('should return 401 when missing auth token', (done) => {
 			request(app)
-				.post('/api/leadership/addViceroy')
+				.post('/api/leadership/createViceroy')
 				.send({ kingdomId: 1 })
 				.expect('Content-Type', /text\/plain/)
 				.expect(401)
@@ -211,7 +211,7 @@ describe('leadershipRouter', () => {
 			};
 
 			request(app)
-				.post('/api/leadership/addViceroy')
+				.post('/api/leadership/createViceroy')
 				.set('Cookie', `accessToken=${token}`)
 				.expect('Content-Type', /json/)
 				.expect(400)
@@ -240,7 +240,7 @@ describe('leadershipRouter', () => {
 			};
 
 			request(app)
-				.post('/api/leadership/addViceroy')
+				.post('/api/leadership/createViceroy')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 'string' })
 				.expect('Content-Type', /json/)
@@ -270,7 +270,7 @@ describe('leadershipRouter', () => {
 			};
 
 			request(app)
-				.post('/api/leadership/addViceroy')
+				.post('/api/leadership/createViceroy')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1, illegalParameter: true })
 				.expect('Content-Type', /json/)

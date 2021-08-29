@@ -22,9 +22,9 @@ describe('settlementService', () => {
 		});
 	});
 
-	describe('addSettlement', () => {
+	describe('createSettlement', () => {
 		it('should return a newly created Settlement when an existing kingdomId and hexId is passed in', async () => {
-			const settlement = await settlementService.addSettlement(1, 3);
+			const settlement = await settlementService.createSettlement(1, 3);
 
 			expect(settlement).not.toBeUndefined();
 			expect(settlement!.name).toBe('New Settlement');
@@ -32,13 +32,13 @@ describe('settlementService', () => {
 		});
 
 		it('should return undefined when a nonexistent kingdomId is passed in', async () => {
-			const settlement = await settlementService.addSettlement(-1, 3);
+			const settlement = await settlementService.createSettlement(-1, 3);
 
 			expect(settlement).toBeUndefined();
 		});
 
 		it('should return undefined when a nonexistent hexId is passed in', async () => {
-			const settlement = await settlementService.addSettlement(1, -1);
+			const settlement = await settlementService.createSettlement(1, -1);
 
 			expect(settlement).toBeUndefined();
 		});

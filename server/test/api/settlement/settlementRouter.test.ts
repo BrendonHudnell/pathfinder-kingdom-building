@@ -151,14 +151,14 @@ describe('settlementRouter', () => {
 		});
 	});
 
-	describe('POST /add', () => {
+	describe('POST /create', () => {
 		it('should return 200 and the created settlement with an existing kingdomId and hexId', (done) => {
 			sandbox
-				.stub(settlementService, 'addSettlement')
+				.stub(settlementService, 'createSettlement')
 				.resolves(testSettlement1);
 
 			request(app)
-				.post('/api/settlement/add')
+				.post('/api/settlement/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1, hexId: 1 })
 				.expect('Content-Type', /json/)
@@ -174,10 +174,10 @@ describe('settlementRouter', () => {
 		});
 
 		it('should return 404 when the kingdomId doesnt exist in the db', (done) => {
-			sandbox.stub(settlementService, 'addSettlement').resolves(undefined);
+			sandbox.stub(settlementService, 'createSettlement').resolves(undefined);
 
 			request(app)
-				.post('/api/settlement/add')
+				.post('/api/settlement/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: -1, hexId: 1 })
 				.expect('Content-Type', /json/)
@@ -190,10 +190,10 @@ describe('settlementRouter', () => {
 		});
 
 		it('should return 404 when the hexId doesnt exist in the db', (done) => {
-			sandbox.stub(settlementService, 'addSettlement').resolves();
+			sandbox.stub(settlementService, 'createSettlement').resolves();
 
 			request(app)
-				.post('/api/settlement/add')
+				.post('/api/settlement/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1, hexId: -1 })
 				.expect('Content-Type', /json/)
@@ -207,7 +207,7 @@ describe('settlementRouter', () => {
 
 		it('should return 401 when missing auth token', (done) => {
 			request(app)
-				.post('/api/settlement/add')
+				.post('/api/settlement/create')
 				.send({ kingdomId: 1, hexId: 1 })
 				.expect('Content-Type', /text\/plain/)
 				.expect(401)
@@ -232,7 +232,7 @@ describe('settlementRouter', () => {
 			};
 
 			request(app)
-				.post('/api/settlement/add')
+				.post('/api/settlement/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ hexId: 1 })
 				.expect('Content-Type', /json/)
@@ -262,7 +262,7 @@ describe('settlementRouter', () => {
 			};
 
 			request(app)
-				.post('/api/settlement/add')
+				.post('/api/settlement/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1 })
 				.expect('Content-Type', /json/)
@@ -292,7 +292,7 @@ describe('settlementRouter', () => {
 			};
 
 			request(app)
-				.post('/api/settlement/add')
+				.post('/api/settlement/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 'string', hexId: 1 })
 				.expect('Content-Type', /json/)
@@ -322,7 +322,7 @@ describe('settlementRouter', () => {
 			};
 
 			request(app)
-				.post('/api/settlement/add')
+				.post('/api/settlement/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1, hexId: 'string' })
 				.expect('Content-Type', /json/)
@@ -352,7 +352,7 @@ describe('settlementRouter', () => {
 			};
 
 			request(app)
-				.post('/api/settlement/add')
+				.post('/api/settlement/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1, hexId: 1, illegalParameter: true })
 				.expect('Content-Type', /json/)

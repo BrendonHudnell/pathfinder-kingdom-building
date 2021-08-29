@@ -151,12 +151,12 @@ describe('districtRouter', () => {
 		});
 	});
 
-	describe('POST /add', () => {
+	describe('POST /create', () => {
 		it('should return 200 and the created district with an existing kingdomId and settlementId', (done) => {
 			sandbox.stub(districtService, 'createDistrict').resolves(testDistrict1);
 
 			request(app)
-				.post('/api/district/add')
+				.post('/api/district/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1, settlementId: 1 })
 				.expect('Content-Type', /json/)
@@ -175,7 +175,7 @@ describe('districtRouter', () => {
 			sandbox.stub(districtService, 'createDistrict').resolves(undefined);
 
 			request(app)
-				.post('/api/district/add')
+				.post('/api/district/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: -1, settlementId: 1 })
 				.expect('Content-Type', /json/)
@@ -191,7 +191,7 @@ describe('districtRouter', () => {
 			sandbox.stub(districtService, 'createDistrict').resolves();
 
 			request(app)
-				.post('/api/district/add')
+				.post('/api/district/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1, settlementId: -1 })
 				.expect('Content-Type', /json/)
@@ -205,7 +205,7 @@ describe('districtRouter', () => {
 
 		it('should return 401 when missing auth token', (done) => {
 			request(app)
-				.post('/api/district/add')
+				.post('/api/district/create')
 				.send({ kingdomId: 1, settlementId: 1 })
 				.expect('Content-Type', /text\/plain/)
 				.expect(401)
@@ -230,7 +230,7 @@ describe('districtRouter', () => {
 			};
 
 			request(app)
-				.post('/api/district/add')
+				.post('/api/district/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ settlementId: 1 })
 				.expect('Content-Type', /json/)
@@ -260,7 +260,7 @@ describe('districtRouter', () => {
 			};
 
 			request(app)
-				.post('/api/district/add')
+				.post('/api/district/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1 })
 				.expect('Content-Type', /json/)
@@ -290,7 +290,7 @@ describe('districtRouter', () => {
 			};
 
 			request(app)
-				.post('/api/district/add')
+				.post('/api/district/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 'string', settlementId: 1 })
 				.expect('Content-Type', /json/)
@@ -320,7 +320,7 @@ describe('districtRouter', () => {
 			};
 
 			request(app)
-				.post('/api/district/add')
+				.post('/api/district/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1, settlementId: 'string' })
 				.expect('Content-Type', /json/)
@@ -350,7 +350,7 @@ describe('districtRouter', () => {
 			};
 
 			request(app)
-				.post('/api/district/add')
+				.post('/api/district/create')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1, settlementId: 1, illegalParameter: true })
 				.expect('Content-Type', /json/)
