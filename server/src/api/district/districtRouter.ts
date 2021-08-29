@@ -1,10 +1,11 @@
 import { Request, Response, Router } from 'express';
 
 import { verifyToken } from '../../middleware';
-import { districtService } from './districtService';
+import { District, districtService } from './districtService';
 import {
 	addDistrictValidator,
 	getAllDistrictsValidator,
+	updateDistrictValidator,
 } from './districtValidator';
 
 export function createDistrictRouter(): Router {
@@ -12,8 +13,9 @@ export function createDistrictRouter(): Router {
 
 	router.use(verifyToken);
 
-	router.get('/', getAllDistrictsValidator, getAllDistricts);
 	router.post('/add', addDistrictValidator, addDistrict);
+	router.patch('/:id', updateDistrictValidator, updateDistrict);
+	router.get('/', getAllDistrictsValidator, getAllDistricts);
 
 	return router;
 }
@@ -37,11 +39,36 @@ export async function addDistrict(req: Request, res: Response): Promise<void> {
 	const kingdomId = req.body.kingdomId;
 	const settlementId = req.body.settlementId;
 
-	const district = await districtService.addDistrict(kingdomId, settlementId);
+	const district = await districtService.createDistrict(
+		kingdomId,
+		settlementId
+	);
 
 	if (district) {
 		res.status(200).json({ status: 200, data: district });
 	} else {
 		res.status(200).json({ status: 404 });
+	}
+}
+
+export async function updateDistrict(
+	req: Request,
+	res: Response
+): Promise<void> {
+	const id = Number(req.params.id);
+
+	const success = await districtService.updateDistrict(
+		id,
+		req.body as Partial<District>
+	);
+
+	if (success) {
+		res.status(200).json({
+			status: 200,
+		});
+	} else {
+		res.status(200).json({
+			status: 404,
+		});
 	}
 }

@@ -153,7 +153,7 @@ describe('districtRouter', () => {
 
 	describe('POST /add', () => {
 		it('should return 200 and the created district with an existing kingdomId and settlementId', (done) => {
-			sandbox.stub(districtService, 'addDistrict').resolves(testDistrict1);
+			sandbox.stub(districtService, 'createDistrict').resolves(testDistrict1);
 
 			request(app)
 				.post('/api/district/add')
@@ -172,7 +172,7 @@ describe('districtRouter', () => {
 		});
 
 		it('should return 404 when the kingdomId doesnt exist in the db', (done) => {
-			sandbox.stub(districtService, 'addDistrict').resolves(undefined);
+			sandbox.stub(districtService, 'createDistrict').resolves(undefined);
 
 			request(app)
 				.post('/api/district/add')
@@ -188,7 +188,7 @@ describe('districtRouter', () => {
 		});
 
 		it('should return 404 when the settlementId doesnt exist in the db', (done) => {
-			sandbox.stub(districtService, 'addDistrict').resolves();
+			sandbox.stub(districtService, 'createDistrict').resolves();
 
 			request(app)
 				.post('/api/district/add')
@@ -353,6 +353,105 @@ describe('districtRouter', () => {
 				.post('/api/district/add')
 				.set('Cookie', `accessToken=${token}`)
 				.send({ kingdomId: 1, settlementId: 1, illegalParameter: true })
+				.expect('Content-Type', /json/)
+				.expect(400)
+				.end((err, res) => {
+					if (err) return done(err);
+					expect(res.body).toMatchObject(expectedResBody);
+					done();
+				});
+		});
+	});
+
+	describe('PATCH /:id', () => {
+		it('should return 200 with an existing district id', (done) => {
+			sandbox.stub(districtService, 'updateDistrict').resolves(true);
+
+			request(app)
+				.patch('/api/district/1')
+				.set('Cookie', `accessToken=${token}`)
+				.send({ name: 'new name' })
+				.expect('Content-Type', /json/)
+				.expect(200)
+				.end((err, res) => {
+					if (err) return done(err);
+					expect(res.body).toMatchObject({
+						status: 200,
+					});
+					done();
+				});
+		});
+
+		it('should return 404 when the district id doesnt exist in the db', (done) => {
+			sandbox.stub(districtService, 'updateDistrict').resolves(false);
+
+			request(app)
+				.patch('/api/district/-1')
+				.set('Cookie', `accessToken=${token}`)
+				.expect('Content-Type', /json/)
+				.expect(200)
+				.end((err, res) => {
+					if (err) return done(err);
+					expect(res.body).toMatchObject({ status: 404 });
+					done();
+				});
+		});
+
+		it('should return 401 when missing auth token', (done) => {
+			request(app)
+				.patch('/api/district/1')
+				.expect('Content-Type', /text\/plain/)
+				.expect(401)
+				.end(() => done());
+		});
+
+		it('should return 400 for a non-number district id', (done) => {
+			const expectedResBody = {
+				ok: false,
+				status: 400,
+				error: [
+					{
+						keyword: 'type',
+						instancePath: '/params/id',
+						schemaPath: '#/properties/params/properties/id/type',
+						params: {
+							type: 'number',
+						},
+						message: 'must be number',
+					},
+				],
+			};
+
+			request(app)
+				.patch('/api/district/string')
+				.set('Cookie', `accessToken=${token}`)
+				.expect('Content-Type', /json/)
+				.expect(400)
+				.end((err, res) => {
+					if (err) return done(err);
+					expect(res.body).toMatchObject(expectedResBody);
+					done();
+				});
+		});
+
+		it('should return 400 for a not allowed body property', (done) => {
+			const expectedResBody = {
+				ok: false,
+				status: 400,
+				error: [
+					{
+						keyword: 'additionalProperties',
+						instancePath: '/body',
+						schemaPath: '#/properties/body/additionalProperties',
+						message: 'must NOT have additional properties',
+					},
+				],
+			};
+
+			request(app)
+				.patch('/api/district/1')
+				.set('Cookie', `accessToken=${token}`)
+				.send({ badProperty: true })
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {

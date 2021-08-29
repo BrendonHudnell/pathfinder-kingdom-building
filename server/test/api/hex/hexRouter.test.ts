@@ -168,7 +168,7 @@ describe('hexRouter', () => {
 		});
 
 		it('should return 404 when the hex id doesnt exist in the db', (done) => {
-			sandbox.stub(hexService, 'updateHex').resolves(undefined);
+			sandbox.stub(hexService, 'updateHex').resolves(false);
 
 			request(app)
 				.patch('/api/hex/-1')
@@ -210,6 +210,33 @@ describe('hexRouter', () => {
 			request(app)
 				.patch('/api/hex/string')
 				.set('Cookie', `accessToken=${token}`)
+				.expect('Content-Type', /json/)
+				.expect(400)
+				.end((err, res) => {
+					if (err) return done(err);
+					expect(res.body).toMatchObject(expectedResBody);
+					done();
+				});
+		});
+
+		it('should return 400 for a not allowed body property', (done) => {
+			const expectedResBody = {
+				ok: false,
+				status: 400,
+				error: [
+					{
+						keyword: 'additionalProperties',
+						instancePath: '/body',
+						schemaPath: '#/properties/body/additionalProperties',
+						message: 'must NOT have additional properties',
+					},
+				],
+			};
+
+			request(app)
+				.patch('/api/hex/1')
+				.set('Cookie', `accessToken=${token}`)
+				.send({ badProperty: true })
 				.expect('Content-Type', /json/)
 				.expect(400)
 				.end((err, res) => {

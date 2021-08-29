@@ -1,5 +1,5 @@
 import { connection, populateDatabase } from '../../testUtils';
-import { hexService } from '../../../src/api';
+import { Hex, hexService } from '../../../src/api';
 
 describe('districtService', () => {
 	beforeEach(async () => {
@@ -38,7 +38,7 @@ describe('districtService', () => {
 
 	describe('updateHex', () => {
 		it('should return true when an existing hex id and an updated fields object are passed in', async () => {
-			const updateOptions = {
+			const updateOptions: Partial<Hex> = {
 				name: 'Replaced',
 				terrain: 'Hills',
 				explorationState: 'Explored',

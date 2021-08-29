@@ -34,3 +34,94 @@ export const addDistrictValidator = requestValidator(
 	},
 	true
 );
+
+export const updateDistrictValidator = requestValidator(
+	{
+		params: {
+			type: 'object',
+			additionalProperties: false,
+			properties: {
+				id: {
+					type: 'number',
+				},
+			},
+			required: ['id'],
+		},
+		body: {
+			type: 'object',
+			additionalProperties: false,
+			properties: {
+				name: {
+					type: 'string',
+				},
+				paved: {
+					type: 'boolean',
+				},
+				sewers: {
+					type: 'boolean',
+				},
+				north: {
+					type: 'object',
+					additionalProperties: false,
+					properties: {
+						terrain: {
+							type: 'string',
+						},
+						wall: {
+							type: 'boolean',
+						},
+						moat: {
+							type: 'boolean',
+						},
+					},
+				},
+				south: {
+					type: 'object',
+					additionalProperties: false,
+					properties: {
+						terrain: {
+							type: 'string',
+						},
+						wall: {
+							type: 'boolean',
+						},
+						moat: {
+							type: 'boolean',
+						},
+					},
+				},
+				east: {
+					type: 'object',
+					additionalProperties: false,
+					properties: {
+						terrain: {
+							type: 'string',
+						},
+						wall: {
+							type: 'boolean',
+						},
+						moat: {
+							type: 'boolean',
+						},
+					},
+				},
+				west: {
+					type: 'object',
+					additionalProperties: false,
+					properties: {
+						terrain: {
+							type: 'string',
+						},
+						wall: {
+							type: 'boolean',
+						},
+						moat: {
+							type: 'boolean',
+						},
+					},
+				},
+			},
+		},
+	},
+	true
+);

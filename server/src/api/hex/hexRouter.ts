@@ -35,9 +35,9 @@ export async function getAllHexes(req: Request, res: Response): Promise<void> {
 export async function updateHex(req: Request, res: Response): Promise<void> {
 	const id = Number(req.params.id);
 
-	const hex = await hexService.updateHex(id, req.body as Partial<Hex>);
+	const success = await hexService.updateHex(id, req.body as Partial<Hex>);
 
-	if (hex) {
+	if (success) {
 		res.status(200).json({
 			status: 200,
 		});

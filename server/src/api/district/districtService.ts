@@ -36,7 +36,9 @@ export interface District {
 
 export const districtService = {
 	getAllDistricts,
-	addDistrict,
+	createDistrict,
+	convertDistrictEntityToDistrict,
+	updateDistrict,
 };
 
 async function getAllDistricts(kingdomId: number): Promise<District[]> {
@@ -52,7 +54,7 @@ async function getAllDistricts(kingdomId: number): Promise<District[]> {
 	return districts.map((district) => convertDistrictEntityToDistrict(district));
 }
 
-async function addDistrict(
+async function createDistrict(
 	kingdomId: number,
 	settlementId: number
 ): Promise<District | undefined> {
@@ -142,4 +144,37 @@ function convertDistrictEntityToDistrict(
 		},
 		lotTypeList,
 	};
+}
+
+async function updateDistrict(
+	id: number,
+	updates: Partial<District>
+): Promise<boolean> {
+	const districtRepository = getRepository(DistrictEntity);
+
+	const district = await districtRepository.findOne(id);
+
+	if (!district) {
+		return false;
+	}
+
+	district.name = updates.name ?? district.name;
+	district.paved = updates.paved ?? district.paved;
+	district.sewers = updates.sewers ?? district.sewers;
+	district.terrainNorth = updates.north?.terrain ?? district.terrainNorth;
+	district.wallNorth = updates.north?.wall ?? district.wallNorth;
+	district.moatNorth = updates.north?.moat ?? district.moatNorth;
+	district.terrainSouth = updates.south?.terrain ?? district.terrainSouth;
+	district.wallSouth = updates.south?.wall ?? district.wallSouth;
+	district.moatSouth = updates.south?.moat ?? district.moatSouth;
+	district.terrainEast = updates.east?.terrain ?? district.terrainEast;
+	district.wallEast = updates.east?.wall ?? district.wallEast;
+	district.moatEast = updates.east?.moat ?? district.moatEast;
+	district.terrainWest = updates.west?.terrain ?? district.terrainWest;
+	district.wallWest = updates.west?.wall ?? district.wallWest;
+	district.moatWest = updates.west?.moat ?? district.moatWest;
+
+	await districtRepository.save(district);
+
+	return true;
 }
