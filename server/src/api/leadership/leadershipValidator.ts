@@ -16,7 +16,7 @@ export const getAllLeadershipRolesValidator = requestValidator(
 	true
 );
 
-export const addViceroyValidator = requestValidator(
+export const createViceroyValidator = requestValidator(
 	{
 		body: {
 			type: 'object',

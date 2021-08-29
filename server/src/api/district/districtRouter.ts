@@ -3,7 +3,7 @@ import { Request, Response, Router } from 'express';
 import { verifyToken } from '../../middleware';
 import { District, districtService } from './districtService';
 import {
-	addDistrictValidator,
+	createDistrictValidator,
 	getAllDistrictsValidator,
 	updateDistrictValidator,
 } from './districtValidator';
@@ -13,7 +13,7 @@ export function createDistrictRouter(): Router {
 
 	router.use(verifyToken);
 
-	router.post('/add', addDistrictValidator, addDistrict);
+	router.post('/create', createDistrictValidator, createDistrict);
 	router.patch('/:id', updateDistrictValidator, updateDistrict);
 	router.get('/', getAllDistrictsValidator, getAllDistricts);
 
@@ -35,7 +35,10 @@ export async function getAllDistricts(
 	}
 }
 
-export async function addDistrict(req: Request, res: Response): Promise<void> {
+export async function createDistrict(
+	req: Request,
+	res: Response
+): Promise<void> {
 	const kingdomId = req.body.kingdomId;
 	const settlementId = req.body.settlementId;
 

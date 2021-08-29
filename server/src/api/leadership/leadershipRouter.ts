@@ -3,7 +3,7 @@ import { Request, Response, Router } from 'express';
 import { verifyToken } from '../../middleware';
 import { leadershipService } from './leadershipService';
 import {
-	addViceroyValidator,
+	createViceroyValidator,
 	getAllLeadershipRolesValidator,
 } from './leadershipValidator';
 
@@ -12,8 +12,8 @@ export function createLeadershipRouter(): Router {
 
 	router.use(verifyToken);
 
+	router.post('/createViceroy', createViceroyValidator, createViceroy);
 	router.get('/', getAllLeadershipRolesValidator, getAllLeadershipRoles);
-	router.post('/addViceroy', addViceroyValidator, addViceroy);
 
 	return router;
 }
@@ -38,10 +38,13 @@ export async function getAllLeadershipRoles(
 	}
 }
 
-export async function addViceroy(req: Request, res: Response): Promise<void> {
+export async function createViceroy(
+	req: Request,
+	res: Response
+): Promise<void> {
 	const kingdomId = req.body.kingdomId;
 
-	const viceroy = await leadershipService.addViceroy(kingdomId);
+	const viceroy = await leadershipService.createViceroy(kingdomId);
 
 	if (viceroy) {
 		res.status(200).json({

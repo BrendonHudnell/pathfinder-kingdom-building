@@ -3,7 +3,7 @@ import { Request, Response, Router } from 'express';
 import { verifyToken } from '../../middleware';
 import { settlementService } from './settlementService';
 import {
-	addSettlementValidator,
+	createSettlementValidator,
 	getAllSettlementsValidator,
 } from './settlementValidator';
 
@@ -12,8 +12,8 @@ export function createSettlementRouter(): Router {
 
 	router.use(verifyToken);
 
+	router.post('/create', createSettlementValidator, createSettlement);
 	router.get('/', getAllSettlementsValidator, getAllSettlements);
-	router.post('/add', addSettlementValidator, addSettlement);
 
 	return router;
 }
@@ -38,14 +38,14 @@ export async function getAllSettlements(
 	}
 }
 
-export async function addSettlement(
+export async function createSettlement(
 	req: Request,
 	res: Response
 ): Promise<void> {
 	const kingdomId = req.body.kingdomId;
 	const hexId = req.body.hexId;
 
-	const settlement = await settlementService.addSettlement(kingdomId, hexId);
+	const settlement = await settlementService.createSettlement(kingdomId, hexId);
 
 	if (settlement) {
 		res.status(200).json({

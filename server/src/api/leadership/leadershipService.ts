@@ -17,7 +17,7 @@ export interface LeadershipRole {
 
 export const leadershipService = {
 	getAllLeadershipRoles,
-	addViceroy,
+	createViceroy,
 	createLeadershipRoles,
 };
 
@@ -33,7 +33,7 @@ async function getAllLeadershipRoles(
 	return roles.map((role) => convertLeadershipEntityToLeadershipRole(role));
 }
 
-async function addViceroy(
+async function createViceroy(
 	kingdomId: number
 ): Promise<LeadershipRole | undefined> {
 	const leadershipRepository = getRepository(LeadershipEntity);

@@ -16,7 +16,7 @@ export const getAllDistrictsValidator = requestValidator(
 	true
 );
 
-export const addDistrictValidator = requestValidator(
+export const createDistrictValidator = requestValidator(
 	{
 		body: {
 			type: 'object',

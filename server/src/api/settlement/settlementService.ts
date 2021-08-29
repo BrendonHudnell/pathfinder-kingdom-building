@@ -87,7 +87,7 @@ export interface Settlement {
 
 export const settlementService = {
 	getAllSettlements,
-	addSettlement,
+	createSettlement,
 };
 
 async function getAllSettlements(kingdomId: number): Promise<Settlement[]> {
@@ -105,7 +105,7 @@ async function getAllSettlements(kingdomId: number): Promise<Settlement[]> {
 	);
 }
 
-async function addSettlement(
+async function createSettlement(
 	kingdomId: number,
 	hexId: number
 ): Promise<Settlement | undefined> {

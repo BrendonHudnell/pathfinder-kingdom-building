@@ -16,7 +16,7 @@ export const getAllSettlementsValidator = requestValidator(
 	true
 );
 
-export const addSettlementValidator = requestValidator(
+export const createSettlementValidator = requestValidator(
 	{
 		body: {
 			type: 'object',

@@ -9,8 +9,8 @@ export function createHexRouter(): Router {
 
 	router.use(verifyToken);
 
-	router.get('/', getAllHexesValidator, getAllHexes);
 	router.patch('/:id', updateHexValidator, updateHex);
+	router.get('/', getAllHexesValidator, getAllHexes);
 
 	return router;
 }
