@@ -9,7 +9,8 @@ import { hexService } from '../hex';
 import { leadershipService } from '../leadership';
 import { UserEntity } from './userEntity';
 
-export interface UserToken {
+export interface LoginResponse {
+	kingdoms: number[];
 	accessToken: string;
 	accessTokenExpiration: Date;
 	// refreshToken: string;
@@ -47,10 +48,14 @@ async function register(username: string, password: string): Promise<boolean> {
 async function login(
 	username: string,
 	password: string
-): Promise<UserToken | undefined> {
+): Promise<LoginResponse | undefined> {
 	const userRepository = getRepository(UserEntity);
 
-	const user = await userRepository.findOne({ username });
+	const user = await userRepository
+		.createQueryBuilder('user')
+		.leftJoinAndSelect('user.kingdoms', 'kingdom', 'kingdom.user = user.id')
+		.where({ username })
+		.getOne();
 
 	if (!user) {
 		return;
@@ -66,6 +71,7 @@ async function login(
 		sub: user.id,
 	};
 
+	const kingdoms = user.kingdoms.map((kingdom) => kingdom.id);
 	const accessTokenExpiration = new Date(Date.now() + env.expiration * 1000);
 	const accessToken = jwt.sign(payload, env.secretKey, {
 		expiresIn: env.expiration,
@@ -76,6 +82,7 @@ async function login(
 	// await userRepository.save(user);
 
 	return {
+		kingdoms,
 		accessToken,
 		accessTokenExpiration,
 		// refreshToken

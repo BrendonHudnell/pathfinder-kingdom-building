@@ -32,18 +32,21 @@ export async function login(req: Request, res: Response): Promise<void> {
 	const username = req.body.username;
 	const password = req.body.password;
 
-	const token = await userService.login(username, password);
+	const loginResponse = await userService.login(username, password);
 
-	if (token) {
+	if (loginResponse) {
 		res
-			.cookie('accessToken', token.accessToken, {
+			.cookie('accessToken', loginResponse.accessToken, {
 				httpOnly: true,
 				sameSite: true,
-				expires: token.accessTokenExpiration,
+				expires: loginResponse.accessTokenExpiration,
 			})
 			// .cookie('refreshToken', token.refreshToken, { httpOnly: true, sameSite: true, expires: token.refreshTokenExpiration })
 			.status(200)
-			.json({ expires: token.accessTokenExpiration.toUTCString() });
+			.json({
+				kingdoms: loginResponse.kingdoms,
+				expires: loginResponse.accessTokenExpiration.toUTCString(),
+			});
 	} else {
 		res
 			.status(401)

@@ -46,7 +46,7 @@ export function UserLogin(): ReactElement {
 		const body = await response.json();
 		if (response.status === 200) {
 			setLoginCookie(body.expires);
-			dispatch(login());
+			dispatch(login(body.kingdoms));
 		} else {
 			setErrorMessage(body.message);
 		}
