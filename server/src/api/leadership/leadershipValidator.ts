@@ -31,3 +31,49 @@ export const createViceroyValidator = requestValidator(
 	},
 	true
 );
+
+export const updateLeadershipRoleValidator = requestValidator(
+	{
+		params: {
+			type: 'object',
+			additionalProperties: false,
+			properties: {
+				id: {
+					type: 'number',
+				},
+			},
+			required: ['id'],
+		},
+		body: {
+			type: 'object',
+			additionalProperties: false,
+			properties: {
+				name: {
+					type: 'string',
+				},
+				heldBy: {
+					type: 'string',
+				},
+				attribute: {
+					type: 'string',
+				},
+				abilityBonus: {
+					type: 'number',
+				},
+				leadership: {
+					type: 'boolean',
+				},
+				benefit: {
+					type: 'string',
+				},
+				vacant: {
+					type: 'boolean',
+				},
+				skillBonus: {
+					type: 'number',
+				},
+			},
+		},
+	},
+	true
+);

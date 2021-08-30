@@ -88,6 +88,7 @@ export interface Settlement {
 export const settlementService = {
 	getAllSettlements,
 	createSettlement,
+	updateSettlement,
 };
 
 async function getAllSettlements(kingdomId: number): Promise<Settlement[]> {
@@ -288,4 +289,117 @@ function convertSettlementEntityToSettlement(
 		moatUnrestUsed: settlementEntity.moatUnrestUsed,
 		government: settlementEntity.government,
 	};
+}
+
+async function updateSettlement(
+	id: number,
+	updates: Partial<Settlement>
+): Promise<boolean> {
+	const settlementRepository = getRepository(SettlementEntity);
+
+	const settlement = await settlementRepository.findOne(id);
+
+	if (!settlement) {
+		return false;
+	}
+
+	settlement.name = updates.name ?? settlement.name;
+	settlement.academy = updates.buildings?.Academy ?? settlement.academy;
+	settlement.alchemist = updates.buildings?.Alchemist ?? settlement.alchemist;
+	settlement.arena = updates.buildings?.Arena ?? settlement.arena;
+	settlement.bank = updates.buildings?.Bank ?? settlement.bank;
+	settlement.bardicCollege =
+		updates.buildings?.['Bardic College'] ?? settlement.bardicCollege;
+	settlement.barracks = updates.buildings?.Barracks ?? settlement.barracks;
+	settlement.blackMarket =
+		updates.buildings?.['Black Market'] ?? settlement.blackMarket;
+	settlement.brewery = updates.buildings?.Brewery ?? settlement.brewery;
+	settlement.bridge = updates.buildings?.Bridge ?? settlement.bridge;
+	settlement.bureau = updates.buildings?.Bureau ?? settlement.bureau;
+	settlement.castersTower =
+		updates.buildings?.["Caster's Tower"] ?? settlement.castersTower;
+	settlement.castle = updates.buildings?.Castle ?? settlement.castle;
+	settlement.cathedral = updates.buildings?.Cathedral ?? settlement.cathedral;
+	settlement.cistern = updates.buildings?.Cistern ?? settlement.cistern;
+	settlement.cityWall = updates.buildings?.['City Wall'] ?? settlement.cityWall;
+	settlement.danceHall =
+		updates.buildings?.['Dance Hall'] ?? settlement.danceHall;
+	settlement.dump = updates.buildings?.Dump ?? settlement.dump;
+	settlement.everflowingSpring =
+		updates.buildings?.['Everflowing Spring'] ?? settlement.everflowingSpring;
+	settlement.exoticArtisan =
+		updates.buildings?.['Exotic Artisan'] ?? settlement.exoticArtisan;
+	settlement.foreignQuarter =
+		updates.buildings?.['Foreign Quarter'] ?? settlement.foreignQuarter;
+	settlement.foundry = updates.buildings?.Foundry ?? settlement.foundry;
+	settlement.garrison = updates.buildings?.Garrison ?? settlement.garrison;
+	settlement.granary = updates.buildings?.Granary ?? settlement.granary;
+	settlement.graveyard = updates.buildings?.Graveyard ?? settlement.graveyard;
+	settlement.guildhall = updates.buildings?.Guildhall ?? settlement.guildhall;
+	settlement.herbalist = updates.buildings?.Herbalist ?? settlement.herbalist;
+	settlement.hospital = updates.buildings?.Hospital ?? settlement.hospital;
+	settlement.house = updates.buildings?.House ?? settlement.house;
+	settlement.inn = updates.buildings?.Inn ?? settlement.inn;
+	settlement.jail = updates.buildings?.Jail ?? settlement.jail;
+	settlement.library = updates.buildings?.Library ?? settlement.library;
+	settlement.luxuryStore =
+		updates.buildings?.['Luxury Store'] ?? settlement.luxuryStore;
+	settlement.magicShop =
+		updates.buildings?.['Magic Shop'] ?? settlement.magicShop;
+	settlement.magicalAcademy =
+		updates.buildings?.['Magical Academy'] ?? settlement.magicalAcademy;
+	settlement.magicalStreetlamps =
+		updates.buildings?.['Magical Streetlamps'] ?? settlement.magicalStreetlamps;
+	settlement.mansion = updates.buildings?.Mansion ?? settlement.mansion;
+	settlement.market = updates.buildings?.Market ?? settlement.market;
+	settlement.menagerie = updates.buildings?.Menagerie ?? settlement.menagerie;
+	settlement.militaryAcademy =
+		updates.buildings?.['Military Academy'] ?? settlement.militaryAcademy;
+	settlement.mill = updates.buildings?.Mill ?? settlement.mill;
+	settlement.mint = updates.buildings?.Mint ?? settlement.mint;
+	settlement.moat = updates.buildings?.Moat ?? settlement.moat;
+	settlement.monastery = updates.buildings?.Monastery ?? settlement.monastery;
+	settlement.monument = updates.buildings?.Monument ?? settlement.monument;
+	settlement.museum = updates.buildings?.Museum ?? settlement.museum;
+	settlement.nobleVilla =
+		updates.buildings?.['Noble Villa'] ?? settlement.nobleVilla;
+	settlement.observatory =
+		updates.buildings?.Observatory ?? settlement.observatory;
+	settlement.orphanage = updates.buildings?.Orphanage ?? settlement.orphanage;
+	settlement.palace = updates.buildings?.Palace ?? settlement.palace;
+	settlement.park = updates.buildings?.Park ?? settlement.park;
+	settlement.pavedStreets =
+		updates.buildings?.['Paved Streets'] ?? settlement.pavedStreets;
+	settlement.pier = updates.buildings?.Pier ?? settlement.pier;
+	settlement.sewerSystem =
+		updates.buildings?.['Sewer System'] ?? settlement.sewerSystem;
+	settlement.shop = updates.buildings?.Shop ?? settlement.shop;
+	settlement.shrine = updates.buildings?.Shrine ?? settlement.shrine;
+	settlement.smithy = updates.buildings?.Smithy ?? settlement.smithy;
+	settlement.stable = updates.buildings?.Stable ?? settlement.stable;
+	settlement.stockyard = updates.buildings?.Stockyard ?? settlement.stockyard;
+	settlement.tannery = updates.buildings?.Tannery ?? settlement.tannery;
+	settlement.tavern = updates.buildings?.Tavern ?? settlement.tavern;
+	settlement.temple = updates.buildings?.Temple ?? settlement.temple;
+	settlement.tenement = updates.buildings?.Temple ?? settlement.tenement;
+	settlement.theater = updates.buildings?.Theater ?? settlement.theater;
+	settlement.townHall = updates.buildings?.['Town Hall'] ?? settlement.townHall;
+	settlement.tradeShop =
+		updates.buildings?.['Trade Shop'] ?? settlement.tradeShop;
+	settlement.university =
+		updates.buildings?.University ?? settlement.university;
+	settlement.watchtower =
+		updates.buildings?.Watchtower ?? settlement.watchtower;
+	settlement.waterfront =
+		updates.buildings?.Waterfront ?? settlement.waterfront;
+	settlement.waterway = updates.buildings?.Waterway ?? settlement.waterway;
+	settlement.wallUnrestUsed =
+		updates.wallUnrestUsed ?? settlement.wallUnrestUsed;
+	settlement.moatUnrestUsed =
+		updates.moatUnrestUsed ?? settlement.moatUnrestUsed;
+	settlement.government = updates.government ?? settlement.government;
+
+	await settlementRepository.save(settlement);
+
+	return true;
 }

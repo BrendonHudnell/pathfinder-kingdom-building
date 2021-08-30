@@ -364,4 +364,102 @@ describe('settlementRouter', () => {
 				});
 		});
 	});
+
+	describe('PATCH /:id', () => {
+		it('should return 200 with an existing settlement id', (done) => {
+			sandbox.stub(settlementService, 'updateSettlement').resolves(true);
+
+			request(app)
+				.patch('/api/settlement/1')
+				.set('Cookie', `accessToken=${token}`)
+				.expect('Content-Type', /json/)
+				.expect(200)
+				.end((err, res) => {
+					if (err) return done(err);
+					expect(res.body).toMatchObject({
+						status: 200,
+					});
+					done();
+				});
+		});
+
+		it('should return 404 when the settlement id doesnt exist in the db', (done) => {
+			sandbox.stub(settlementService, 'updateSettlement').resolves(false);
+
+			request(app)
+				.patch('/api/settlement/-1')
+				.set('Cookie', `accessToken=${token}`)
+				.expect('Content-Type', /json/)
+				.expect(200)
+				.end((err, res) => {
+					if (err) return done(err);
+					expect(res.body).toMatchObject({ status: 404 });
+					done();
+				});
+		});
+
+		it('should return 401 when missing auth token', (done) => {
+			request(app)
+				.patch('/api/settlement/1')
+				.expect('Content-Type', /text\/plain/)
+				.expect(401)
+				.end(() => done());
+		});
+
+		it('should return 400 for a non-number settlement id', (done) => {
+			const expectedResBody = {
+				ok: false,
+				status: 400,
+				error: [
+					{
+						keyword: 'type',
+						instancePath: '/params/id',
+						schemaPath: '#/properties/params/properties/id/type',
+						params: {
+							type: 'number',
+						},
+						message: 'must be number',
+					},
+				],
+			};
+
+			request(app)
+				.patch('/api/settlement/string')
+				.set('Cookie', `accessToken=${token}`)
+				.expect('Content-Type', /json/)
+				.expect(400)
+				.end((err, res) => {
+					if (err) return done(err);
+					expect(res.body).toMatchObject(expectedResBody);
+					done();
+				});
+		});
+
+		it('should return 400 for a not allowed body property', (done) => {
+			const expectedResBody = {
+				ok: false,
+				status: 400,
+				error: [
+					{
+						keyword: 'additionalProperties',
+						instancePath: '/body',
+						schemaPath: '#/properties/body/additionalProperties',
+						message: 'must NOT have additional properties',
+					},
+				],
+			};
+
+			request(app)
+				.patch('/api/settlement/1')
+				.set('Cookie', `accessToken=${token}`)
+				.send({ badProperty: true })
+				.expect('Content-Type', /json/)
+				.expect(400)
+				.end((err, res) => {
+					if (err) return done(err);
+					expect(res.body).toMatchObject(expectedResBody);
+					done();
+				});
+		});
+	});
 });

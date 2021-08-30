@@ -1,5 +1,5 @@
 import { connection, populateDatabase } from '../../testUtils';
-import { leadershipService } from '../../../src/api';
+import { LeadershipRole, leadershipService } from '../../../src/api';
 
 describe('leadershipService', () => {
 	beforeEach(async () => {
@@ -35,6 +35,40 @@ describe('leadershipService', () => {
 			const viceroy = await leadershipService.createViceroy(-1);
 
 			expect(viceroy).toBeUndefined();
+		});
+	});
+
+	describe('updateLeadershipRole', () => {
+		it('should return true when an existing leadership role id and an updated fields object are passed in', async () => {
+			const updateOptions: Partial<LeadershipRole> = {
+				name: 'Replaced',
+				heldBy: 'Replaced',
+				attribute: 'Charisma',
+				abilityBonus: 0,
+				leadership: true,
+				benefit: 'Economy',
+				vacant: false,
+				skillBonus: 0,
+			};
+
+			const success = await leadershipService.updateLeadershipRole(
+				1,
+				updateOptions
+			);
+
+			expect(success).toBe(true);
+		});
+
+		it('should return true when the updated fields object is empty', async () => {
+			const success = await leadershipService.updateLeadershipRole(1, {});
+
+			expect(success).toBe(true);
+		});
+
+		it('should return false when the leadership role id doesnt exist in the database', async () => {
+			const success = await leadershipService.updateLeadershipRole(-1, {});
+
+			expect(success).toBe(false);
 		});
 	});
 });

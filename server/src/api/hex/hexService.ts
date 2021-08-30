@@ -178,9 +178,33 @@ async function updateHex(id: number, updates: Partial<Hex>): Promise<boolean> {
 
 	hex.name = updates.name ?? hex.name;
 	hex.terrain = updates.terrain ?? hex.terrain;
-	// TODO special terrain
+	hex.bridgeSpecialTerrain =
+		updates.specialTerrain?.includes('Bridge') ?? hex.bridgeSpecialTerrain;
+	hex.building = updates.specialTerrain?.includes('Building') ?? hex.building;
+	hex.freeCity = updates.specialTerrain?.includes('Free City') ?? hex.freeCity;
+	hex.lair = updates.specialTerrain?.includes('Lair') ?? hex.lair;
+	hex.landmark = updates.specialTerrain?.includes('Landmark') ?? hex.landmark;
+	hex.resource = updates.specialTerrain?.includes('Resource') ?? hex.resource;
+	hex.river = updates.specialTerrain?.includes('River') ?? hex.river;
+	hex.ruin = updates.specialTerrain?.includes('Ruin') ?? hex.ruin;
 	hex.explorationState = updates.explorationState ?? hex.explorationState;
-	// TODO terrain improvements
+	hex.aqueduct =
+		updates.terrainImprovements?.includes('Aqueduct') ?? hex.aqueduct;
+	hex.bridgeImprovement =
+		updates.terrainImprovements?.includes('Bridge') ?? hex.bridgeImprovement;
+	hex.canal = updates.terrainImprovements?.includes('Canal') ?? hex.canal;
+	hex.farm = updates.terrainImprovements?.includes('Farm') ?? hex.farm;
+	hex.fishery = updates.terrainImprovements?.includes('Fishery') ?? hex.fishery;
+	hex.fort = updates.terrainImprovements?.includes('Fort') ?? hex.fort;
+	hex.highway = updates.terrainImprovements?.includes('Highway') ?? hex.highway;
+	hex.mine = updates.terrainImprovements?.includes('Mine') ?? hex.mine;
+	hex.quarry = updates.terrainImprovements?.includes('Quarry') ?? hex.quarry;
+	hex.road = updates.terrainImprovements?.includes('Road') ?? hex.road;
+	hex.sawmill = updates.terrainImprovements?.includes('Sawmill') ?? hex.sawmill;
+	hex.vineyard =
+		updates.terrainImprovements?.includes('Vineyard') ?? hex.vineyard;
+	hex.watchtower =
+		updates.terrainImprovements?.includes('Watchtower') ?? hex.watchtower;
 	hex.pointsOfInterest = updates.pointsOfInterest ?? hex.pointsOfInterest;
 	hex.notes = updates.notes ?? hex.notes;
 

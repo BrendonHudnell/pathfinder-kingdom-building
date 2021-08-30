@@ -41,7 +41,9 @@ describe('districtService', () => {
 			const updateOptions: Partial<Hex> = {
 				name: 'Replaced',
 				terrain: 'Hills',
+				specialTerrain: [],
 				explorationState: 'Explored',
+				terrainImprovements: [],
 				pointsOfInterest: 'Replaced',
 				notes: 'Replaced',
 			};
