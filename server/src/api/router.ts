@@ -4,6 +4,7 @@ import { createDistrictRouter } from './district';
 import { createHexRouter } from './hex';
 import { createKingdomRouter } from './kingdom';
 import { createLeadershipRouter } from './leadership';
+import { createLotRouter } from './lot';
 import { createSettlementRouter } from './settlement';
 import { createUserRouter } from './user';
 
@@ -15,6 +16,7 @@ export function createApiRouter(): Router {
 	router.use('/settlement', createSettlementRouter());
 	router.use('/district', createDistrictRouter());
 	router.use('/leadership', createLeadershipRouter());
+	router.use('/lot', createLotRouter());
 	router.use('/user', createUserRouter());
 
 	router.all('/', (req: Request, res: Response): void => {
