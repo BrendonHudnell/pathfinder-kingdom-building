@@ -12,9 +12,14 @@ export interface AddSettlementResponse {
 	data?: Settlement;
 }
 
+export interface UpdateSettlementResponse {
+	status: number;
+}
+
 export const settlementApi = {
 	getAllSettlements,
 	addSettlement,
+	updateSettlement,
 };
 
 async function getAllSettlements(kingdomId: number): Promise<Settlement[]> {
@@ -42,4 +47,19 @@ async function addSettlement(
 	}
 
 	return response.data ?? undefined;
+}
+
+async function updateSettlement(
+	settlementId: number,
+	updates: Partial<Settlement>
+): Promise<boolean> {
+	const response: UpdateSettlementResponse = await ky
+		.patch(`/api/settlement/${settlementId}`, { json: { updates } })
+		.json();
+
+	if (response.status !== 200) {
+		false;
+	}
+
+	return true;
 }

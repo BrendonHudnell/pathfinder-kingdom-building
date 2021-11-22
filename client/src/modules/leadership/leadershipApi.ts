@@ -12,9 +12,14 @@ export interface AddViceroyResponse {
 	data?: Role;
 }
 
+export interface UpdateRoleResponse {
+	status: number;
+}
+
 export const leadershipApi = {
 	getAllRoles,
 	addViceroy,
+	updateRole,
 };
 
 async function getAllRoles(kingdomId: number): Promise<Role[]> {
@@ -39,4 +44,19 @@ async function addViceroy(kingdomId: number): Promise<Role | undefined> {
 	}
 
 	return response.data ?? undefined;
+}
+
+async function updateRole(
+	roleId: number,
+	updates: Partial<Role>
+): Promise<boolean> {
+	const response: UpdateRoleResponse = await ky
+		.patch(`/api/leadership/${roleId}`, { json: { updates } })
+		.json();
+
+	if (response.status !== 200) {
+		false;
+	}
+
+	return true;
 }

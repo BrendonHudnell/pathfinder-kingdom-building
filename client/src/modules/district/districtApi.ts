@@ -12,9 +12,14 @@ export interface AddDistrictResponse {
 	data?: District;
 }
 
+export interface UpdateDistrictResponse {
+	status: number;
+}
+
 export const districtApi = {
 	getAllDistricts,
 	addDistrict,
+	updateDistrict,
 };
 
 async function getAllDistricts(kingdomId: number): Promise<District[]> {
@@ -34,7 +39,7 @@ async function addDistrict(
 	settlementId: number
 ): Promise<District | undefined> {
 	const response: AddDistrictResponse = await ky
-		.get('/api/district/add', { json: { kingdomId, settlementId } })
+		.post('/api/district/create', { json: { kingdomId, settlementId } })
 		.json();
 
 	if (response.status !== 200) {
@@ -42,4 +47,19 @@ async function addDistrict(
 	}
 
 	return response.data ?? undefined;
+}
+
+async function updateDistrict(
+	districtId: number,
+	updates: Partial<District>
+): Promise<boolean> {
+	const response: UpdateDistrictResponse = await ky
+		.patch(`/api/district/${districtId}`, { json: { updates } })
+		.json();
+
+	if (response.status !== 200) {
+		false;
+	}
+
+	return true;
 }
