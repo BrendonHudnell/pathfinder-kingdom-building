@@ -140,6 +140,7 @@ describe('userRouter', () => {
 	describe('POST /login', () => {
 		it('should return 200 and return a token cookie when login is success', (done) => {
 			const fakeToken = {
+				kingdoms: [],
 				accessToken: 'accessToken',
 				accessTokenExpiration: new Date(),
 			};
@@ -159,6 +160,7 @@ describe('userRouter', () => {
 				.end((err, res) => {
 					if (err) return done(err);
 					expect(res.body).toEqual({
+						kingdoms: fakeToken.kingdoms,
 						expires: fakeToken.accessTokenExpiration.toUTCString(),
 					});
 					done();
